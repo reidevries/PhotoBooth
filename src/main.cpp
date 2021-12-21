@@ -4,6 +4,7 @@
 #include "pca.hpp"
 #include "utils.hpp"
 #include "face.hpp"
+#include "morph.hpp"
 
 struct trackbar_params
 {
@@ -26,7 +27,9 @@ void trackbar_callback(int pos, void* ptr)
 	utils::normalize_default(img);
 	*/
 
-	//cv::imshow(p->window_name, img);
+	auto img = morph::warp_face(p->images[0], p->face_src, p->face_dst, pos/100.0);
+
+	cv::imshow(p->window_name, img);
 }
 
 int main()

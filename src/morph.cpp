@@ -9,15 +9,18 @@ auto morph::warp_face(
 {
 	auto img_dst = img_src.clone();
 
-	auto tri_list_src = face_src.get_delaunay().getTriangleList();
-	auto tri_list_dst = face_dst.get_delaunay().getTriangleList();
+	auto tri_list_src = std::vector<cv::Vec6f>();
+	auto tri_list_dst = std::vector<cv::Vec6f>();
+	face_src.get_delaunay().getTriangleList(tri_list_src);
+	face_dst.get_delaunay().getTriangleList(tri_list_dst);
 
 	for (u64 i = 0; i < tri_list_dst.size(); ++i) {
 		img_dst = morph::affine_transform(
 			img_dst,
 			tri_list_src[i],
-			tri_list_dst[i]
-		)
+			tri_list_dst[i],
+			pos
+		);
 	}
 	return img_dst;
 }

@@ -16,8 +16,6 @@ struct Face
 	cv::Rect rect;
 	std::vector<cv::Point2f> shape;
 
-	auto get_shape_mat() const -> cv::Mat;
-
 	auto get_delaunay() const -> cv::Subdiv2D;
 
 	static auto warp(

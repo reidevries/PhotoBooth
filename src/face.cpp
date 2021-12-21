@@ -1,18 +1,12 @@
 #include "face.hpp"
 
-auto Face::get_shape_mat() const -> cv::Mat
-{
-	auto output = cv::Mat(shape.size(), 1, CV_32F);
-	for (u64 i = 0; i < shape.size(); ++i) {
-		output.at<float>(i, 0) = shape[i].x;
-		output.at<float>(i, 1) = shape[i].y;
-	}
-	return output;
-}
-
 auto Face::get_delaunay() const -> cv::Subdiv2D
 {
-	return cv::Subdiv2D();
+	auto subdiv = cv::Subdiv2D();
+	subdiv.initDelaunay(rect);
+	for (auto& point : shape) {
+		subdiv.insert(point);
+	}
 }
 
 auto Face::warp(
@@ -35,8 +29,6 @@ auto Face::warp(
 //	auto box_src = cv::boundingRect(face_src.shape);
 //	auto box_dst = cv::boundingRect(face_dst.shape);
 
-	auto mat_src = face_src.get_shape_mat();
-	auto mat_dst = face_dst.get_shape_mat();
 	auto mat_interp = utils::mean(mat_src, mat_dst, pos);
 	auto affine = cv::getAffineTransform(mat_src, mat_interp);
 	cv::Mat output;

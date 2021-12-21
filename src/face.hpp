@@ -13,7 +13,13 @@
 struct Face
 {
 	dlib::rectangle rect;
-	dlib::full_object_detection shape;
+	std::vector<cv::Point2f> shape;
+
+	static auto warp(
+		const cv::Mat& img,
+		const Face& face_img,
+		const Face& face_target
+	) -> cv::Mat;
 };
 
 class FaceDetector

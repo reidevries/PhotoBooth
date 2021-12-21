@@ -13,6 +13,7 @@ namespace convert
 auto cv_to_dlib_rgb(const cv::Mat& img) -> dlib::array2d<dlib::rgb_pixel>;
 auto dlib_to_cv(const dlib::full_object_detection& shape)
 	-> std::vector<cv::Point2f>;
+auto dlib_to_cv(const dlib::rectangle& rect) -> cv::Rect;
 }
 
 #endif // __CONVERT_HPP_

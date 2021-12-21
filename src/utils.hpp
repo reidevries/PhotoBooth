@@ -22,6 +22,13 @@ auto reshape_row_to_raw_grayscale_images(const cv::Mat& row, const u64 img_rows)
 	-> cv::Mat;
 
 void normalize_default(cv::Mat& mat);
+
+template<typename T>
+auto mean(const T& a, const T& b, const float pos) -> T
+{
+	return a*(1-pos) + b*pos;
+}
+
 }
 
 #endif // __UTILS_HPP_

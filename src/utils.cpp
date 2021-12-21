@@ -15,6 +15,14 @@ void utils::read_img_list(
 	}
 }
 
+auto utils::convert_cv_to_dlib_rgb(const cv::Mat& img)
+	-> dlib::array2d<dlib::rgb_pixel>
+{
+	dlib::array2d<dlib::rgb_pixel> img_dlib;
+	dlib::assign_image(img_dlib, dlib::cv_image<dlib::bgr_pixel>(img));
+	return img_dlib;
+}
+
 auto utils::reshape_img_to_row(const cv::Mat& img) -> cv::Mat
 {
 	// split individual channels from img

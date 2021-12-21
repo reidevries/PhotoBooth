@@ -3,6 +3,7 @@
 
 #include "pca.hpp"
 #include "utils.hpp"
+#include "face.hpp"
 
 struct trackbar_params
 {
@@ -33,8 +34,13 @@ int main()
 		std::cerr << "Error opening img list: " << e.msg << std::endl;
 		exit(1);
 	}
+	std::cout << "loaded " << images.size() << " images from img_list.txt"
+		<< std::endl;
 
 	auto data = utils::reshape_images_to_rows(images);
+
+	auto face_detector = FaceDetector("shape_predictor_68_face_landmarks.dat");
+	face_detector.get_landmarks(images[0]);
 
 	// init highgui window
 	auto window_name = "reconstruction";

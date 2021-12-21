@@ -23,6 +23,20 @@ auto utils::convert_cv_to_dlib_rgb(const cv::Mat& img)
 	return img_dlib;
 }
 
+auto utils::convert_dlib_to_cv(
+	const dlib::full_object_detection& shape
+)	-> std::vector<cv::Point2f>
+{
+	std::vector<cv::Point2f> output;
+	// its really annoying that I have to do this instead of just being able
+	// to access the "parts" vector inside full_object_detection :(
+	for (u64 i = 0; i < shape.num_parts(); ++i) {
+		auto p = shape.part(i);
+		output.push_back(cv::Point2f(p.x(), p.y()));
+	}
+	return output;
+}
+
 auto utils::reshape_img_to_row(const cv::Mat& img) -> cv::Mat
 {
 	// split individual channels from img

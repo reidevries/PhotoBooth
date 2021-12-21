@@ -17,19 +17,6 @@ struct Face
 	std::vector<cv::Point2f> shape;
 
 	auto get_delaunay() const -> cv::Subdiv2D;
-
-	static auto warp(
-		const cv::Mat& img,
-		const cv::Vec6f& tri_src,
-		const cv::Vec6f& tri_dst
-	) -> cv::Mat;
-
-	static auto warp(
-		const cv::Mat& img,
-		const cv::Vec6f& tri_src,
-		const cv::Vec6f& tri_dst,
-		const float pos
-	) -> cv::Mat;
 };
 
 class FaceDetector

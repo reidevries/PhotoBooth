@@ -20,14 +20,14 @@ struct Face
 
 	static auto warp(
 		const cv::Mat& img,
-		const Face& face_src,
-		const Face& face_dst
+		const cv::Vec6f& tri_src,
+		const cv::Vec6f& tri_dst
 	) -> cv::Mat;
 
 	static auto warp(
 		const cv::Mat& img,
-		const Face& face_src,
-		const Face& face_dst,
+		const cv::Vec6f& tri_src,
+		const cv::Vec6f& tri_dst,
 		const float pos
 	) -> cv::Mat;
 };

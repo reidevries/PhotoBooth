@@ -25,9 +25,8 @@ void trackbar_callback(int pos, void* ptr)
 	);
 	utils::normalize_default(img);
 	*/
-	auto img = Face::warp(p->images[0], p->face_src, p->face_dst, pos/100.0);
 
-	cv::imshow(p->window_name, img);
+	//cv::imshow(p->window_name, img);
 }
 
 int main()

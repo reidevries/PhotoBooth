@@ -4,7 +4,7 @@
 #include "pca.hpp"
 #include "utils.hpp"
 
-struct params
+struct trackbar_params
 {
     cv::Mat data;
     int img_xsize;
@@ -14,7 +14,7 @@ struct params
 
 void trackbar_callback(int pos, void* ptr)
 {
-    struct params *p = (struct params *)ptr;
+    struct trackbar_params *p = (struct trackbar_params *)ptr;
 	cv::Mat img = utils::reshape_row_to_img(
 		p->pca.get_component_range(fmax(0,pos-7), pos),
 		p->img_xsize
@@ -39,8 +39,8 @@ int main()
 	// init highgui window
 	auto window_name = "reconstruction";
     cv::namedWindow(window_name, cv::WINDOW_NORMAL);
-	// params struct to pass to the trackbar handler
-    params p;
+	// trackbar_params struct to pass to the trackbar handler
+    trackbar_params p;
     p.data = data;
     p.img_xsize = images[0].rows;
     p.pca = PCA(data);

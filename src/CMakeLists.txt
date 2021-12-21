@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.0)
+project( PhotoBooth )
+find_package( OpenCV REQUIRED )
+find_package( dlib REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( photobooth_process main.cpp pca.cpp utils.cpp )
+target_link_libraries( photobooth_process ${OpenCV_LIBS} dlib::dlib)

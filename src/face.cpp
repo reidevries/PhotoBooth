@@ -18,7 +18,7 @@ FaceDetector::FaceDetector(const std::string& predictor_filename)
 
 auto FaceDetector::get_landmarks(const cv::Mat& img) -> Face
 {
-	auto img_dlib = utils::convert_cv_to_dlib_rgb(img);
+	auto img_dlib = convert::cv_to_dlib_rgb(img);
 	auto rects = detector(img_dlib, 1);
 	if (rects.size() == 0) {
 		rects = detector(img_dlib, 0);
@@ -32,5 +32,5 @@ auto FaceDetector::get_landmarks(const cv::Mat& img) -> Face
 	std::cout << "pixel pos of first part " << shape.part(0) << std::endl;
 	std::cout << "pixel pos of second part " << shape.part(1) << std::endl;
 
-	return Face{target_rect, utils::convert_dlib_to_cv(shape)};
+	return Face{target_rect, convert::dlib_to_cv(shape)};
 }

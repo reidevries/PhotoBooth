@@ -8,7 +8,7 @@
 #include <dlib/image_processing/render_face_detections.h>
 #include <dlib/image_processing.h>
 
-#include "utils.hpp"
+#include "convert.hpp"
 
 struct Face
 {

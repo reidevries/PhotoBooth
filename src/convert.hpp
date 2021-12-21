@@ -1,6 +1,7 @@
 #ifndef __CONVERT_HPP_
 #define __CONVERT_HPP_
 
+#include "numbers.hpp"
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <dlib/opencv.h>

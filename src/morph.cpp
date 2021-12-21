@@ -1,5 +1,27 @@
 #include "morph.hpp"
 
+auto morph::warp_face(
+	const cv::Mat& img_src,
+	const Face& face_src,
+	const Face& face_dst,
+	const float pos
+) -> cv::Mat
+{
+	auto img_dst = img_src.clone();
+
+	auto tri_list_src = face_src.get_delaunay().getTriangleList();
+	auto tri_list_dst = face_dst.get_delaunay().getTriangleList();
+
+	for (u64 i = 0; i < tri_list_dst.size(); ++i) {
+		img_dst = morph::affine_transform(
+			img_dst,
+			tri_list_src[i],
+			tri_list_dst[i]
+		)
+	}
+	return img_dst;
+}
+
 auto morph::affine_transform(
 	const cv::Mat& img_src,
 	const cv::Vec6f& tri_src,

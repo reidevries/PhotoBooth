@@ -75,3 +75,18 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 		delaunay.push_back(tri_converted);
 	}
 }
+
+auto Face::get_nearest_tri(const cv::Mat& tri_i) -> cv::Mat&
+{
+	auto tri_o = cv::Mat(3,2,CV_32F);
+	auto p = cv::Point2f();
+	for (u8 i = 0; i < 3; ++i) {
+		subdiv.findNearest(
+			cv::Point2f(tri_i.at<float>(i,0), tri_i.at<float>(i,1)),
+			&p
+		);
+		tri_o.at<float>(i,0) = p.x;
+		tri_o.at<float>(i,1) = p.y;
+	}
+	return tri_o;
+}

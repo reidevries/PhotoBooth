@@ -2,18 +2,19 @@
 
 auto morph::warp_face(
 	const cv::Mat& img_src,
-	const Face& face_src,
-	const Face& face_dst,
+	Face& face_src,
+	Face& face_dst,
 	const float pos
 ) -> cv::Mat
 {
 	auto img_dst = img_src.clone();
 
 	for (u64 i = 0; i < 1; ++i) {
+		auto tri_src = face_src.get_delaunay()[i];
 		img_dst = morph::affine_transform(
 			img_dst,
-			face_src.get_delaunay()[i],
-			face_dst.get_delaunay()[i],
+			tri_src,
+			face_dst.get_nearest_tri(tri_src),
 			pos
 		);
 	}

@@ -38,6 +38,8 @@ public:
 	Face(const cv::Mat& img, FaceDetector& face_detector);
 	auto get_delaunay() const
 		-> const std::vector<cv::Mat>& { return delaunay; }
+	auto get_nearest_tri(const cv::Mat& tri_i)
+		-> cv::Mat&;
 };
 
 #endif // __FACE_HPP_

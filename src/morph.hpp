@@ -8,8 +8,8 @@ namespace morph
 {
 auto warp_face(
 	const cv::Mat& img_src,
-	const Face& face_src,
-	const Face& face_dst,
+	Face& face_src,
+	Face& face_dst,
 	const float pos
 ) -> cv::Mat;
 

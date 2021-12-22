@@ -30,17 +30,20 @@ auto FaceDetector::predict(
 
 void Face::store_boundary_points(const cv::Mat& img)
 {
-	auto h = img.size[0];
-	auto w = img.size[1];
-	std::cout << "img has dims " << w << "x" << h << std::endl;
-	shape.push_back(cv::Point2f(1,1));
-	shape.push_back(cv::Point2f(w-1,1));
-	shape.push_back(cv::Point2f(1,h-1));
-	shape.push_back(cv::Point2f(w-1,h-1));
-	shape.push_back(cv::Point2f((w-1)/2,1));
-	shape.push_back(cv::Point2f(1,(h-1)/2));
-	shape.push_back(cv::Point2f((w-1)/2,h-1));
-	shape.push_back(cv::Point2f((w-1)/2,(h-1)/2));
+	auto w = img.size[1] - 1;
+	auto h = img.size[0] - 1;
+	std::cout << "img size is " << img.size << std::endl;
+	shape.push_back(cv::Point2f(  1,  1));
+	shape.push_back(cv::Point2f(  w,  1));
+	shape.push_back(cv::Point2f(  1,  h));
+	shape.push_back(cv::Point2f(  w,  h));
+	shape.push_back(cv::Point2f(w/2,  1));
+	shape.push_back(cv::Point2f(  1,h/2));
+	shape.push_back(cv::Point2f(w/2,  h));
+	shape.push_back(cv::Point2f(w/2,h/2));
+	for (u64 i = 0; i < 8; ++i) {
+		std::cout << shape[shape.size()-i-1] << std::endl;
+	}
 }
 
 Face::Face(const cv::Mat& img, FaceDetector& face_detector)
@@ -48,11 +51,12 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	auto img_dlib = convert::cv_to_dlib_rgb(img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	shape = face_detector.predict(img_dlib, rect_dlib);
-	store_boundary_points(img);
 	rect = convert::dlib_to_cv(rect_dlib);
+	store_boundary_points(img);
 
-	auto subdiv = cv::Subdiv2D();
-	subdiv.initDelaunay(rect);
+	subdiv = cv::Subdiv2D();
+	auto img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
+	subdiv.initDelaunay(img_rect);
 	for (auto& point : shape) {
 		subdiv.insert(point);
 	}

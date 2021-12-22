@@ -45,7 +45,7 @@ int main()
 	std::cout << "loaded " << images.size() << " images from img_list.txt"
 		<< std::endl;
 
-	auto data = utils::reshape_images_to_rows(images);
+	//auto data = utils::reshape_images_to_rows(images);
 
 	auto face_detector = FaceDetector("shape_predictor_68_face_landmarks.dat");
 
@@ -55,9 +55,7 @@ int main()
 	// trackbar_params struct to pass to the trackbar handler
     trackbar_params p;
 	p.images = images;
-    p.data = data;
     p.img_xsize = images[0].rows;
-    p.pca = PCA(data);
     p.window_name = window_name;
 	p.face_src = Face(images[6], face_detector);
 	p.face_dst = Face(images[9], face_detector);

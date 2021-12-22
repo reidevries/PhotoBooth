@@ -29,6 +29,7 @@ class Face
 {
 	cv::Rect rect;
 	std::vector<cv::Point2f> shape;
+	cv::Subdiv2D subdiv;
 	std::vector<cv::Mat> delaunay;
 
 	void store_boundary_points(const cv::Mat& img);

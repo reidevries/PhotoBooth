@@ -9,12 +9,13 @@ auto morph::warp_face(
 {
 	auto img_dst = img_src.clone();
 
-	for (u64 i = 0; i < 1; ++i) {
+	for (u64 i = 0; i < face_src.get_delaunay().size(); i+=3) {
 		auto tri_src = face_src.get_delaunay()[i];
+		auto tri_dst = face_dst.get_nearest_tri(tri_src);
 		img_dst = morph::warp_tri(
 			img_dst,
 			tri_src,
-			face_dst.get_nearest_tri(tri_src),
+			tri_dst,
 			pos
 		);
 	}
@@ -28,14 +29,17 @@ auto morph::warp_tri(
 	const float pos
 ) -> cv::Mat
 {
-	auto tri_interp = tri_src*(1-pos) + tri_dst*pos;
+	cv::Mat tri_interp = tri_src*(1-pos) + tri_dst*pos;
 	auto img_trans = affine_transform(img, tri_src, tri_interp);
 
 	auto rect_dst = cv::boundingRect(tri_dst); // not sure if this will work
 	cv::Mat mask = cv::Mat::zeros(img.size[0], img.size[1], img.type());
+	// needed for fillConvexPoly for some reason
+	cv::Mat tri_interp_short;
+	tri_interp.convertTo(tri_interp_short, CV_32S);
 	cv::fillConvexPoly(
 		mask,
-		tri_dst, //not sure if this will work either
+		tri_interp_short, //not sure if this will work either
 		cv::Scalar(1.0, 1.0, 1.0, 1.0)
 	);
 

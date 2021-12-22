@@ -11,25 +11,29 @@
 #include "utils.hpp"
 #include "convert.hpp"
 
-struct Face
-{
-	cv::Rect rect;
-	std::vector<cv::Point2f> shape;
-
-	auto get_delaunay() const -> cv::Subdiv2D;
-};
-
 class FaceDetector
+// basically just gives RAII to frontal_face_detector and shape_predictor
 {
 	dlib::frontal_face_detector detector;
 	dlib::shape_predictor predictor;
-
-	// not sure if i will need this
-	// auto get_img_boundary(const cv::Mat& img) -> std::vector<cv::Point2f>;
-
 public:
 	FaceDetector(const std::string& predictor_filename);
-	auto get_landmarks(const cv::Mat& img) -> Face;
+	auto detect(const dlib::array2d<dlib::rgb_pixel>& img) -> dlib::rectangle;
+	auto predict(
+		const dlib::array2d<dlib::rgb_pixel>& img,
+		const dlib::rectangle& rect
+	) -> std::vector<cv::Point2f>;
+};
+
+class Face
+{
+	cv::Rect rect;
+	std::vector<cv::Point2f> shape;
+	std::vector<cv::Mat> delaunay;
+public:
+	Face(const cv::Mat& img, FaceDetector& face_detector);
+	auto get_delaunay() const
+		-> const std::vector<cv::Mat>& { return delaunay; }
 };
 
 #endif // __FACE_HPP_

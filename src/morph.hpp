@@ -15,14 +15,14 @@ auto warp_face(
 
 auto affine_transform(
 	const cv::Mat& img,
-	const cv::Vec6f& tri_src,
-	const cv::Vec6f& tri_dst
+	const cv::Mat& tri_src,
+	const cv::Mat& tri_dst
 ) -> cv::Mat;
 
 auto affine_transform(
 	const cv::Mat& img,
-	const cv::Vec6f& tri_src,
-	const cv::Vec6f& tri_dst,
+	const cv::Mat& tri_src,
+	const cv::Mat& tri_dst,
 	const float pos
 ) -> cv::Mat;
 }

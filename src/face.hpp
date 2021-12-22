@@ -38,10 +38,15 @@ public:
 	Face(const cv::Mat& img, FaceDetector& face_detector);
 	auto get_shape() const
 		-> const std::vector<cv::Point2f>& { return shape; }
+	auto get_shape_at(const int i) const
+		-> cv::Point2f { return shape.at(i); }
 	auto get_delaunay() const
 		-> const std::vector<cv::Mat>& { return delaunay; }
+	auto get_delaunay_indices() const -> std::vector<cv::Point3i>;
 	auto get_nearest_tri(const cv::Mat& tri_i)
 		-> cv::Mat;
+	auto get_tri(const cv::Point2f& pt) -> cv::Mat;
+	auto get_tri(const cv::Point3i& indices) -> cv::Mat;
 };
 
 #endif // __FACE_HPP_

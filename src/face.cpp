@@ -74,26 +74,84 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	}
 }
 
+auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
+{
+	auto indices = std::vector<cv::Point3i>();
+	for (auto& tri: delaunay) {
+		auto index = cv::Point3i();
+		auto p1 = cv::Point2f(tri.at<float>(0,0), tri.at<float>(0,1));
+		auto p2 = cv::Point2f(tri.at<float>(1,0), tri.at<float>(1,1));
+		auto p3 = cv::Point2f(tri.at<float>(2,0), tri.at<float>(2,1));
+		for (u32 i = 0; i < shape.size(); ++i) {
+			if (shape[i] == p1) {
+				index.x = i;
+			} else if (shape[i] == p2) {
+				index.y = i;
+			} else if (shape[i] == p3) {
+				index.z = i;
+			}
+		}
+		indices.push_back(index);
+	}
+	return indices;
+}
+
 auto Face::get_nearest_tri(const cv::Mat& tri_i) -> cv::Mat
+{
+	return cv::Mat();
+}
+
+auto Face::get_tri(const cv::Point2f& pt) -> cv::Mat
 {
 	auto tri_o = cv::Mat(3,2,CV_32F);
 	auto p = cv::Point2f();
-	auto edge_i = subdiv.findNearest(
-		cv::Point2f(tri_i.at<float>(0,0), tri_i.at<float>(0,1)),
-		&p
-	);
+	auto edge_i = 0;
+	auto vertex_i = 0;
+	try {
+		auto result = subdiv.locate(
+			pt,
+			edge_i,
+			vertex_i
+		);
+		std::cout << "RESULT: " << result << std::endl;
+		// result of 1 means it's on a vertex, so edge_i isn't filled
+		// I don't know how to fill edge_i? at least not without just searching
+		// all the edges.
+		// one idea - make a get_edge_at that returns the average point between
+		// get_shape_at(i) and get_shape_at(i+1) to get the edge?
+	} catch(const cv::Exception& e) {
+		std::cerr << "wat????? " << e.msg << std::endl;
+		std::cout << "was finding nearest to " << pt << std::endl;
+	}
+
+	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
 	tri_o.at<float>(0,0) = p.x;
 	tri_o.at<float>(0,1) = p.y;
 
 	edge_i = subdiv.getEdge(edge_i, cv::Subdiv2D::NEXT_AROUND_LEFT);
-	subdiv.edgeOrg(edge_i, &p);
+	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
 	tri_o.at<float>(1,0) = p.x;
 	tri_o.at<float>(1,1) = p.y;
 
 	edge_i = subdiv.getEdge(edge_i, cv::Subdiv2D::NEXT_AROUND_LEFT);
-	subdiv.edgeOrg(edge_i, &p);
+	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
 	tri_o.at<float>(2,0) = p.x;
 	tri_o.at<float>(2,1) = p.y;
 
+	return tri_o;
+}
+
+auto Face::get_tri(const cv::Point3i& indices) -> cv::Mat
+{
+	auto tri_o = cv::Mat(3,2,CV_32F);
+	auto p0 = shape[indices.x];
+	auto p1 = shape[indices.y];
+	auto p2 = shape[indices.z];
+	tri_o.at<float>(0,0) = p0.x;
+	tri_o.at<float>(0,1) = p0.y;
+	tri_o.at<float>(1,0) = p1.x;
+	tri_o.at<float>(1,1) = p1.y;
+	tri_o.at<float>(2,0) = p2.x;
+	tri_o.at<float>(2,1) = p2.y;
 	return tri_o;
 }

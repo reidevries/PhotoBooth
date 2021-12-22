@@ -1,12 +1,12 @@
 #include "face.hpp"
 
-FaceDetector::FaceDetector(const std::string& predictor_filename)
-	: detector(dlib::get_frontal_face_detector())
+void Face::init_dlib(const std::string& predictor_filename)
 {
+	detector = dlib::get_frontal_face_detector();
 	dlib::deserialize(predictor_filename.c_str()) >> predictor;
 }
 
-auto FaceDetector::detect(const dlib::array2d<dlib::rgb_pixel>& img)
+auto Face::detect(const dlib::array2d<dlib::rgb_pixel>& img)
 	-> dlib::rectangle
 {
 	auto rects = detector(img, 1);
@@ -17,7 +17,7 @@ auto FaceDetector::detect(const dlib::array2d<dlib::rgb_pixel>& img)
 	return rects[0];
 }
 
-auto FaceDetector::predict(
+auto Face::predict(
 	const dlib::array2d<dlib::rgb_pixel>& img,
 	const dlib::rectangle& rect
 ) -> std::vector<cv::Point2f>
@@ -28,11 +28,11 @@ auto FaceDetector::predict(
 	return convert::dlib_to_cv(shape);
 }
 
-Face::Face(const cv::Mat& img, FaceDetector& face_detector)
+Face::Face(const cv::Mat& img)
 {
 	auto img_dlib = convert::cv_to_dlib_rgb(img);
-	auto rect_dlib = face_detector.detect(img_dlib);
-	shape = face_detector.predict(img_dlib, rect_dlib);
+	auto rect_dlib = detect(img_dlib);
+	shape = predict(img_dlib, rect_dlib);
 	rect = convert::dlib_to_cv(rect_dlib);
 
 	auto subdiv = cv::Subdiv2D();

@@ -36,6 +36,8 @@ class Face
 public:
 	Face() {}
 	Face(const cv::Mat& img, FaceDetector& face_detector);
+	auto get_shape() const
+		-> const std::vector<cv::Point2f>& { return shape; }
 	auto get_delaunay() const
 		-> const std::vector<cv::Mat>& { return delaunay; }
 	auto get_nearest_tri(const cv::Mat& tri_i)

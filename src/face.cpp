@@ -40,10 +40,8 @@ void Face::store_boundary_points(const cv::Mat& img)
 	shape.push_back(cv::Point2f(w/2,  1));
 	shape.push_back(cv::Point2f(  1,h/2));
 	shape.push_back(cv::Point2f(w/2,  h));
+	shape.push_back(cv::Point2f(w,  h/2));
 	shape.push_back(cv::Point2f(w/2,h/2));
-	for (u64 i = 0; i < 8; ++i) {
-		std::cout << shape[shape.size()-i-1] << std::endl;
-	}
 }
 
 Face::Face(const cv::Mat& img, FaceDetector& face_detector)

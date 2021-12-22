@@ -10,6 +10,18 @@ auto morph::warp_face(
 {
 	auto img_out = img_src.clone();
 
+	// debug
+	for (u64 i = 0; i < face_src.get_shape().size(); ++i) {
+		std::cout << "\t src: " << std::endl;
+		std::cout << face_src.get_shape()[i] << std::endl;
+		std::cout << "\t dst: " << std::endl;
+		std::cout << face_dst.get_shape()[i] << std::endl;
+	}
+	// it seems that the shapes vector is in the correct order, but for some
+	// reason the resulting delaunay triangulation is not. Possibly we should
+	// iterate over the shapes vector, find the same points in the delaunay
+	// vector, and then
+
 	for (u64 i = 0; i < face_src.get_delaunay().size(); i+=2) {
 		auto tri_src = face_src.get_delaunay()[i];
 		auto tri_dst = face_dst.get_nearest_tri(tri_src);

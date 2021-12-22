@@ -76,7 +76,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	}
 }
 
-auto Face::get_nearest_tri(const cv::Mat& tri_i) -> cv::Mat&
+auto Face::get_nearest_tri(const cv::Mat& tri_i) -> cv::Mat
 {
 	auto tri_o = cv::Mat(3,2,CV_32F);
 	auto p = cv::Point2f();

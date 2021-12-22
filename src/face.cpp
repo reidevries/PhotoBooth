@@ -52,7 +52,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	auto rect_dlib = face_detector.detect(img_dlib);
 	shape = face_detector.predict(img_dlib, rect_dlib);
 	rect = convert::dlib_to_cv(rect_dlib);
-//	store_boundary_points(img);
+	store_boundary_points(img);
 
 	subdiv = cv::Subdiv2D();
 	auto img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);

@@ -27,7 +27,13 @@ void trackbar_callback(int pos, void* ptr)
 	utils::normalize_default(img);
 	*/
 
-	auto img = morph::warp_face(p->images[6], p->face_src, p->face_dst, pos/100.0);
+	auto img = morph::warp_face(
+		p->images[6],
+		p->images[9],
+		p->face_src,
+		p->face_dst,
+		pos/100.0
+	);
 
 	cv::imshow(p->window_name, img);
 }

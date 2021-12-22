@@ -27,7 +27,7 @@ void trackbar_callback(int pos, void* ptr)
 	utils::normalize_default(img);
 	*/
 
-	auto img = morph::warp_face(p->images[0], p->face_src, p->face_dst, pos/100.0);
+	auto img = morph::warp_face(p->images[6], p->face_src, p->face_dst, pos/100.0);
 
 	cv::imshow(p->window_name, img);
 }
@@ -59,8 +59,8 @@ int main()
     p.img_xsize = images[0].rows;
     p.pca = PCA(data);
     p.window_name = window_name;
-	p.face_src = face_detector.get_landmarks(images[0]);
-	p.face_dst = face_detector.get_landmarks(images[1]);
+	p.face_src = Face(images[6], face_detector);
+	p.face_dst = Face(images[9], face_detector);
     // create the tracbar
     cv::createTrackbar(
 		"component",

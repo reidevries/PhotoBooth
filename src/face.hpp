@@ -11,26 +11,28 @@
 #include "utils.hpp"
 #include "convert.hpp"
 
-class Face
+class FaceDetector
+// basically just gives RAII to frontal_face_detector and shape_predictor
 {
-	static dlib::frontal_face_detector detector;
-	static dlib::shape_predictor predictor;
-
+	dlib::frontal_face_detector detector;
+	dlib::shape_predictor predictor;
+public:
+	FaceDetector(const std::string& predictor_filename);
 	auto detect(const dlib::array2d<dlib::rgb_pixel>& img) -> dlib::rectangle;
 	auto predict(
 		const dlib::array2d<dlib::rgb_pixel>& img,
 		const dlib::rectangle& rect
 	) -> std::vector<cv::Point2f>;
+};
 
+class Face
+{
 	cv::Rect rect;
 	std::vector<cv::Point2f> shape;
 	std::vector<cv::Mat> delaunay;
 public:
-	static void init_dlib(const std::string& predictor_filename);
-
-	Face(const cv::Mat& img);
-	auto get_rect() const -> const cv::Rect& { return rect; }
-	auto get_shape() const -> const std::vector<cv::Point2f>& { return shape; }
+	Face() {}
+	Face(const cv::Mat& img, FaceDetector& face_detector);
 	auto get_delaunay() const
 		-> const std::vector<cv::Mat>& { return delaunay; }
 };

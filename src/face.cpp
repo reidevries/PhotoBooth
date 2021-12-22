@@ -28,11 +28,27 @@ auto FaceDetector::predict(
 	return convert::dlib_to_cv(shape);
 }
 
+void Face::store_boundary_points(const cv::Mat& img)
+{
+	auto h = img.size[0];
+	auto w = img.size[1];
+	std::cout << "img has dims " << w << "x" << h << std::endl;
+	shape.push_back(cv::Point2f(1,1));
+	shape.push_back(cv::Point2f(w-1,1));
+	shape.push_back(cv::Point2f(1,h-1));
+	shape.push_back(cv::Point2f(w-1,h-1));
+	shape.push_back(cv::Point2f((w-1)/2,1));
+	shape.push_back(cv::Point2f(1,(h-1)/2));
+	shape.push_back(cv::Point2f((w-1)/2,h-1));
+	shape.push_back(cv::Point2f((w-1)/2,(h-1)/2));
+}
+
 Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 {
 	auto img_dlib = convert::cv_to_dlib_rgb(img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	shape = face_detector.predict(img_dlib, rect_dlib);
+	store_boundary_points(img);
 	rect = convert::dlib_to_cv(rect_dlib);
 
 	auto subdiv = cv::Subdiv2D();

@@ -1,6 +1,29 @@
 #include "morph.hpp"
 
 auto morph::warp_face(
+	const cv::Mat& img,
+	Face& face_src,
+	Face& face_dst,
+	const float pos
+) -> cv::Mat
+{
+	auto img_out = img.clone();
+	auto indices = face_src.get_delaunay_indices();
+	for (auto& index : indices) {
+		auto tri_src = face_src.get_tri(index);
+		auto tri_dst = face_dst.get_tri(index);
+		morph::warp_tri(
+			img_out,
+			img,
+			tri_src,
+			tri_dst,
+			pos
+		);
+	}
+	return img_out;
+}
+
+auto morph::warp_face_fading(
 	const cv::Mat& img_src,
 	const cv::Mat& img_dst,
 	Face& face_src,
@@ -8,20 +31,28 @@ auto morph::warp_face(
 	const float pos
 ) -> cv::Mat
 {
-	auto img_out = img_src.clone();
+	auto img1 = img_src.clone();
+	auto img2 = img_dst.clone();
 	auto indices = face_src.get_delaunay_indices();
 	for (auto& index : indices) {
 		auto tri_src = face_src.get_tri(index);
 		auto tri_dst = face_dst.get_tri(index);
 		morph::warp_tri(
-			img_out,
+			img1,
 			img_src,
 			tri_src,
 			tri_dst,
 			pos
 		);
+		morph::warp_tri(
+			img2,
+			img_dst,
+			tri_dst,
+			tri_src,
+			1-pos
+		);
 	}
-	return img_out;
+	return utils::mean(img1, img2, pos);
 }
 
 void morph::warp_tri(

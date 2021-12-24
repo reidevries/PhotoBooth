@@ -34,7 +34,6 @@ void trackbar_callback(int pos, void* ptr)
 
 	auto img = morph::warp_face(
 		p->images[FACE_I1],
-		p->images[FACE_I2],
 		p->face_src,
 		p->face_dst,
 		posf

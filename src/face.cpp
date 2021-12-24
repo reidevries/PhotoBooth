@@ -9,11 +9,29 @@ FaceDetector::FaceDetector(const std::string& predictor_filename)
 auto FaceDetector::detect(const dlib::array2d<dlib::rgb_pixel>& img)
 	-> dlib::rectangle
 {
+	auto detect_threshold = 1;
 	auto rects = detector(img, 1);
-	if (rects.size() == 0) {
-		rects = detector(img, 0);
+	// if no faces are detected, reduce the threshold a few times until some
+	// are found
+	while (rects.size() == 0) {
+		--detect_threshold;
+		rects = detector(img, detect_threshold);
+
+		// if no faces are detected by now, assume the face takes up the whole
+		// image
+		if (detect_threshold < -3) {
+			rects.push_back(dlib::rectangle(
+				0,
+				0,
+				img.width_step(),
+				img.size()/img.width_step())
+			);
+			break;
+		}
 	}
-	std::cout << "num faces detected: " << rects.size() << std::endl;
+	std::cout << "num faces detected: " << rects.size()
+			  << "threshold: " << detect_threshold
+			  << std::endl;
 	return rects[0];
 }
 

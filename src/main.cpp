@@ -6,6 +6,9 @@
 #include "face.hpp"
 #include "morph.hpp"
 
+int FACE_I1 = 13;
+int FACE_I2 = 14;
+
 struct trackbar_params
 {
 	std::vector<cv::Mat> images;
@@ -27,13 +30,25 @@ void trackbar_callback(int pos, void* ptr)
 	utils::normalize_default(img);
 	*/
 
-	auto img = morph::warp_face(
-		p->images[0],
-		p->images[9],
+	auto posf = pos/100.0;
+
+	auto img1 = morph::warp_face(
+		p->images[FACE_I2],
+		p->images[FACE_I1],
+		p->face_dst,
+		p->face_src,
+		posf
+	);
+
+	auto img2 = morph::warp_face(
+		p->images[FACE_I1],
+		p->images[FACE_I2],
 		p->face_src,
 		p->face_dst,
-		pos/100.0
+		posf
 	);
+
+	auto img = utils::mean(img1, img2, posf);
 
 	cv::imshow(p->window_name, img);
 }
@@ -61,10 +76,10 @@ int main()
 	// trackbar_params struct to pass to the trackbar handler
     trackbar_params p;
 	p.images = images;
-    p.img_xsize = images[0].rows;
+    p.img_xsize = images[FACE_I1].rows;
     p.window_name = window_name;
-	p.face_src = Face(images[0], face_detector);
-	p.face_dst = Face(images[9], face_detector);
+	p.face_src = Face(images[FACE_I1], face_detector);
+	p.face_dst = Face(images[FACE_I2], face_detector);
     // create the tracbar
     cv::createTrackbar(
 		"component",

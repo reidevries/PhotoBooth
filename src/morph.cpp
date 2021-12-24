@@ -9,12 +9,6 @@ auto morph::warp_face(
 ) -> cv::Mat
 {
 	auto img_out = img_src.clone();
-
-	// it seems that the shapes vector is in the correct order, but for some
-	// reason the resulting delaunay triangulation is not. Possibly we should
-	// iterate over the shapes vector, find the same points in the delaunay
-	// vector, and then
-
 	auto indices = face_src.get_delaunay_indices();
 	for (auto& index : indices) {
 		auto tri_src = face_src.get_tri(index);

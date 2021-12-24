@@ -23,5 +23,10 @@ auto convert::dlib_to_cv(const dlib::full_object_detection& shape)
 
 auto convert::dlib_to_cv(const dlib::rectangle& rect) -> cv::Rect
 {
-	return cv::Rect(rect.left(), rect.top(), rect.right(), rect.bottom());
+	return cv::Rect(
+		rect.left(),
+		rect.top(),
+		rect.right() - rect.left(),
+		rect.bottom() - rect.top()
+	);
 }

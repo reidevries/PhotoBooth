@@ -30,7 +30,7 @@ class Face
 	cv::Rect rect;
 	std::vector<cv::Point2f> shape;
 	cv::Subdiv2D subdiv;
-	std::vector<cv::Mat> delaunay;
+	std::vector<cv::Point3i> delaunay_indices;
 
 	void store_boundary_points(const cv::Mat& img);
 public:
@@ -40,12 +40,8 @@ public:
 		-> const std::vector<cv::Point2f>& { return shape; }
 	auto get_shape_at(const int i) const
 		-> cv::Point2f { return shape.at(i); }
-	auto get_delaunay() const
-		-> const std::vector<cv::Mat>& { return delaunay; }
-	auto get_delaunay_indices() const -> std::vector<cv::Point3i>;
-	auto get_nearest_tri(const cv::Mat& tri_i)
-		-> cv::Mat;
-	auto get_tri(const cv::Point2f& pt) -> cv::Mat;
+	auto get_delaunay_indices() const
+		-> std::vector<cv::Point3i> { return delaunay_indices; }
 	auto get_tri(const cv::Point3i& indices) -> cv::Mat;
 };
 

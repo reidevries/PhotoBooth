@@ -63,25 +63,10 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 
 	// the triangles need to be in a different format for getAffineTransform
 	for (const auto& tri: tri_list) {
-		auto tri_converted = cv::Mat(3, 2, CV_32F);
-		tri_converted.at<float>(0,0) = tri[0];
-		tri_converted.at<float>(0,1) = tri[1];
-		tri_converted.at<float>(1,0) = tri[2];
-		tri_converted.at<float>(1,1) = tri[3];
-		tri_converted.at<float>(2,0) = tri[4];
-		tri_converted.at<float>(2,1) = tri[5];
-		delaunay.push_back(tri_converted);
-	}
-}
-
-auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
-{
-	auto indices = std::vector<cv::Point3i>();
-	for (auto& tri: delaunay) {
-		auto index = cv::Point3i();
-		auto p1 = cv::Point2f(tri.at<float>(0,0), tri.at<float>(0,1));
-		auto p2 = cv::Point2f(tri.at<float>(1,0), tri.at<float>(1,1));
-		auto p3 = cv::Point2f(tri.at<float>(2,0), tri.at<float>(2,1));
+		auto index = cv::Point3i(-1,-1,-1);
+		auto p1 = cv::Point2f(tri[0], tri[1]);
+		auto p2 = cv::Point2f(tri[2], tri[3]);
+		auto p3 = cv::Point2f(tri[4], tri[5]);
 		for (u32 i = 0; i < shape.size(); ++i) {
 			if (shape[i] == p1) {
 				index.x = i;
@@ -91,54 +76,17 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 				index.z = i;
 			}
 		}
-		indices.push_back(index);
+		if (index.x == -1) {
+			std::cerr << "point " << p1 << " not found in face!" << std::endl;
+		}
+		if (index.y == -1) {
+			std::cerr << "point " << p2 << " not found in face!" << std::endl;
+		}
+		if (index.z == -1) {
+			std::cerr << "point " << p3 << " not found in face!" << std::endl;
+		}
+		delaunay_indices.push_back(index);
 	}
-	return indices;
-}
-
-auto Face::get_nearest_tri(const cv::Mat& tri_i) -> cv::Mat
-{
-	return cv::Mat();
-}
-
-auto Face::get_tri(const cv::Point2f& pt) -> cv::Mat
-{
-	auto tri_o = cv::Mat(3,2,CV_32F);
-	auto p = cv::Point2f();
-	auto edge_i = 0;
-	auto vertex_i = 0;
-	try {
-		auto result = subdiv.locate(
-			pt,
-			edge_i,
-			vertex_i
-		);
-		std::cout << "RESULT: " << result << std::endl;
-		// result of 1 means it's on a vertex, so edge_i isn't filled
-		// I don't know how to fill edge_i? at least not without just searching
-		// all the edges.
-		// one idea - make a get_edge_at that returns the average point between
-		// get_shape_at(i) and get_shape_at(i+1) to get the edge?
-	} catch(const cv::Exception& e) {
-		std::cerr << "wat????? " << e.msg << std::endl;
-		std::cout << "was finding nearest to " << pt << std::endl;
-	}
-
-	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
-	tri_o.at<float>(0,0) = p.x;
-	tri_o.at<float>(0,1) = p.y;
-
-	edge_i = subdiv.getEdge(edge_i, cv::Subdiv2D::NEXT_AROUND_LEFT);
-	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
-	tri_o.at<float>(1,0) = p.x;
-	tri_o.at<float>(1,1) = p.y;
-
-	edge_i = subdiv.getEdge(edge_i, cv::Subdiv2D::NEXT_AROUND_LEFT);
-	p = subdiv.getVertex(subdiv.edgeOrg(edge_i));
-	tri_o.at<float>(2,0) = p.x;
-	tri_o.at<float>(2,1) = p.y;
-
-	return tri_o;
 }
 
 auto Face::get_tri(const cv::Point3i& indices) -> cv::Mat

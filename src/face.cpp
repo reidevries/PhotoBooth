@@ -30,8 +30,9 @@ auto FaceDetector::detect(const dlib::array2d<dlib::rgb_pixel>& img)
 		}
 	}
 	std::cout << "num faces detected: " << rects.size()
-			  << "threshold: " << detect_threshold
-			  << std::endl;
+		<< std::endl
+		<< "threshold: " << detect_threshold
+		<< std::endl;
 	return rects[0];
 }
 

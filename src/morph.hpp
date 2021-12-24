@@ -15,8 +15,7 @@ auto warp_face(
 ) -> cv::Mat;
 
 auto warp_tri(
-	const cv::Mat& img_src,
-	const cv::Mat& img_dst,
+	const cv::Mat& img,
 	const cv::Mat& tri_src,
 	const cv::Mat& tri_dst,
 	const float pos

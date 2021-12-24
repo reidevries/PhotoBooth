@@ -6,8 +6,8 @@
 #include "face.hpp"
 #include "morph.hpp"
 
-int FACE_I1 = 13;
-int FACE_I2 = 14;
+int FACE_I1 = 23;
+int FACE_I2 = 24;
 
 struct trackbar_params
 {
@@ -32,23 +32,13 @@ void trackbar_callback(int pos, void* ptr)
 
 	auto posf = pos/100.0;
 
-	auto img1 = morph::warp_face(
-		p->images[FACE_I2],
-		p->images[FACE_I1],
-		p->face_dst,
-		p->face_src,
-		posf
-	);
-
-	auto img2 = morph::warp_face(
+	auto img = morph::warp_face(
 		p->images[FACE_I1],
 		p->images[FACE_I2],
 		p->face_src,
 		p->face_dst,
 		posf
 	);
-
-	auto img = utils::mean(img1, img2, posf);
 
 	cv::imshow(p->window_name, img);
 }

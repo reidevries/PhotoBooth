@@ -23,6 +23,12 @@ auto reshape_row_to_raw_grayscale_images(const cv::Mat& row, const u64 img_rows)
 
 void normalize_default(cv::Mat& mat);
 
+auto scale_point_to_other_rect(
+	const cv::Point2f& p,
+	const cv::Rect& src,
+	const cv::Rect& dst
+) -> cv::Point2f;
+
 template<typename T>
 auto mean(const T& a, const T& b, const float pos) -> T
 {

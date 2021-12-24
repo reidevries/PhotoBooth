@@ -73,3 +73,17 @@ void utils::normalize_default(cv::Mat& mat)
 {
     cv::normalize(mat, mat, 0, 255, cv::NORM_MINMAX, CV_8UC3);
 }
+
+auto utils::scale_point_to_other_rect(
+	const cv::Point2f& p,
+	const cv::Rect& src,
+	const cv::Rect& dst
+) -> cv::Point2f
+{
+	auto x_scale = dst.width/src.width;
+	auto y_scale = dst.height/src.height;
+	return cv::Point2f(
+		x_scale*(p.x - src.x) + dst.x,
+		y_scale*(p.y - src.y) + dst.y
+	);
+}

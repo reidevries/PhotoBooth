@@ -8,45 +8,39 @@ auto morph::warp_face(
 	const float pos
 ) -> cv::Mat
 {
-	auto img1 = img_src.clone();
-	auto img2 = img_dst.clone();
+	auto img_out = img_src.clone();
 	auto indices = face_src.get_delaunay_indices();
 	for (auto& index : indices) {
 		auto tri_src = face_src.get_tri(index);
 		auto tri_dst = face_dst.get_tri(index);
-		img1 = morph::warp_tri(
-			img1,
+		morph::warp_tri(
+			img_out,
+			img_src,
 			tri_src,
 			tri_dst,
 			pos
 		);
-		img2 = morph::warp_tri(
-			img2,
-			tri_dst,
-			tri_src,
-			1-pos
-		);
 	}
-	return utils::mean(img1, img2, pos);
+	return img_out;
 }
 
-auto morph::warp_tri(
-	const cv::Mat& img,
+void morph::warp_tri(
+	cv::Mat& img_out,
+	const cv::Mat& img_src,
 	const cv::Mat& tri_src,
 	const cv::Mat& tri_dst,
 	const float pos
-) -> cv::Mat
+)
 {
 	cv::Mat tri_interp = utils::mean(tri_src, tri_dst, pos);
-	auto img_trans = affine_transform(img, tri_src, tri_interp);
+	auto img_trans = affine_transform(img_src, tri_src, tri_interp);
 
-	auto rect_dst = cv::boundingRect(tri_dst);
 	cv::Mat mask = cv::Mat::zeros(
-		img.size[0],
-		img.size[1],
-		img.type()
+		img_out.size[0],
+		img_out.size[1],
+		img_out.type()
 	);
-	// needed for fillConvexPoly for some reason
+	// triConvexPoly wants a short datatype for some reason
 	cv::Mat tri_interp_short;
 	tri_interp.convertTo(tri_interp_short, CV_32S);
 	cv::fillConvexPoly(
@@ -55,9 +49,7 @@ auto morph::warp_tri(
 		cv::Scalar(1.0, 1.0, 1.0, 1.0)
 	);
 
-	auto output = img.clone();
-	img_trans.copyTo(output, mask);
-	return output;
+	img_trans.copyTo(img_out, mask);
 }
 
 auto morph::affine_transform(

@@ -14,12 +14,13 @@ auto warp_face(
 	const float pos
 ) -> cv::Mat;
 
-auto warp_tri(
-	const cv::Mat& img,
+void warp_tri(
+	cv::Mat& img_out,
+	const cv::Mat& img_src,
 	const cv::Mat& tri_src,
 	const cv::Mat& tri_dst,
 	const float pos
-) -> cv::Mat;
+);
 
 auto affine_transform(
 	const cv::Mat& img,

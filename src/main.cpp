@@ -6,8 +6,8 @@
 #include "face.hpp"
 #include "morph.hpp"
 
-int FACE_I1 = 23;
-int FACE_I2 = 24;
+int FACE_I1 = 13;
+int FACE_I2 = 12;
 
 struct trackbar_params
 {

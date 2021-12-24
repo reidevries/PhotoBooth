@@ -88,6 +88,18 @@ auto utils::scale_point_to_other_rect(
 	);
 }
 
+auto shift_scale_tri(
+	cv::Mat& tri,
+	const cv::Point2f& shift,
+	const cv::Point2f& scale
+)
+{
+	for (u8 i = 0; i < 3; ++i) {
+		tri.at<float>(i,0) = scale.x * (tri.at<float>(i,0) + shift.x);
+		tri.at<float>(i,1) = scale.x * (tri.at<float>(i,1) + shift.y);
+	}
+}
+
 auto scale_tri_to_other_rect(
 	cv::Mat& tri,
 	const cv::Rect& src,

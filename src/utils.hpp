@@ -29,6 +29,12 @@ auto scale_point_to_other_rect(
 	const cv::Rect& dst
 ) -> cv::Point2f;
 
+auto scale_tri_to_other_rect(
+	cv::Mat& tri,
+	const cv::Rect& src,
+	const cv::Rect& dst
+);
+
 template<typename T>
 auto mean(const T& a, const T& b, const float pos) -> T
 {

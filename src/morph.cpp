@@ -40,7 +40,7 @@ auto morph::warp_tri(
 	cv::Mat tri_interp = utils::mean(tri_src, tri_dst, pos);
 	auto img_trans = affine_transform(img, tri_src, tri_interp);
 
-	auto rect_dst = cv::boundingRect(tri_dst); // not sure if this will work
+	auto rect_dst = cv::boundingRect(tri_dst);
 	cv::Mat mask = cv::Mat::zeros(
 		img.size[0],
 		img.size[1],

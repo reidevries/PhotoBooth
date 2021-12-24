@@ -87,3 +87,17 @@ auto utils::scale_point_to_other_rect(
 		y_scale*(p.y - src.y) + dst.y
 	);
 }
+
+auto scale_tri_to_other_rect(
+	cv::Mat& tri,
+	const cv::Rect& src,
+	const cv::Rect& dst
+)
+{
+	auto x_scale = dst.width/src.width;
+	auto y_scale = dst.height/src.height;
+	for (u8 i = 0; i < 3; ++i) {
+		tri.at<float>(i,0) = x_scale * (tri.at<float>(i,0) - src.x) + dst.x;
+		tri.at<float>(i,1) = y_scale * (tri.at<float>(i,1) - src.y) + dst.y;
+	}
+}

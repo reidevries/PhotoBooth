@@ -28,17 +28,17 @@ public:
 class Face
 {
 	cv::Rect rect;
-	std::vector<cv::Point2f> shape;
+	std::vector<cv::Point2f> vertices;
 	std::vector<cv::Point3i> delaunay_indices;
 
 	void store_boundary_points(const cv::Mat& img);
 public:
 	Face() {}
 	Face(const cv::Mat& img, FaceDetector& face_detector);
-	auto get_shape() const
-		-> const std::vector<cv::Point2f>& { return shape; }
-	auto get_shape_at(const int i) const
-		-> cv::Point2f { return shape.at(i); }
+	auto get_vertices() const
+		-> const std::vector<cv::Point2f>& { return vertices; }
+	auto get_vertex_at(const int i) const
+		-> cv::Point2f { return vertices.at(i); }
 	auto get_delaunay_indices() const
 		-> std::vector<cv::Point3i> { return delaunay_indices; }
 	auto get_tri(const cv::Point3i& indices) -> cv::Mat;

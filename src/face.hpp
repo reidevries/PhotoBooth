@@ -75,6 +75,7 @@ public:
 	 */
 	auto get_tri(const cv::Point3i& indices) const -> cv::Mat;
 
+	auto get_rect() const -> cv::Rect { return rect; }
 	auto get_vertices() const
 		-> const std::vector<cv::Point2f>& { return vertices; }
 	auto get_vertex_at(const int i) const

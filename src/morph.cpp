@@ -32,7 +32,7 @@ auto morph::warp_tri(
 	const float pos
 ) -> cv::Mat
 {
-	cv::Mat tri_interp = tri_src*(1-pos) + tri_dst*pos;
+	cv::Mat tri_interp = utils::mean(tri_src, tri_dst, pos);
 	auto img_trans = affine_transform(img_dst, tri_src, tri_interp);
 
 	auto rect_dst = cv::boundingRect(tri_dst); // not sure if this will work
@@ -61,7 +61,8 @@ auto morph::affine_transform(
 	const cv::Mat& tri_dst
 ) -> cv::Mat
 {
-	auto affine = cv::getAffineTransform(tri_src, tri_dst);
+	// these have to be backwards from what the argument names would imply
+	auto affine = cv::getAffineTransform(tri_dst, tri_src);
 	cv::Mat output;
 	cv::warpAffine(img_src, output, affine, img_src.size(), cv::BORDER_REFLECT_101);
 	return output;

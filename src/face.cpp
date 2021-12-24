@@ -52,7 +52,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	rect = convert::dlib_to_cv(rect_dlib);
 	store_boundary_points(img);
 
-	subdiv = cv::Subdiv2D();
+	auto subdiv = cv::Subdiv2D();
 	auto img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
 	subdiv.initDelaunay(img_rect);
 	for (auto& point : shape) {

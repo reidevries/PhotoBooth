@@ -108,7 +108,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	}
 }
 
-auto Face::get_tri(const cv::Point3i& indices) -> cv::Mat
+auto Face::get_tri(const cv::Point3i& indices) const -> cv::Mat
 {
 	auto tri_o = cv::Mat(3,2,CV_32F);
 	auto p0 = vertices[indices.x];

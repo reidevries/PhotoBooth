@@ -73,7 +73,7 @@ public:
 	 * @param indices A triple of indices to `vertices`
 	 * @return A triangle in the format used by cv::getAffineTransform etc
 	 */
-	auto get_tri(const cv::Point3i& indices) -> cv::Mat;
+	auto get_tri(const cv::Point3i& indices) const -> cv::Mat;
 
 	auto get_vertices() const
 		-> const std::vector<cv::Point2f>& { return vertices; }

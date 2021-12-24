@@ -6,8 +6,8 @@
 #include "face.hpp"
 #include "morph.hpp"
 
-int FACE_I1 = 13;
-int FACE_I2 = 12;
+int FACE_I1 = 2;
+int FACE_I2 = 3;
 
 struct trackbar_params
 {
@@ -17,7 +17,22 @@ struct trackbar_params
     PCA pca;
     std::string window_name;
 	Face face_src, face_dst;
+	FaceDetector* face_detector;
 };
+
+void select_face1_callback(int pos, void* ptr)
+{
+    struct trackbar_params *p = (struct trackbar_params *)ptr;
+	FACE_I1 = pos;
+	p->face_src = Face(p->images[FACE_I1], *(p->face_detector));
+}
+void select_face2_callback(int pos, void* ptr)
+{
+    struct trackbar_params *p = (struct trackbar_params *)ptr;
+	FACE_I2 = pos;
+	p->face_dst = Face(p->images[FACE_I2], *(p->face_detector));
+}
+
 
 void trackbar_callback(int pos, void* ptr)
 {
@@ -32,8 +47,9 @@ void trackbar_callback(int pos, void* ptr)
 
 	auto posf = pos/100.0;
 
-	auto img = morph::warp_face(
+	auto img = morph::warp_face_fading(
 		p->images[FACE_I1],
+		p->images[FACE_I2],
 		p->face_src,
 		p->face_dst,
 		posf
@@ -57,7 +73,6 @@ int main()
 
 	//auto data = utils::reshape_images_to_rows(images);
 
-	auto face_detector = FaceDetector("shape_predictor_68_face_landmarks.dat");
 
 	// init highgui window
 	auto window_name = "reconstruction";
@@ -67,8 +82,8 @@ int main()
 	p.images = images;
     p.img_xsize = images[FACE_I1].rows;
     p.window_name = window_name;
-	p.face_src = Face(images[FACE_I1], face_detector);
-	p.face_dst = Face(images[FACE_I2], face_detector);
+	auto face_detector = FaceDetector("shape_predictor_68_face_landmarks.dat");
+	p.face_detector = &face_detector;
     // create the tracbar
     cv::createTrackbar(
 		"component",
@@ -76,6 +91,22 @@ int main()
 		NULL,
 		100,
 		trackbar_callback,
+		(void*)&p
+	);
+	cv::createTrackbar(
+		"face1",
+		window_name,
+		NULL,
+		images.size(),
+		select_face1_callback,
+		(void*)&p
+	);
+	cv::createTrackbar(
+		"face2",
+		window_name,
+		NULL,
+		images.size(),
+		select_face2_callback,
 		(void*)&p
 	);
     // display until user presses q

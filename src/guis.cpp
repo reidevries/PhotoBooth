@@ -1,17 +1,19 @@
 #include "guis.hpp"
 
+std::string FaceMorpher::window_name = "face morpher";
+
 FaceMorpher::FaceMorpher(
 	const std::vector<cv::Mat>& images
-) : params("face morpher", images)
+) : params(images)
 {
 	params.img1 = images[0];
 	params.img2 = images[0];
 
-	cv::namedWindow(params.window_name, cv::WINDOW_NORMAL);
+	cv::namedWindow(FaceMorpher::window_name, cv::WINDOW_NORMAL);
 
 	cv::createTrackbar(
 		"position",
-		params.window_name,
+		FaceMorpher::window_name,
 		NULL,
 		10,
 		trackbar_callback,
@@ -19,7 +21,7 @@ FaceMorpher::FaceMorpher(
 	);
 	cv::createTrackbar(
 		"face1",
-		params.window_name,
+		FaceMorpher::window_name,
 		NULL,
 		images.size()-1,
 		select_face1_callback,
@@ -27,7 +29,7 @@ FaceMorpher::FaceMorpher(
 	);
 	cv::createTrackbar(
 		"face2",
-		params.window_name,
+		FaceMorpher::window_name,
 		NULL,
 		images.size()-1,
 		select_face2_callback,
@@ -68,7 +70,7 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 void FaceMorpher::trackbar_callback(int pos, void* ptr)
 {
 	auto p = static_cast<GuiParams*>(ptr);
-	cv::imshow(p->window_name, p->faces[pos]);
+	cv::imshow(FaceMorpher::window_name, p->faces[pos]);
 }
 
 void FaceAverager::push(const cv::Mat& img, const Face& face)

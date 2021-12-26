@@ -16,8 +16,8 @@ int main()
 	std::cout << "loaded " << images.size() << " images from img_list.txt"
 		<< std::endl;
 
-	//initialize FaceMorpher gui
-	auto gui = gui::FaceMorpher(images);
+	//initialize FaceAverager gui
+	auto gui = gui::FaceAverager(images);
 
     // display until user presses q
     while(cv::waitKey() != 'q') {}

@@ -36,11 +36,11 @@ FaceMorpher::FaceMorpher(const std::vector<cv::Mat>& images) : params(images)
 	params.img1 = images[0];
 	params.img2 = images[0];
 
-	cv::namedWindow(FaceMorpher::window_name, cv::WINDOW_NORMAL);
+	cv::namedWindow(window_name, cv::WINDOW_NORMAL);
 
 	cv::createTrackbar(
 		"position",
-		FaceMorpher::window_name,
+		window_name,
 		NULL,
 		10,
 		trackbar_callback,
@@ -48,7 +48,7 @@ FaceMorpher::FaceMorpher(const std::vector<cv::Mat>& images) : params(images)
 	);
 	cv::createTrackbar(
 		"face1",
-		FaceMorpher::window_name,
+		window_name,
 		NULL,
 		images.size()-1,
 		select_face1_callback,
@@ -56,7 +56,7 @@ FaceMorpher::FaceMorpher(const std::vector<cv::Mat>& images) : params(images)
 	);
 	cv::createTrackbar(
 		"face2",
-		FaceMorpher::window_name,
+		window_name,
 		NULL,
 		images.size()-1,
 		select_face2_callback,
@@ -97,5 +97,5 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 void FaceMorpher::trackbar_callback(int pos, void* ptr)
 {
 	auto p = static_cast<GuiParams*>(ptr);
-	cv::imshow(FaceMorpher::window_name, p->faces[pos]);
+	cv::imshow(window_name, p->faces[pos]);
 }

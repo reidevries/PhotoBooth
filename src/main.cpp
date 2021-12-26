@@ -6,8 +6,13 @@
 #include "face.hpp"
 #include "morph.hpp"
 
-int FACE_I1 = 2;
-int FACE_I2 = 3;
+int FACE_I1 = 0;
+int FACE_I2 = 0;
+cv::Mat faces[11];
+cv::Mat img1;
+cv::Mat img2;
+Face face1;
+Face face2;
 
 struct trackbar_params
 {
@@ -24,15 +29,34 @@ void select_face1_callback(int pos, void* ptr)
 {
     struct trackbar_params *p = (struct trackbar_params *)ptr;
 	FACE_I1 = pos;
-	p->face_src = Face(p->images[FACE_I1], *(p->face_detector));
+	img1 = p->images[FACE_I1];
+	face1 = Face(img1, *p->face_detector);
+	for (u8 i = 0; i < 11; ++i) {
+		faces[i] = morph::warp_face_fading(
+			img1,
+			img2,
+			face1,
+			face2,
+			i/10.0
+		);
+	}
 }
 void select_face2_callback(int pos, void* ptr)
 {
     struct trackbar_params *p = (struct trackbar_params *)ptr;
 	FACE_I2 = pos;
-	p->face_dst = Face(p->images[FACE_I2], *(p->face_detector));
+	img2 = p->images[FACE_I2];
+	face2 = Face(img2, *p->face_detector);
+	for (u8 i = 0; i < 11; ++i) {
+		faces[i] = morph::warp_face_fading(
+			img1,
+			img2,
+			face1,
+			face2,
+			i/10.0
+		);
+	}
 }
-
 
 void trackbar_callback(int pos, void* ptr)
 {
@@ -45,15 +69,7 @@ void trackbar_callback(int pos, void* ptr)
 	utils::normalize_default(img);
 	*/
 
-	auto posf = pos/100.0;
-
-	auto img = morph::warp_face_fading(
-		p->images[FACE_I1],
-		p->images[FACE_I2],
-		p->face_src,
-		p->face_dst,
-		posf
-	);
+	auto img = faces[pos];
 
 	cv::imshow(p->window_name, img);
 }
@@ -84,12 +100,16 @@ int main()
     p.window_name = window_name;
 	auto face_detector = FaceDetector("shape_predictor_68_face_landmarks.dat");
 	p.face_detector = &face_detector;
+
+	img1 = images[FACE_I1];
+	img2 = images[FACE_I2];
+
     // create the tracbar
     cv::createTrackbar(
 		"component",
 		window_name,
 		NULL,
-		100,
+		10,
 		trackbar_callback,
 		(void*)&p
 	);
@@ -97,7 +117,7 @@ int main()
 		"face1",
 		window_name,
 		NULL,
-		images.size(),
+		images.size()-1,
 		select_face1_callback,
 		(void*)&p
 	);
@@ -105,7 +125,7 @@ int main()
 		"face2",
 		window_name,
 		NULL,
-		images.size(),
+		images.size()-1,
 		select_face2_callback,
 		(void*)&p
 	);

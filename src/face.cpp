@@ -60,7 +60,6 @@ void Face::store_boundary_points(const cv::Mat& img)
 	vertices.push_back(cv::Point2f(  1,h/2));
 	vertices.push_back(cv::Point2f(w/2,  h));
 	vertices.push_back(cv::Point2f(w,  h/2));
-	vertices.push_back(cv::Point2f(w/2,h/2));
 }
 
 Face::Face(const cv::Mat& img, FaceDetector& face_detector)
@@ -79,6 +78,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	}
 	std::vector<cv::Vec6f> tri_list;
 	subdiv.getTriangleList(tri_list);
+	std::cout << "stored " << tri_list.size() << " triangles" << std::endl;
 
 	// the triangles need to be in a different format for getAffineTransform
 	for (const auto& tri: tri_list) {
@@ -106,6 +106,7 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 		}
 		delaunay_indices.push_back(index);
 	}
+	std::cout << "stored " << delaunay_indices.size() << " delaunay indices" << std::endl;
 }
 
 auto Face::get_tri(const cv::Point3i& indices) -> cv::Mat

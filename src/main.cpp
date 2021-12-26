@@ -17,7 +17,7 @@ int main()
 		<< std::endl;
 
 	//initialize FaceMorpher gui
-	auto gui = FaceMorpher(images);
+	auto gui = gui::FaceMorpher(images);
 
     // display until user presses q
     while(cv::waitKey() != 'q') {}

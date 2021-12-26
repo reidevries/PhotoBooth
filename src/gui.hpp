@@ -4,14 +4,28 @@
 #include "morph.hpp"
 #include <opencv2/highgui.hpp>
 
+namespace gui
+{
+
 class FaceAverager
 {
-	cv::Mat avg_img;
-	cv::Rect avg_rect;
-	std::vector<cv::Point2f> avg_face_vertices;
-	int num_faces;
+	static std::string window_name;
+	struct GuiParams {
+		std::vector<cv::Mat> images;
+		FaceDetector face_detector;
+		cv::Mat faces[11];
+		cv::Mat img1;
+		cv::Mat img2;
+		Face face1;
+		Face face2;
+
+		GuiParams(
+			const std::vector<cv::Mat>& _images
+		) : images(_images)
+		{}
+	};
+	GuiParams params;
 public:
-	void push(const cv::Mat& img, const Face& face);
 };
 
 class FaceMorpher
@@ -40,5 +54,6 @@ public:
 	FaceMorpher(const std::vector<cv::Mat>& images);
 };
 
+} // namespace gui
 
 #endif // __GUIS_HPP_

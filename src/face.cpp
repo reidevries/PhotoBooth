@@ -1,9 +1,12 @@
 #include "face.hpp"
 
-FaceDetector::FaceDetector(const std::string& predictor_filename)
+std::string FaceDetector::predictor_filename
+	= "shape_predictor_68_face_landmarks.dat";
+
+FaceDetector::FaceDetector()
 	: detector(dlib::get_frontal_face_detector())
 {
-	dlib::deserialize(predictor_filename.c_str()) >> predictor;
+	dlib::deserialize(FaceDetector::predictor_filename.c_str()) >> predictor;
 }
 
 auto FaceDetector::detect(const dlib::array2d<dlib::rgb_pixel>& img)

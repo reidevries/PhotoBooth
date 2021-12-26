@@ -17,15 +17,15 @@
  */
 class FaceDetector
 {
+	static std::string predictor_filename;
 	dlib::frontal_face_detector detector;
 	dlib::shape_predictor predictor;
 public:
 	/**
 	 * Initializes the detector and predictor, deserializing the given .dat
-	 * file into the predictor.
-	 * @param predictor_filename specifies the .dat file name
+	 * file with hardcoded predictor_filename as the predictor
 	 */
-	FaceDetector(const std::string& predictor_filename);
+	FaceDetector();
 
 	/**
 	 * Detects a face and returns the rectangle bounding the face.

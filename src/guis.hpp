@@ -29,7 +29,6 @@ class FaceMorpher
 		GuiParams(
 			const std::vector<cv::Mat>& _images
 		) : images(_images)
-		  , face_detector("shape_predictor_68_face_landmarks.dat")
 		{}
 	};
 	GuiParams params;
@@ -37,7 +36,6 @@ class FaceMorpher
 	static void select_face1_callback(int pos, void* ptr);
 	static void select_face2_callback(int pos, void* ptr);
 	static void trackbar_callback(int pos, void* ptr);
-
 public:
 	FaceMorpher(const std::vector<cv::Mat>& images);
 };

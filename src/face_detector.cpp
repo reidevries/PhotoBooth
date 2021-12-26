@@ -1,5 +1,7 @@
 #include "face_detector.hpp"
 
+using namespace face;
+
 std::string FaceDetector::predictor_filename
 	= "shape_predictor_68_face_landmarks.dat";
 

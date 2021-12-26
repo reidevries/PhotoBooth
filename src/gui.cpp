@@ -46,7 +46,7 @@ void FaceMorpher::select_face1_callback(int pos, void* ptr)
 {
 	auto p = static_cast<GuiParams*>(ptr);
 	p->img1 = p->images[pos];
-	p->face1 = Face(p->img1, p->face_detector);
+	p->face1 = face::Face(p->img1, p->face_detector);
 	for (u8 i = 0; i < 11; ++i) {
 		p->faces[i] = morph::warp_face_fading(
 			p->img1,
@@ -61,7 +61,7 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 {
 	auto p = static_cast<GuiParams*>(ptr);
 	p->img2 = p->images[pos];
-	p->face2 = Face(p->img2, p->face_detector);
+	p->face2 = face::Face(p->img2, p->face_detector);
 	for (u8 i = 0; i < 11; ++i) {
 		p->faces[i] = morph::warp_face_fading(
 			p->img1,

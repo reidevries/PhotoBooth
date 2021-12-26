@@ -3,6 +3,9 @@
 
 #include "face_detector.hpp"
 
+namespace face
+{
+
 /**
  * Contains facial data generated from a photo of a Face
  */
@@ -40,5 +43,7 @@ public:
 	auto get_delaunay_indices() const
 		-> std::vector<cv::Point3i> { return delaunay_indices; }
 };
+
+}
 
 #endif // __FACE_HPP_

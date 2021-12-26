@@ -1,5 +1,7 @@
 #include "face.hpp"
 
+using namespace face;
+
 void Face::store_boundary_points(const cv::Mat& img)
 {
 	auto w = img.size[1] - 1;

@@ -1,5 +1,7 @@
 #include "face_averager.hpp"
 
+using namespace face;
+
 auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {
 	auto coef = 1.0;

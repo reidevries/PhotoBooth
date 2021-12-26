@@ -8,16 +8,16 @@ namespace morph
 {
 auto warp_face(
 	const cv::Mat& img,
-	const Face& face_src,
-	const Face& face_dst,
+	const face::Face& face_src,
+	const face::Face& face_dst,
 	const float pos
 ) -> cv::Mat;
 
 auto warp_face_fading(
 	const cv::Mat& img_src,
 	const cv::Mat& img_dst,
-	const Face& face_src,
-	const Face& face_dst,
+	const face::Face& face_src,
+	const face::Face& face_dst,
 	const float pos
 ) -> cv::Mat;
 

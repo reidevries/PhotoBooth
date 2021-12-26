@@ -12,12 +12,12 @@ class FaceAverager
 	static std::string window_name;
 	struct GuiParams {
 		std::vector<cv::Mat> images;
-		FaceDetector face_detector;
+		face::FaceDetector face_detector;
 		cv::Mat faces[11];
 		cv::Mat img1;
 		cv::Mat img2;
-		Face face1;
-		Face face2;
+		face::Face face1;
+		face::Face face2;
 
 		GuiParams(
 			const std::vector<cv::Mat>& _images
@@ -33,12 +33,12 @@ class FaceMorpher
 	static std::string window_name;
 	struct GuiParams {
 		std::vector<cv::Mat> images;
-		FaceDetector face_detector;
+		face::FaceDetector face_detector;
 		cv::Mat faces[11];
 		cv::Mat img1;
 		cv::Mat img2;
-		Face face1;
-		Face face2;
+		face::Face face1;
+		face::Face face2;
 
 		GuiParams(
 			const std::vector<cv::Mat>& _images

@@ -2,8 +2,8 @@
 
 auto morph::warp_face(
 	const cv::Mat& img,
-	const Face& face_src,
-	const Face& face_dst,
+	const face::Face& face_src,
+	const face::Face& face_dst,
 	const float pos
 ) -> cv::Mat
 {
@@ -26,8 +26,8 @@ auto morph::warp_face(
 auto morph::warp_face_fading(
 	const cv::Mat& img_src,
 	const cv::Mat& img_dst,
-	const Face& face_src,
-	const Face& face_dst,
+	const face::Face& face_src,
+	const face::Face& face_dst,
 	const float pos
 ) -> cv::Mat
 {

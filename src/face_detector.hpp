@@ -11,6 +11,9 @@
 #include "utils.hpp"
 #include "convert.hpp"
 
+namespace face
+{
+
 /**
  * FaceDetector basically gives RAII to two dlib classes for detecting faces
  * and facial landmarks.
@@ -45,5 +48,7 @@ public:
 		const dlib::rectangle& rect
 	) -> std::vector<cv::Point2f>;
 };
+
+}
 
 #endif // __FACE_DETECTOR_HPP_

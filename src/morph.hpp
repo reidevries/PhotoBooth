@@ -4,20 +4,30 @@
 #include "utils.hpp"
 #include "face.hpp"
 
+class FaceAverager
+{
+	cv::Mat avg_img;
+	cv::Rect avg_rect;
+	std::vector<cv::Point2f> avg_face_vertices;
+	int num_faces;
+public:
+	void push(const cv::Mat& img, const Face& face);
+};
+
 namespace morph
 {
 auto warp_face(
 	const cv::Mat& img,
-	Face& face_src, // this should be const, but can't because of lib :(
-	Face& face_dst, // same here
+	const Face& face_src,
+	const Face& face_dst,
 	const float pos
 ) -> cv::Mat;
 
 auto warp_face_fading(
 	const cv::Mat& img_src,
 	const cv::Mat& img_dst,
-	Face& face_src, // this should be const, but can't because of lib :(
-	Face& face_dst, // same here
+	const Face& face_src,
+	const Face& face_dst,
 	const float pos
 ) -> cv::Mat;
 

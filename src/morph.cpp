@@ -1,9 +1,23 @@
 #include "morph.hpp"
 
+void FaceAverager::push(const cv::Mat& img, const Face& face)
+{
+	auto coef = 1;
+	if (num_faces > 0) {
+		coef = 1.0/num_faces;
+	}
+	avg_img = utils::mean(avg_img, img, coef);
+	avg_rect = utils::mean(avg_rect, face.get_rect(), coef);
+	for (u32 i = 0; i < avg_face_vertices.size(); ++i) {
+		auto& avg_vertex = avg_face_vertices[i];
+		avg_vertex = utils::mean(avg_vertex, face.get_vertex_at(i), coef);
+	}
+}
+
 auto morph::warp_face(
 	const cv::Mat& img,
-	Face& face_src,
-	Face& face_dst,
+	const Face& face_src,
+	const Face& face_dst,
 	const float pos
 ) -> cv::Mat
 {
@@ -26,8 +40,8 @@ auto morph::warp_face(
 auto morph::warp_face_fading(
 	const cv::Mat& img_src,
 	const cv::Mat& img_dst,
-	Face& face_src,
-	Face& face_dst,
+	const Face& face_src,
+	const Face& face_dst,
 	const float pos
 ) -> cv::Mat
 {

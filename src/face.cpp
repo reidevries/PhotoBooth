@@ -24,9 +24,20 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	vertices = face_detector.predict(img_dlib, rect_dlib);
 	rect = convert::dlib_to_cv(rect_dlib);
 	store_boundary_points(img);
+	img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
+	calc_delaunay();
+}
 
+void Face::set_vertex_at(const cv::Point2f& vertex, const int i)
+{
+	vertices.at(i) = vertex;
+	delaunay_valid = false;
+}
+
+void Face::calc_delaunay()
+{
 	auto subdiv = cv::Subdiv2D();
-	auto img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
+
 	subdiv.initDelaunay(img_rect);
 	for (auto& point : vertices) {
 		subdiv.insert(point);
@@ -63,6 +74,8 @@ Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 	}
 	std::cout << "stored " << delaunay_indices.size()
 		<< " delaunay indices" << std::endl;
+
+	delaunay_valid = true;
 }
 
 auto Face::get_tri(const cv::Point3i& indices) const -> cv::Mat
@@ -78,4 +91,10 @@ auto Face::get_tri(const cv::Point3i& indices) const -> cv::Mat
 	tri_o.at<float>(2,0) = p2.x;
 	tri_o.at<float>(2,1) = p2.y;
 	return tri_o;
+}
+
+auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
+{
+	CV_Assert(delaunay_valid);
+	return delaunay_indices;
 }

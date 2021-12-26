@@ -18,4 +18,5 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		auto& avg_vertex = avg_vertices[i];
 		avg_vertex = utils::mean(avg_vertex, face.get_vertex_at(i), coef);
 	}
+	return avg_img;
 }

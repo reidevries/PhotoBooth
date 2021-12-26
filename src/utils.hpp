@@ -41,6 +41,8 @@ auto scale_tri_to_other_rect(
 	const cv::Rect& dst
 );
 
+auto mean(const cv::Rect& a, const cv::Rect& b, const float pos) -> cv::Rect;
+
 template<typename T>
 auto mean(const T& a, const T& b, const float pos) -> T
 {

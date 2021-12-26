@@ -88,7 +88,7 @@ auto utils::scale_point_to_other_rect(
 	);
 }
 
-auto shift_scale_tri(
+auto utils::shift_scale_tri(
 	cv::Mat& tri,
 	const cv::Point2f& shift,
 	const cv::Point2f& scale
@@ -100,7 +100,7 @@ auto shift_scale_tri(
 	}
 }
 
-auto scale_tri_to_other_rect(
+auto utils::scale_tri_to_other_rect(
 	cv::Mat& tri,
 	const cv::Rect& src,
 	const cv::Rect& dst
@@ -112,4 +112,15 @@ auto scale_tri_to_other_rect(
 		tri.at<float>(i,0) = x_scale * (tri.at<float>(i,0) - src.x) + dst.x;
 		tri.at<float>(i,1) = y_scale * (tri.at<float>(i,1) - src.y) + dst.y;
 	}
+}
+
+auto utils::mean(const cv::Rect& a, const cv::Rect& b, const float pos)
+	-> cv::Rect
+{
+	return cv::Rect(
+		utils::mean(a.x,b.x,pos),
+		utils::mean(a.y,b.y,pos),
+		utils::mean(a.width,b.width,pos),
+		utils::mean(a.height,b.height,pos)
+	);
 }

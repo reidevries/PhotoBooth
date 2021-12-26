@@ -11,6 +11,6 @@ class FaceAverager
 	int num_faces;
 public:
 	auto push(const cv::Mat& img, const Face& face) -> cv::Mat;
-}
+};
 
 #endif // __FACE_AVERAGER_HPP_

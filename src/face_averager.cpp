@@ -14,13 +14,20 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		return avg_img;
 	}
 
-	avg_rect = utils::mean(avg_rect, face.get_rect(), coef);
-	for (u32 i = 0; i < avg_vertices.size(); ++i) {
-		auto& avg_vertex = avg_vertices[i];
-		avg_vertex = utils::mean(avg_vertex, face.get_vertex_at(i), coef);
+	avg_face.set_rect(utils::mean(avg_face.get_rect(), face.get_rect(), coef));
+	for (u32 i = 0; i < avg_face.get_vertices().size(); ++i) {
+		avg_face.set_vertex_at(
+			utils::mean(avg_face.get_vertex_at(i), face.get_vertex_at(i), coef),
+			i
+		);
 	}
 
-	auto img_warped = img; //TODO
+	auto img_warped = morph::warp_face(
+		img,
+		face,
+		avg_face,
+		1.0
+	);
 
 	avg_img = utils::mean(avg_img, img_warped, coef);
 	return avg_img;

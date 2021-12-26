@@ -9,8 +9,7 @@ namespace face
 class FaceAverager
 {
 	cv::Mat avg_img;
-	cv::Rect avg_rect;
-	std::vector<cv::Point2f> avg_vertices;
+	Face avg_face;
 	int num_faces;
 public:
 	auto push(const cv::Mat& img, const Face& face) -> cv::Mat;

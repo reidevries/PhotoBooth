@@ -4,16 +4,6 @@
 #include "utils.hpp"
 #include "face.hpp"
 
-class FaceAverager
-{
-	cv::Mat avg_img;
-	cv::Rect avg_rect;
-	std::vector<cv::Point2f> avg_face_vertices;
-	int num_faces;
-public:
-	void push(const cv::Mat& img, const Face& face);
-};
-
 namespace morph
 {
 auto warp_face(

@@ -1,7 +1,7 @@
 #include "numbers.hpp"
 #include <opencv2/highgui.hpp>
 
-#include "guis.hpp"
+#include "gui.hpp"
 
 int main()
 {

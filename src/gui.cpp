@@ -1,4 +1,4 @@
-#include "guis.hpp"
+#include "gui.hpp"
 
 std::string FaceMorpher::window_name = "face morpher";
 

@@ -6,7 +6,7 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {
 	auto coef = 1.0;
 	if (num_faces > 0) {
-		coef = 1.0/num_faces;
+		coef = 1.0/(num_faces+1);
 	} else {
 		// if num_faces == 0 then we need to initialize the averages
 		avg_face = face;
@@ -21,6 +21,8 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		return avg_img;
 	}
 
+	auto old_avg_face = avg_face;
+
 	// set the rect of avg_face to a new mean
 	avg_face.set_rect(utils::mean(avg_face.get_rect(), face.get_rect(), coef));
 	// set the vertices of the average to a new mean
@@ -34,6 +36,14 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 			i
 		);
 	}
+
+	old_avg_face.calc_delaunay();
+	avg_img = morph::warp_face(
+		avg_img,
+		old_avg_face,
+		avg_face,
+		1.0
+	);
 
 	auto img_warped = morph::warp_face(
 		img,

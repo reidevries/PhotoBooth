@@ -17,15 +17,13 @@ FaceAverager::FaceAverager(const std::vector<cv::Mat>& images) : params(images)
 	for (auto& img : images) {
 		auto face = face::Face(img, params.face_detector);
 		params.avg_images.push_back(face_averager.push(img, face));
-		std::cout << "." << std::flush;
 	}
-	std::cout << std::endl;
 	cv::namedWindow(window_name, cv::WINDOW_NORMAL);
 	cv::createTrackbar(
 		"position",
 		window_name,
 		NULL,
-		images.size(),
+		images.size()-1,
 		trackbar_callback,
 		static_cast<void*>(&params)
 	);

@@ -2,14 +2,36 @@
 
 using namespace gui;
 
+std::string FaceAverager::window_name = "face averager";
 
+void FaceAverager::trackbar_callback(int pos, void* ptr)
+{
+	auto p = static_cast<GuiParams*>(ptr);
+	cv::imshow(window_name, p->avg_images[pos]);
+}
+
+FaceAverager::FaceAverager(const std::vector<cv::Mat>& images) : params(images)
+{
+	auto face_averager = face::FaceAverager();
+	for (auto& img : images) {
+		auto face = face::Face(img, params.face_detector);
+		params.avg_images.push_back(face_averager.push(img, face));
+	}
+	cv::namedWindow(window_name, cv::WINDOW_NORMAL);
+	cv::createTrackbar(
+		"position",
+		window_name,
+		NULL,
+		images.size(),
+		trackbar_callback,
+		static_cast<void*>(&params)
+	);
+}
 
 
 std::string FaceMorpher::window_name = "face morpher";
 
-FaceMorpher::FaceMorpher(
-	const std::vector<cv::Mat>& images
-) : params(images)
+FaceMorpher::FaceMorpher(const std::vector<cv::Mat>& images) : params(images)
 {
 	params.img1 = images[0];
 	params.img2 = images[0];

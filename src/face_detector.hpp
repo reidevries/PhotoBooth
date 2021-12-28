@@ -23,6 +23,16 @@ class FaceDetector
 	static std::string predictor_filename;
 	dlib::frontal_face_detector detector;
 	dlib::shape_predictor predictor;
+
+	/**
+	 * Used to extract the vertices along the boundary of an image.
+	 * @param img The image file in dlib format
+	 * @param vertices The vertices will be pushed to this vector
+	 */
+	static void store_boundary_vertices(
+		const dlib::array2d<dlib::rgb_pixel>& img,
+		std::vector<cv::Point2f>& vertices
+	);
 public:
 	/**
 	 * Initializes the detector and predictor, deserializing the given .dat

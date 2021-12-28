@@ -21,8 +21,6 @@ class Face
 	std::vector<cv::Point3i> delaunay_indices;
 	/// stores whether the current list of delaunay indices is valid
 	bool delaunay_valid = false;
-	/// Used as part of Face constructor to store the img boundaries as vertices
-	void store_boundary_points(const cv::Mat& img);
 public:
 	Face() {}
 	/**

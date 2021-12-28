@@ -2,28 +2,12 @@
 
 using namespace face;
 
-void Face::store_boundary_points(const cv::Mat& img)
-{
-	auto w = img.size[1] - 1;
-	auto h = img.size[0] - 1;
-	std::cout << "img size is " << img.size << std::endl;
-	vertices.push_back(cv::Point2f(  1,  1));
-	vertices.push_back(cv::Point2f(  w,  1));
-	vertices.push_back(cv::Point2f(  1,  h));
-	vertices.push_back(cv::Point2f(  w,  h));
-	vertices.push_back(cv::Point2f(w/2,  1));
-	vertices.push_back(cv::Point2f(  1,h/2));
-	vertices.push_back(cv::Point2f(w/2,  h));
-	vertices.push_back(cv::Point2f(w,  h/2));
-}
-
 Face::Face(const cv::Mat& img, FaceDetector& face_detector)
 {
 	auto img_dlib = convert::cv_to_dlib_rgb(img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	vertices = face_detector.predict(img_dlib, rect_dlib);
 	rect = convert::dlib_to_cv(rect_dlib);
-	store_boundary_points(img);
 	img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
 	calc_delaunay();
 }

@@ -33,7 +33,16 @@ static auto get_foreground_mask(
 	cv::Mat bg_model;
 	cv::Mat fg_model;
 	cv::Mat mask;
-	mask.create(img.size, CV_8UC1);
+	cv::grabCut(
+		img,
+		mask,
+		rect,
+		bg_model,
+		fg_model,
+		iter_count,
+		cv::GC_INIT_WITH_RECT
+	);
+	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
 	return mask;
 }
 

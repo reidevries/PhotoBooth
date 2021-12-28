@@ -33,6 +33,16 @@ class FaceDetector
 		const dlib::array2d<dlib::rgb_pixel>& img,
 		std::vector<cv::Point2f>& vertices
 	);
+
+	/**
+	 * Used to extract a mask of the image foreground using GrabCut
+	 */
+	static auto get_foreground_mask(
+		const cv::Mat& img,
+		const cv::Rect& rect,
+		const int threshold,
+		const int iter_count
+	) -> cv::Mat;
 public:
 	/**
 	 * Initializes the detector and predictor, deserializing the given .dat

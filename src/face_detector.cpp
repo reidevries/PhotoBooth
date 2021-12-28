@@ -23,6 +23,20 @@ void FaceDetector::store_boundary_vertices(
 	vertices.push_back(cv::Point2f(w,  h/2));
 }
 
+static auto get_foreground_mask(
+	const cv::Mat& img,
+	const cv::Rect& rect,
+	const int threshold,
+	const int iter_count
+)
+{
+	cv::Mat bg_model;
+	cv::Mat fg_model;
+	cv::Mat mask;
+	mask.create(img.size, CV_8UC1);
+	return mask;
+}
+
 FaceDetector::FaceDetector()
 	: detector(dlib::get_frontal_face_detector())
 {

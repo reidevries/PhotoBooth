@@ -35,7 +35,9 @@ std::string FaceMorpher::window_name = "face morpher";
 FaceMorpher::FaceMorpher(const std::vector<cv::Mat>& images) : params(images)
 {
 	params.img1 = images[0];
-	params.img2 = images[0];
+	params.img2 = images[1];
+	params.face1 = face::Face(params.img1, params.face_detector);
+	params.face2 = face::Face(params.img2, params.face_detector);
 
 	cv::namedWindow(window_name, cv::WINDOW_NORMAL);
 

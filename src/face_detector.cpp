@@ -23,13 +23,21 @@ void FaceDetector::store_boundary_vertices(
 	vertices.push_back(cv::Point2f(w,  h/2));
 }
 
-static auto get_foreground_mask(
+auto FaceDetector::get_foreground_mask(
 	const cv::Mat& img,
-	const cv::Rect& rect,
+	const cv::Rect& face_rect,
 	const int threshold,
 	const int iter_count
-)
+) -> cv::Mat
 {
+	// make a new rect to attempt to capture the entire face rather than just
+	// central features
+	auto rect = cv::Rect(
+		face_rect.x/2,
+		face_rect.y/4,
+		face_rect.width*1.5,
+		img.size().height - face_rect.y/4
+	);
 	cv::Mat bg_model;
 	cv::Mat fg_model;
 	cv::Mat mask;
@@ -43,7 +51,22 @@ static auto get_foreground_mask(
 		cv::GC_INIT_WITH_RECT
 	);
 	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
-	return mask;
+	if (threshold == 0) { // GC_PR_BGD, GC_PR_FGD and GC_FGD included
+		for (u16 i = 0; i < mask.rows*mask.cols; ++i) {
+			uchar p_i = *mask.ptr(i);
+			uchar* p = output_mask.ptr(i);
+			*p = p_i & cv::GC_FGD | ((p_i && cv::GC_PR_BGD) >> 1 );
+		}
+	} else if (threshold == 1) { // GC_PR_FGD and GC_FGD included
+		output_mask = mask & cv::GC_FGD;
+	} else if (threshold == 2) {
+		for (u16 i = 0; i < mask.rows*mask.cols; ++i) {
+			uchar p_i = *mask.ptr(i);
+			uchar* p = output_mask.ptr(i);
+			*p = p_i & cv::GC_FGD & !((p_i && cv::GC_PR_BGD) >> 1 );
+		}
+	}
+	return output_mask*255;
 }
 
 FaceDetector::FaceDetector()

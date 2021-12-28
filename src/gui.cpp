@@ -88,13 +88,22 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 	p->img2 = p->images[pos];
 	p->face2 = face::Face(p->img2, p->face_detector);
 	for (u8 i = 0; i < 11; ++i) {
-		p->faces[i] = morph::warp_face_fading(
+		p->faces[i] = p->img2.setTo(
+			cv::Scalar(0,0,0),
+			face::FaceDetector::get_foreground_mask(
+				p->img2,
+				p->face2.get_rect(),
+				0,
+				4
+			)
+		);
+		/*morph::warp_face_fading(
 			p->img1,
 			p->img2,
 			p->face1,
 			p->face2,
 			i/10.0
-		);
+		);*/
 	}
 }
 void FaceMorpher::trackbar_callback(int pos, void* ptr)

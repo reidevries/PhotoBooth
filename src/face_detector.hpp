@@ -34,6 +34,7 @@ class FaceDetector
 		std::vector<cv::Point2f>& vertices
 	);
 
+public:
 	/**
 	 * Used to extract a mask of the image foreground using GrabCut
 	 */
@@ -43,7 +44,7 @@ class FaceDetector
 		const int threshold,
 		const int iter_count
 	) -> cv::Mat;
-public:
+
 	/**
 	 * Initializes the detector and predictor, deserializing the given .dat
 	 * file with hardcoded predictor_filename as the predictor

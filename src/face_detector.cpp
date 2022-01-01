@@ -57,7 +57,7 @@ auto FaceDetector::get_foreground_mask(
 			uchar* p = output_mask.ptr(row_i);
 			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
 				auto p_i = *p;
-				*p = p_i & cv::GC_FGD | ((p_i && cv::GC_PR_BGD) >> 1 );
+				*p = p_i & cv::GC_FGD | ((p_i & cv::GC_PR_BGD) >> 1 );
 				++p;
 			}
 		}
@@ -68,13 +68,15 @@ auto FaceDetector::get_foreground_mask(
 			uchar* p = output_mask.ptr(row_i);
 			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
 				auto p_i = *p;
-				*p = p_i & cv::GC_FGD & ! ((p_i && cv::GC_PR_BGD) >> 1 );
+				*p = p_i & cv::GC_FGD & ! ((p_i & cv::GC_PR_BGD) >> 1 );
 				++p;
 			}
 		}
 	}
 	return output_mask*255;
 }
+
+
 
 FaceDetector::FaceDetector()
 	: detector(dlib::get_frontal_face_detector())

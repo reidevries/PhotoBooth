@@ -35,7 +35,7 @@ auto FaceDetector::get_foreground_mask(
 	auto rect = cv::Rect(
 		face_rect.x/2,
 		face_rect.y/4,
-		face_rect.width*1.5,
+		img.size().width - (face_rect.x/2 + face_rect.width),
 		img.size().height - face_rect.y/4
 	);
 	cv::Mat bg_model;
@@ -51,19 +51,26 @@ auto FaceDetector::get_foreground_mask(
 		cv::GC_INIT_WITH_RECT
 	);
 	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
+	mask.convertTo(output_mask, CV_8UC1);
 	if (threshold == 0) { // GC_PR_BGD, GC_PR_FGD and GC_FGD included
-		for (u16 i = 0; i < mask.rows*mask.cols; ++i) {
-			uchar p_i = *mask.ptr(i);
-			uchar* p = output_mask.ptr(i);
-			*p = p_i & cv::GC_FGD | ((p_i && cv::GC_PR_BGD) >> 1 );
+		for (u16 row_i = 0; row_i < mask.rows; ++row_i) {
+			uchar* p = output_mask.ptr(row_i);
+			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
+				auto p_i = *p;
+				*p = p_i & cv::GC_FGD | ((p_i && cv::GC_PR_BGD) >> 1 );
+				++p;
+			}
 		}
 	} else if (threshold == 1) { // GC_PR_FGD and GC_FGD included
 		output_mask = mask & cv::GC_FGD;
-	} else if (threshold == 2) {
-		for (u16 i = 0; i < mask.rows*mask.cols; ++i) {
-			uchar p_i = *mask.ptr(i);
-			uchar* p = output_mask.ptr(i);
-			*p = p_i & cv::GC_FGD & !((p_i && cv::GC_PR_BGD) >> 1 );
+	} else if (threshold == 2) { // only GC_FGD included
+		for (u16 row_i = 0; row_i < mask.rows; ++row_i) {
+			uchar* p = output_mask.ptr(row_i);
+			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
+				auto p_i = *p;
+				*p = p_i & cv::GC_FGD & ! ((p_i && cv::GC_PR_BGD) >> 1 );
+				++p;
+			}
 		}
 	}
 	return output_mask*255;

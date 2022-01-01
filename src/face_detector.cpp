@@ -31,12 +31,12 @@ auto FaceDetector::get_foreground_mask(
 ) -> cv::Mat
 {
 	// make a new rect to attempt to capture the entire face rather than just
-	// central features
+	// central features (a better way to do this might be
 	auto rect = cv::Rect(
-		face_rect.x/2,
-		face_rect.y/4,
-		img.size().width - (face_rect.x/2 + face_rect.width),
-		img.size().height - face_rect.y/4
+		fmax(0, face_rect.x - face_rect.width/2),
+		fmax(0, face_rect.y - face_rect.height/2),
+		fmin(img.size().width, face_rect.width*1.5),
+		fmin(img.size().height, face_rect.height*1.5)
 	);
 	cv::Mat bg_model;
 	cv::Mat fg_model;
@@ -52,15 +52,8 @@ auto FaceDetector::get_foreground_mask(
 	);
 	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
 	mask.convertTo(output_mask, CV_8UC1);
-	if (threshold == 0) { // GC_PR_BGD, GC_PR_FGD and GC_FGD included
-		for (u16 row_i = 0; row_i < mask.rows; ++row_i) {
-			uchar* p = output_mask.ptr(row_i);
-			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
-				auto p_i = *p;
-				*p = p_i & cv::GC_FGD | ((p_i & cv::GC_PR_BGD) >> 1 );
-				++p;
-			}
-		}
+	if (threshold == 0) { // basically just includes the whole face
+		output_mask = mask;
 	} else if (threshold == 1) { // GC_PR_FGD and GC_FGD included
 		output_mask = mask & cv::GC_FGD;
 	} else if (threshold == 2) { // only GC_FGD included

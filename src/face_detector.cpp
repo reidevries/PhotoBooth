@@ -35,8 +35,8 @@ auto FaceDetector::get_foreground_mask(
 	auto rect = cv::Rect(
 		fmax(0, face_rect.x - face_rect.width/2),
 		fmax(0, face_rect.y - face_rect.height/2),
-		fmin(img.size().width, face_rect.width*1.5),
-		fmin(img.size().height, face_rect.height*1.5)
+		fmin(img.size().width, face_rect.width*2),
+		fmin(img.size().height, face_rect.height*2)
 	);
 	cv::Mat bg_model;
 	cv::Mat fg_model;

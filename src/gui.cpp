@@ -93,7 +93,7 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 			face::FaceDetector::get_foreground_mask(
 				p->img2,
 				p->face2.get_rect(),
-				0,
+				1,
 				4
 			)
 		);

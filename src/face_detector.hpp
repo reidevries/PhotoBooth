@@ -59,7 +59,8 @@ public:
 	 */
 	static auto get_fg_edge_points(
 		const cv::Mat& img,
-		const cv::Rect& rect
+		const cv::Rect& rect,
+		const cv::Point2f& facing_direction
 	) -> std::vector<cv::Point2f>;
 
 	/**

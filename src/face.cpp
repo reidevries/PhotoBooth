@@ -15,8 +15,13 @@ void Face::estimate_direction()
 	const auto& nose_tip = vertices[NOSE_TIP_I];
 	const auto& nose_base = vertices[NOSE_BASE_I];
 	const auto& chin = vertices[CHIN_I];
+	auto upper_cheek = fminf(l_cheek.y, r_cheek.y);
 	auto x = (nose_tip.x - l_cheek.x) / (r_cheek.x - l_cheek.x);
+	auto y = (nose_tip.y - upper_cheek) / (chin.y - upper_cheek);
 	direction.x = fmaxf(-1, fminf(1, 2 * x - 1));
+	direction.y = fmaxf(-1, fminf(1, 2 * y));
+	std::cout << "face is probably pointing in direction " << direction
+		<< std::endl;
 }
 
 Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
@@ -24,13 +29,15 @@ Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 	auto img_dlib = convert::cv_to_dlib_rgb(img.img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	vertices = face_detector.predict(img_dlib, rect_dlib);
+	estimate_direction();
 
 	rect = convert::dlib_to_cv(rect_dlib);
-	auto fg_edges = FaceDetector::get_fg_edge_points(img.img, rect);
+	auto fg_edges = FaceDetector::get_fg_edge_points(img.img, rect, direction);
 	vertices.insert(vertices.end(), fg_edges.begin(), fg_edges.end());
 
 	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	calc_delaunay();
+
 }
 
 void Face::set_vertex_at(const cv::Point2f& vertex, const int i)

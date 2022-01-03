@@ -123,7 +123,8 @@ auto FaceDetector::get_fg_edge_points(
 
 auto FaceDetector::get_fg_edge_points(
 	const cv::Mat& img,
-	const cv::Rect& rect
+	const cv::Rect& rect,
+	const cv::Point2f& facing_direction
 ) -> std::vector<cv::Point2f>
 {
 	auto direction_vectors = std::vector<cv::Point2f>{
@@ -136,6 +137,9 @@ auto FaceDetector::get_fg_edge_points(
 		cv::Point2f(-1,0),
 		cv::Point2f(-0.866, 0.5)
 	};
+	for (auto& v : direction_vectors) {
+		v.y *= facing_direction.y;
+	}
 	auto mask = get_fg_mask(img, rect);
 	return get_fg_edge_points(mask, rect, direction_vectors);
 }

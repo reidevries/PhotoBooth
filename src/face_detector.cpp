@@ -106,11 +106,13 @@ auto FaceDetector::get_fg_edge_points(
 	for (u8 i = 0; i < num_points; ++i) {
 		auto& cur_ray = edge_points[i];
 		auto& cur_dir = direction_vectors[i];
+		auto next_ray = cur_ray + cur_dir;
 		while (
-			cur_ray.inside(boundary)
-			&& mask.at<u8>(cur_ray.y, cur_ray.x) > 0
+			next_ray.inside(boundary)
+			&& mask.at<u8>(next_ray.y, next_ray.x) > 0
 		) {
-			cur_ray += cur_dir;
+			cur_ray = next_ray;
+			next_ray += cur_dir;
 		}
 		std::cout << "FaceDetector::get_fg_edge_points "
 			<< "found mask edge at " << cur_ray << std::endl;

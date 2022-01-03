@@ -22,8 +22,13 @@ class Face
 	std::vector<cv::Point3i> delaunay_indices;
 	/// stores whether the current list of delaunay indices is valid
 	bool delaunay_valid = false;
+	/// stores the estimated direction that the Face is pointing toward
+	/// (0,0) is centre, (1,0) is right, (-1,1) is bottom left etc
+	cv::Point2f direction;
 	/// stores the filename of the img it came from for debugging
 	std::string name;
+
+	void estimate_direction();
 public:
 	Face() {}
 	/**

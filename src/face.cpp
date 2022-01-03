@@ -2,6 +2,15 @@
 
 using namespace face;
 
+void Face::estimate_direction()
+{
+	const auto& l_cheek = vertices[2];
+	const auto& r_cheek = vertices[14];
+	const auto& nose_tip = vertices[33];
+	auto cheek_distance = r_cheek.x - l_cheek.x;
+	direction.x = 2 * nose_tip.x / cheek_distance - 1;
+}
+
 Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 {
 	auto img_dlib = convert::cv_to_dlib_rgb(img.img);
@@ -96,7 +105,10 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 void Face::draw_markers(cv::Mat& img) const
 {
 	for (auto& p : vertices) {
-		cv::drawMarker(img, p, cv::Scalar(255,100,20));
+		cv::drawMarker(img, p, cv::Scalar(255,100,20), cv::MARKER_CROSS, 6);
 	}
+	cv::drawMarker(img, vertices[2], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[14], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[33], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
 	cv::rectangle(img, rect, cv::Scalar(0,255,255));
 }

@@ -119,14 +119,30 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 
 void Face::draw_markers(cv::Mat& img) const
 {
-	for (auto& p : vertices) {
-		cv::drawMarker(img, p, cv::Scalar(255,100,20), cv::MARKER_CROSS, 6);
-	}
 	static const cv::Scalar RED(0,0,255);
-	cv::drawMarker(img, vertices[L_CHEEK_I], RED, cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[R_CHEEK_I], RED, cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[NOSE_TIP_I], RED, cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[NOSE_BASE_I], RED, cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[CHIN_I], RED, cv::MARKER_STAR, 6);
-	cv::rectangle(img, rect, cv::Scalar(0,255,255));
+	static const cv::Scalar DLIBCOLOR(255,100,20);
+	static const cv::Scalar YELLOW(0,255,255);
+	static const cv::Scalar GREEN(0,255,0);
+	for (u8 i = 0; i < vertices.size(); ++i) {
+		auto& p = vertices[i];
+		auto color = DLIBCOLOR;
+		auto marker = cv::MARKER_CROSS;
+		if (i < 68) {
+			if (i == L_CHEEK_I
+				|| i == R_CHEEK_I
+				|| i == NOSE_TIP_I
+				|| i == NOSE_BASE_I
+				|| i == CHIN_I) {
+				color = RED;
+			}
+		} else if (i < 76) {
+			color = YELLOW;
+			marker = cv::MARKER_TILTED_CROSS;
+		} else {
+			color = GREEN;
+			marker = cv::MARKER_TRIANGLE_DOWN;
+		}
+		cv::drawMarker(img, p, color, marker, 6);
+	}
+	cv::rectangle(img, rect, YELLOW);
 }

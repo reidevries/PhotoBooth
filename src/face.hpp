@@ -58,6 +58,11 @@ public:
 	 */
 	auto get_delaunay_indices() const -> std::vector<cv::Point3i>;
 
+	/**
+	 * draws markers from the face onto the given img
+	 */
+	void draw_markers(cv::Mat& img) const;
+
 	void set_rect(const cv::Rect& rect) { this->rect = rect; }
 	auto get_rect() const -> cv::Rect { return rect; }
 	auto get_vertices() const

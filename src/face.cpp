@@ -92,3 +92,11 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 	CV_Assert(delaunay_valid);
 	return delaunay_indices;
 }
+
+void Face::draw_markers(cv::Mat& img) const
+{
+	for (auto& p : vertices) {
+		cv::drawMarker(img, p, cv::Scalar(255,100,20));
+	}
+	cv::rectangle(img, rect, cv::Scalar(0,255,255));
+}

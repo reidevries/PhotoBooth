@@ -89,6 +89,12 @@ void utils::normalize_default(cv::Mat& mat)
     cv::normalize(mat, mat, 0, 255, cv::NORM_MINMAX, CV_8UC3);
 }
 
+auto utils::normalize_vec(const cv::Point2f& p) -> cv::Point2f
+{
+	auto dividend = p.x*p.x + p.y*p.y;
+	return cv::Point2f(p.x/dividend, p.y/dividend);
+}
+
 auto utils::scale_point_to_other_rect(
 	const cv::Point2f& p,
 	const cv::Rect& src,

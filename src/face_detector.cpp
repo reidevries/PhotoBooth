@@ -26,8 +26,8 @@ void FaceDetector::store_boundary_vertices(
 auto FaceDetector::get_fg_mask(
 	const cv::Mat& img,
 	const cv::Rect& face_rect,
-	const int threshold = 1,
-	const int iter_count = 3
+	const int threshold,
+	const int iter_count
 ) -> cv::Mat
 {
 	// make a new rect to attempt to capture the entire face rather than just

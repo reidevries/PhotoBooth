@@ -41,8 +41,8 @@ public:
 	static auto get_fg_mask(
 		const cv::Mat& img,
 		const cv::Rect& rect,
-		const int threshold,
-		const int iter_count
+		const int threshold = 1,
+		const int iter_count = 3
 	) -> cv::Mat;
 
 	/**

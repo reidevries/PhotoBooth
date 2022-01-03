@@ -5,6 +5,10 @@ void utils::read_img_list(
 	std::vector<NamedImg>& images
 )
 {
+	auto dir = filename.substr(
+		0,
+		filename.find_last_of("/\\")+1
+	);
 	std::ifstream file(filename.c_str(), std::ifstream::in);
 	if (!file) {
 		CV_Error(cv::Error::StsBadArg, "invalid input filename");
@@ -14,7 +18,7 @@ void utils::read_img_list(
 		try {
 			auto named_img = NamedImg{
 				line,
-				cv::imread(line, cv::IMREAD_COLOR)
+				cv::imread(dir + line, cv::IMREAD_COLOR)
 			};
 			images.push_back(named_img);
 		} catch (const cv::Exception& e) {

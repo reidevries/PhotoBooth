@@ -2,13 +2,21 @@
 
 using namespace face;
 
+const u8 L_CHEEK_I = 2;
+const u8 R_CHEEK_I = 14;
+const u8 NOSE_TIP_I = 33;
+const u8 NOSE_BASE_I = 27;
+const u8 CHIN_I = 8;
+
 void Face::estimate_direction()
 {
-	const auto& l_cheek = vertices[2];
-	const auto& r_cheek = vertices[14];
-	const auto& nose_tip = vertices[33];
-	auto cheek_distance = r_cheek.x - l_cheek.x;
-	direction.x = 2 * nose_tip.x / cheek_distance - 1;
+	const auto& l_cheek = vertices[L_CHEEK_I];
+	const auto& r_cheek = vertices[R_CHEEK_I];
+	const auto& nose_tip = vertices[NOSE_TIP_I];
+	const auto& nose_base = vertices[NOSE_BASE_I];
+	const auto& chin = vertices[CHIN_I];
+	auto x = (nose_tip.x - l_cheek.x) / (r_cheek.x - l_cheek.x);
+	direction.x = fmaxf(-1, fminf(1, 2 * x - 1));
 }
 
 Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
@@ -107,8 +115,11 @@ void Face::draw_markers(cv::Mat& img) const
 	for (auto& p : vertices) {
 		cv::drawMarker(img, p, cv::Scalar(255,100,20), cv::MARKER_CROSS, 6);
 	}
-	cv::drawMarker(img, vertices[2], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[14], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
-	cv::drawMarker(img, vertices[33], cv::Scalar(255,0,0), cv::MARKER_STAR, 6);
+	static const cv::Scalar RED(0,0,255);
+	cv::drawMarker(img, vertices[L_CHEEK_I], RED, cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[R_CHEEK_I], RED, cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[NOSE_TIP_I], RED, cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[NOSE_BASE_I], RED, cv::MARKER_STAR, 6);
+	cv::drawMarker(img, vertices[CHIN_I], RED, cv::MARKER_STAR, 6);
 	cv::rectangle(img, rect, cv::Scalar(0,255,255));
 }

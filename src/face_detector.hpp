@@ -49,7 +49,7 @@ public:
 	 * Used to get the edge points from the extracted foreground mask
 	 */
 	static auto get_fg_edge_points(
-		const cv::Mat& img,
+		const cv::Mat& mask,
 		const cv::Rect& rect,
 		const std::vector<cv::Point2f>& direction_vectors
 	) -> std::vector<cv::Point2f>;

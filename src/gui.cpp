@@ -94,7 +94,7 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 			face::FaceDetector::get_fg_mask(
 				p->img2.img,
 				p->face2.get_rect(),
-				1,
+				2,
 				4
 			)
 		);

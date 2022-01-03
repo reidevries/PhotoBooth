@@ -31,7 +31,8 @@ auto FaceDetector::get_fg_mask(
 ) -> cv::Mat
 {
 	// make a new rect to attempt to capture the entire face rather than just
-	// central features (a better way to do this might be
+	// central features (a better way to do this might be to try analyze the
+	// direction that the face is looking in)
 	auto rect = cv::Rect(
 		fmax(0, face_rect.x - face_rect.width/2),
 		fmax(0, face_rect.y - face_rect.height/2),
@@ -107,7 +108,7 @@ auto FaceDetector::get_fg_edge_points(
 		auto& cur_dir = direction_vectors[i];
 		while (
 			cur_ray.inside(boundary)
-			&& mask.at<u8>(cur_ray.x, cur_ray.y) > 0
+			&& mask.at<u8>(cur_ray.y, cur_ray.x) > 0
 		) {
 			cur_ray += cur_dir;
 		}
@@ -127,7 +128,7 @@ auto FaceDetector::get_fg_edge_points(
 		cv::Point2f(1,0),
 		cv::Point2f(-1,0)
 	};
-	auto mask = get_fg_mask(img, rect, 1, 3);
+	auto mask = get_fg_mask(img, rect, 2, 3);
 	return get_fg_edge_points(mask, rect, direction_vectors);
 }
 

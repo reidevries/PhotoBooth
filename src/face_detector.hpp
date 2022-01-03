@@ -36,34 +36,6 @@ class FaceDetector
 
 public:
 	/**
-	 * Used to extract a mask of the image foreground using GrabCut
-	 */
-	static auto get_fg_mask(
-		const cv::Mat& img,
-		const cv::Rect& rect,
-		const int threshold = 1,
-		const int iter_count = 3
-	) -> cv::Mat;
-
-	/**
-	 * Used to get the edge points from the extracted foreground mask
-	 */
-	static auto get_fg_edge_points(
-		const cv::Mat& mask,
-		const cv::Rect& rect,
-		const std::vector<cv::Point2f>& direction_vectors
-	) -> std::vector<cv::Point2f>;
-
-	/**
-	 * Calls get_fg_edge_points with default direction vectors
-	 */
-	static auto get_fg_edge_points(
-		const cv::Mat& img,
-		const cv::Rect& rect,
-		const cv::Point2f& facing_direction
-	) -> std::vector<cv::Point2f>;
-
-	/**
 	 * Initializes the detector and predictor, deserializing the given .dat
 	 * file with hardcoded predictor_filename as the predictor
 	 */

@@ -3,14 +3,12 @@
 using namespace face;
 
 const std::vector<cv::Point2f> Face::direction_vectors = {
-		cv::Point2f(0.866, 0.5),
+		cv::Point2f(0.707, 0.707),
 		cv::Point2f(1,0),
-		cv::Point2f(0.866, -0.5),
 		cv::Point2f(0.7071, -0.7071),
 		cv::Point2f(-0.7071, 0.7071),
-		cv::Point2f(-0.866, -0.5),
 		cv::Point2f(-1,0),
-		cv::Point2f(-0.866, 0.5)
+		cv::Point2f(-0.707, 0.707)
 };
 
 const u8 L_CHEEK_I = 2;
@@ -71,19 +69,11 @@ auto Face::get_fg_edge_points(
 {
 	auto local_direction_vectors = direction_vectors;
 	for (auto& v : local_direction_vectors) {
-		v.y *= direction.y;
+		v.y *= 0.5 + fabsf(direction.y);
 	}
 	auto mask = get_fg_mask(img);
-	// ensure mask type is CV_8UC1 which is single-channel 8 bit int
-	CV_Assert(mask.type() == CV_8UC1);
 	auto num_points = local_direction_vectors.size();
-	// purely so i can use u8 in loop lol
-	CV_Assert(num_points < 255);
-
-	auto midpoint = cv::Point2f(
-		rect.x + rect.width/2.0,
-		rect.y + rect.height/2.0
-	);
+	auto midpoint = utils::mean(vertices[L_CHEEK_I], vertices[R_CHEEK_I], 0.5);
 
 	auto boundary = cv::Rect(
 		1,

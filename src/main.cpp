@@ -4,7 +4,7 @@
 
 #include "gui.hpp"
 
-int main()
+int main(int argc, char** argv)
 {
 	std::vector<NamedImg> images;
 
@@ -18,9 +18,18 @@ int main()
 		<< std::endl;
 
 	//initialize gui
+	if (argc > 0) {
+		if (strncmp("morph", argv[1], 5) == 0) {
+			auto gui = gui::FaceMorpher(images);
+		} else if (strncmp("average", argv[1], 5) == 0) {
+			auto gui = gui::FaceAverager(images);
+		} else {
+			std::cout << "argument " << argv[1] << " invalid" << std::endl;
+		}
+	}
+	std::cout << "no argument, assuming FaceMorpher" << std::endl;
 	auto gui = gui::FaceMorpher(images);
+	while(cv::waitKey() != 'q') {}
 
-    // display until user presses q
-    while(cv::waitKey() != 'q') {}
 	return 0;
 }

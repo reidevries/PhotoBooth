@@ -1,6 +1,7 @@
 #ifndef __FACE_HPP_
 #define __FACE_HPP_
 
+#include "named_img.hpp"
 #include "face_detector.hpp"
 
 namespace face
@@ -21,14 +22,17 @@ class Face
 	std::vector<cv::Point3i> delaunay_indices;
 	/// stores whether the current list of delaunay indices is valid
 	bool delaunay_valid = false;
+	/// stores the filename of the img it came from for debugging
+	std::string name;
 public:
 	Face() {}
 	/**
 	 * Analyzes an image to generate facial data
 	 * @param img The image containing the face
+	 * @param filename The filename of the image, for debugging purposes
 	 * @param face_detector An instance of `FaceDetector`
 	 */
-	Face(const cv::Mat& img, FaceDetector& face_detector);
+	Face(const NamedImg& img, FaceDetector& face_detector);
 
 	/**
 	 * Allows setting a vertex, it will invalidate the delaunay indices

@@ -2,6 +2,7 @@
 #define __GUIS_HPP_
 
 #include "morph.hpp"
+#include "named_img.hpp"
 #include <opencv2/highgui.hpp>
 #include "face_averager.hpp"
 
@@ -12,12 +13,12 @@ class FaceAverager
 {
 	static std::string window_name;
 	struct GuiParams {
-		std::vector<cv::Mat> images;
+		std::vector<NamedImg> images;
 		face::FaceDetector face_detector;
 		std::vector<cv::Mat> avg_images;
 
 		GuiParams(
-			const std::vector<cv::Mat>& _images
+			const std::vector<NamedImg>& _images
 		) : images(_images)
 		{}
 	};
@@ -25,23 +26,23 @@ class FaceAverager
 
 	static void trackbar_callback(int pos, void* ptr);
 public:
-	FaceAverager(const std::vector<cv::Mat>& images);
+	FaceAverager(const std::vector<NamedImg>& images);
 };
 
 class FaceMorpher
 {
 	static std::string window_name;
 	struct GuiParams {
-		std::vector<cv::Mat> images;
+		std::vector<NamedImg> images;
 		face::FaceDetector face_detector;
 		cv::Mat faces[11];
-		cv::Mat img1;
-		cv::Mat img2;
+		NamedImg img1;
+		NamedImg img2;
 		face::Face face1;
 		face::Face face2;
 
 		GuiParams(
-			const std::vector<cv::Mat>& _images
+			const std::vector<NamedImg>& _images
 		) : images(_images)
 		{}
 	};
@@ -51,7 +52,7 @@ class FaceMorpher
 	static void select_face2_callback(int pos, void* ptr);
 	static void trackbar_callback(int pos, void* ptr);
 public:
-	FaceMorpher(const std::vector<cv::Mat>& images);
+	FaceMorpher(const std::vector<NamedImg>& images);
 };
 
 } // namespace gui

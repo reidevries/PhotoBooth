@@ -2,6 +2,7 @@
 #define __UTILS_HPP_
 
 #include "numbers.hpp"
+#include "named_img.hpp"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -13,7 +14,10 @@
 
 namespace utils
 {
-void read_img_list(const std::string& filename, std::vector<cv::Mat>& images);
+void read_img_list(
+	const std::string& filename,
+	std::vector<NamedImg>& images
+);
 
 auto reshape_img_to_row(const cv::Mat& img) -> cv::Mat;
 auto reshape_images_to_rows(const std::vector<cv::Mat> &images) -> cv::Mat;

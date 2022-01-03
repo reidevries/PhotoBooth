@@ -2,13 +2,17 @@
 
 using namespace face;
 
-Face::Face(const cv::Mat& img, FaceDetector& face_detector)
+Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 {
-	auto img_dlib = convert::cv_to_dlib_rgb(img);
+	auto img_dlib = convert::cv_to_dlib_rgb(img.img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	vertices = face_detector.predict(img_dlib, rect_dlib);
+
 	rect = convert::dlib_to_cv(rect_dlib);
-	img_rect = cv::Rect(0, 0, img.size[1], img.size[0]);
+	auto fg_edges = FaceDetector::get_fg_edge_points(img.img, rect);
+	vertices.insert(vertices.end(), fg_edges.begin(), fg_edges.end());
+
+	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	calc_delaunay();
 }
 
@@ -24,7 +28,13 @@ void Face::calc_delaunay()
 
 	subdiv.initDelaunay(img_rect);
 	for (auto& point : vertices) {
-		subdiv.insert(point);
+		try {
+			subdiv.insert(point);
+		} catch (const cv::Exception& e) {
+			std::cerr << "Got this cv exception: " << e.msg << std::endl
+				<< "When adding point" << point
+				<< " for face '" << name << "'" << std::endl;
+		}
 	}
 	std::vector<cv::Vec6f> tri_list;
 	subdiv.getTriangleList(tri_list);

@@ -38,12 +38,29 @@ public:
 	/**
 	 * Used to extract a mask of the image foreground using GrabCut
 	 */
-	static auto get_foreground_mask(
+	static auto get_fg_mask(
 		const cv::Mat& img,
 		const cv::Rect& rect,
 		const int threshold,
 		const int iter_count
 	) -> cv::Mat;
+
+	/**
+	 * Used to get the edge points from the extracted foreground mask
+	 */
+	static auto get_fg_edge_points(
+		const cv::Mat& img,
+		const cv::Rect& rect,
+		const std::vector<cv::Point2f>& direction_vectors
+	) -> std::vector<cv::Point2f>;
+
+	/**
+	 * Calls get_fg_edge_points with default direction vectors
+	 */
+	static auto get_fg_edge_points(
+		const cv::Mat& img,
+		const cv::Rect& rect
+	) -> std::vector<cv::Point2f>;
 
 	/**
 	 * Initializes the detector and predictor, deserializing the given .dat

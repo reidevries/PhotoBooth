@@ -23,7 +23,7 @@ void FaceDetector::store_boundary_vertices(
 	vertices.push_back(cv::Point2f(w,  h/2));
 }
 
-auto FaceDetector::get_foreground_mask(
+auto FaceDetector::get_fg_mask(
 	const cv::Mat& img,
 	const cv::Rect& face_rect,
 	const int threshold,
@@ -69,7 +69,67 @@ auto FaceDetector::get_foreground_mask(
 	return output_mask*255;
 }
 
+auto FaceDetector::get_fg_edge_points(
+	const cv::Mat& mask,
+	const cv::Rect& face_rect,
+	const std::vector<cv::Point2f>& direction_vectors
+) -> std::vector<cv::Point2f>
+{
+	// ensure mask type is CV_8UC1 which is single-channel 8 bit int
+	CV_Assert(mask.type() == CV_8UC1);
+	auto num_points = direction_vectors.size();
+	// purely so i can use u8 in loop lol
+	CV_Assert(num_points < 255);
 
+	auto midpoint = cv::Point2f(
+		face_rect.x + face_rect.width/2.0,
+		face_rect.y + face_rect.height/2.0
+	);
+
+	auto boundary = cv::Rect(
+		1,
+		1,
+		mask.size().width - 1,
+		mask.size().height - 1
+	);
+
+	// fill with enough copies of midpoint
+	auto edge_points = std::vector<cv::Point2f>(
+		num_points,
+		midpoint
+	);
+
+	std::cout << "FaceDetector::get_fg_edge_points Starting ray tracing"
+		<< std::endl;
+
+	for (u8 i = 0; i < num_points; ++i) {
+		auto& cur_ray = edge_points[i];
+		auto& cur_dir = direction_vectors[i];
+		while (
+			cur_ray.inside(boundary)
+			&& mask.at<u8>(cur_ray.x, cur_ray.y) > 0
+		) {
+			cur_ray += cur_dir;
+		}
+		std::cout << "FaceDetector::get_fg_edge_points "
+			<< "found mask edge at " << cur_ray << std::endl;
+	}
+
+	return edge_points;
+}
+
+auto FaceDetector::get_fg_edge_points(
+	const cv::Mat& img,
+	const cv::Rect& rect
+) -> std::vector<cv::Point2f>
+{
+	auto direction_vectors = std::vector<cv::Point2f>{
+		cv::Point2f(1,0),
+		cv::Point2f(-1,0)
+	};
+	auto mask = get_fg_mask(img, rect, 1, 3);
+	return get_fg_edge_points(mask, rect, direction_vectors);
+}
 
 FaceDetector::FaceDetector()
 	: detector(dlib::get_frontal_face_detector())
@@ -113,9 +173,10 @@ auto FaceDetector::predict(
 ) -> std::vector<cv::Point2f>
 {
 	auto vertices_dlib = predictor(img, rect);
-	std::cout << "number of parts: " << vertices_dlib.num_parts() << std::endl;
-	std::cout << "pixel pos of first part " << vertices_dlib.part(0) << std::endl;
 	auto vertices_cv = convert::dlib_to_cv(vertices_dlib);
+
 	store_boundary_vertices(img, vertices_cv);
+
+
 	return vertices_cv;
 }

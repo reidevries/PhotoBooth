@@ -2,7 +2,7 @@
 
 void utils::read_img_list(
 	const std::string& filename,
-	std::vector<cv::Mat>& images
+	std::vector<NamedImg>& images
 )
 {
 	std::ifstream file(filename.c_str(), std::ifstream::in);
@@ -11,7 +11,18 @@ void utils::read_img_list(
 	}
 	std::string line;
 	while (std::getline(file, line)) {
-		images.push_back(cv::imread(line, cv::IMREAD_COLOR));
+		try {
+			auto named_img = NamedImg{
+				line,
+				cv::imread(line, cv::IMREAD_COLOR)
+			};
+			images.push_back(named_img);
+		} catch (const cv::Exception& e) {
+			std::cerr << "Got error " << e.msg
+				<< " on line '" << line << "'"
+				<< " while reading image in utils::read_img_list"
+				<< std::endl;
+		}
 	}
 }
 

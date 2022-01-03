@@ -1,11 +1,12 @@
 #include "numbers.hpp"
+#include "named_img.hpp"
 #include <opencv2/highgui.hpp>
 
 #include "gui.hpp"
 
 int main()
 {
-	std::vector<cv::Mat> images;
+	std::vector<NamedImg> images;
 
 	try {
 		utils::read_img_list("img_list.txt", images);

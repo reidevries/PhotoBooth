@@ -230,6 +230,7 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 
 void Face::draw_markers(cv::Mat& img) const
 {
+	img.setTo(cv::Scalar(0,0,0), get_fg_mask(img));
 	static const cv::Scalar RED(0,0,255);
 	static const cv::Scalar DLIBCOLOR(255,100,20);
 	static const cv::Scalar YELLOW(0,255,255);
@@ -256,5 +257,4 @@ void Face::draw_markers(cv::Mat& img) const
 		cv::drawMarker(img, p, color, marker, 6);
 	}
 	cv::rectangle(img, rect, YELLOW);
-	img.setTo(cv::Scalar(0,0,0), get_fg_mask(img));
 }

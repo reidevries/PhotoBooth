@@ -12,6 +12,8 @@ namespace face
  */
 class Face
 {
+	/// the vectors used for raytracing to edge of the foreground
+	static const std::vector<cv::Point2f> direction_vectors;
 	/// The rectangle bounding the face in the photo (in pixels)
 	cv::Rect rect;
 	/// The rectangle of the size of the img itself (in pixels)
@@ -31,30 +33,18 @@ class Face
 	/**
 	 * Used to extract a mask of the image foreground using GrabCut
 	 */
-	static auto get_fg_mask(
+	auto get_fg_mask(
 		const cv::Mat& img,
-		const cv::Rect& rect,
 		const int threshold = 1,
 		const int iter_count = 3
-	) -> cv::Mat;
-
-	/**
-	 * Used to get the edge points from the extracted foreground mask
-	 */
-	static auto get_fg_edge_points(
-		const cv::Mat& mask,
-		const cv::Rect& rect,
-		const std::vector<cv::Point2f>& direction_vectors
-	) -> std::vector<cv::Point2f>;
+	) const -> cv::Mat;
 
 	/**
 	 * Calls get_fg_edge_points with default direction vectors
 	 */
-	static auto get_fg_edge_points(
-		const cv::Mat& img,
-		const cv::Rect& rect,
-		const cv::Point2f& facing_direction
-	) -> std::vector<cv::Point2f>;
+	auto get_fg_edge_points(
+		const cv::Mat& img
+	) const -> std::vector<cv::Point2f>;
 
 	void estimate_direction();
 public:

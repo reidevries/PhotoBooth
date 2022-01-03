@@ -2,6 +2,17 @@
 
 using namespace face;
 
+const std::vector<cv::Point2f> Face::direction_vectors = {
+		cv::Point2f(0.866, 0.5),
+		cv::Point2f(1,0),
+		cv::Point2f(0.866, -0.5),
+		cv::Point2f(0.7071, -0.7071),
+		cv::Point2f(-0.7071, 0.7071),
+		cv::Point2f(-0.866, -0.5),
+		cv::Point2f(-1,0),
+		cv::Point2f(-0.866, 0.5)
+};
+
 const u8 L_CHEEK_I = 2;
 const u8 R_CHEEK_I = 14;
 const u8 NOSE_TIP_I = 33;
@@ -10,19 +21,18 @@ const u8 CHIN_I = 8;
 
 auto Face::get_fg_mask(
 	const cv::Mat& img,
-	const cv::Rect& face_rect,
 	const int threshold,
 	const int iter_count
-) -> cv::Mat
+) const -> cv::Mat
 {
 	// make a new rect to attempt to capture the entire face rather than just
 	// central features (a better way to do this might be to try analyze the
 	// direction that the face is looking in)
-	auto rect = cv::Rect(
-		fmax(0, face_rect.x - face_rect.width/2),
-		fmax(0, face_rect.y - face_rect.height/2),
-		fmin(img.size().width, face_rect.width*2),
-		fmin(img.size().height, face_rect.height*2)
+	auto rect_head = cv::Rect(
+		fmax(0, rect.x - rect.width/2.0),
+		fmax(0, rect.y - rect.height/2.0),
+		fmin(img.size().width, rect.width*2),
+		fmin(img.size().height, rect.height*2)
 	);
 	cv::Mat bg_model;
 	cv::Mat fg_model;
@@ -30,7 +40,7 @@ auto Face::get_fg_mask(
 	cv::grabCut(
 		img,
 		mask,
-		rect,
+		rect_head,
 		bg_model,
 		fg_model,
 		iter_count,
@@ -56,20 +66,23 @@ auto Face::get_fg_mask(
 }
 
 auto Face::get_fg_edge_points(
-	const cv::Mat& mask,
-	const cv::Rect& face_rect,
-	const std::vector<cv::Point2f>& direction_vectors
-) -> std::vector<cv::Point2f>
+	const cv::Mat& img
+) const -> std::vector<cv::Point2f>
 {
+	auto local_direction_vectors = direction_vectors;
+	for (auto& v : local_direction_vectors) {
+		v.y *= direction.y;
+	}
+	auto mask = get_fg_mask(img);
 	// ensure mask type is CV_8UC1 which is single-channel 8 bit int
 	CV_Assert(mask.type() == CV_8UC1);
-	auto num_points = direction_vectors.size();
+	auto num_points = local_direction_vectors.size();
 	// purely so i can use u8 in loop lol
 	CV_Assert(num_points < 255);
 
 	auto midpoint = cv::Point2f(
-		face_rect.x + face_rect.width/2.0,
-		face_rect.y + face_rect.height/2.0
+		rect.x + rect.width/2.0,
+		rect.y + rect.height/2.0
 	);
 
 	auto boundary = cv::Rect(
@@ -90,7 +103,7 @@ auto Face::get_fg_edge_points(
 
 	for (u8 i = 0; i < num_points; ++i) {
 		auto& cur_ray = edge_points[i];
-		auto& cur_dir = direction_vectors[i];
+		auto& cur_dir = local_direction_vectors[i];
 		auto next_ray = cur_ray + cur_dir;
 		while (
 			next_ray.inside(boundary)
@@ -105,30 +118,6 @@ auto Face::get_fg_edge_points(
 
 	return edge_points;
 }
-
-auto Face::get_fg_edge_points(
-	const cv::Mat& img,
-	const cv::Rect& rect,
-	const cv::Point2f& facing_direction
-) -> std::vector<cv::Point2f>
-{
-	auto direction_vectors = std::vector<cv::Point2f>{
-		cv::Point2f(0.866, 0.5),
-		cv::Point2f(1,0),
-		cv::Point2f(0.866, -0.5),
-		cv::Point2f(0.7071, -0.7071),
-		cv::Point2f(-0.7071, 0.7071),
-		cv::Point2f(-0.866, -0.5),
-		cv::Point2f(-1,0),
-		cv::Point2f(-0.866, 0.5)
-	};
-	for (auto& v : direction_vectors) {
-		v.y *= facing_direction.y;
-	}
-	auto mask = get_fg_mask(img, rect);
-	return get_fg_edge_points(mask, rect, direction_vectors);
-}
-
 
 void Face::estimate_direction()
 {
@@ -154,7 +143,7 @@ Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 	estimate_direction();
 
 	rect = convert::dlib_to_cv(rect_dlib);
-	auto fg_edges = Face::get_fg_edge_points(img.img, rect, direction);
+	auto fg_edges = get_fg_edge_points(img.img);
 	vertices.insert(vertices.end(), fg_edges.begin(), fg_edges.end());
 
 	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
@@ -267,11 +256,5 @@ void Face::draw_markers(cv::Mat& img) const
 		cv::drawMarker(img, p, color, marker, 6);
 	}
 	cv::rectangle(img, rect, YELLOW);
-	img.setTo(
-		cv::Scalar(0,0,0),
-		get_fg_mask(
-			img,
-			rect
-		)
-	);
+	img.setTo(cv::Scalar(0,0,0), get_fg_mask(img));
 }

@@ -68,10 +68,10 @@ auto Face::get_fg_edge_points(
 		mask.size().height - 1
 	);
 
-	// fill with enough copies of midpoint
+	// fill with first 28 vertices, corresponding to face outer points
 	auto edge_points = std::vector<cv::Point2f>(
-		num_points,
-		midpoint
+		vertices.begin(),
+		vertices.begin()+OUTER_LAST_I+1
 	);
 
 	std::cout << "Face::get_fg_edge_points Starting ray tracing"
@@ -87,6 +87,11 @@ auto Face::get_fg_edge_points(
 		) {
 			cur_ray = next_ray;
 			next_ray += cur_dir;
+		}
+		if (utils::distance(cur_ray, midpoint)
+			< utils::distance(vertices[i], midpoint)
+		) {
+			cur_ray = next_ray;
 		}
 		std::cout << "Face::get_fg_edge_points "
 			<< "found mask edge at " << cur_ray << std::endl;

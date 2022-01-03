@@ -8,6 +8,10 @@
 
 namespace gui
 {
+enum Type {
+	Average,
+	Morph
+};
 
 class FaceAverager
 {

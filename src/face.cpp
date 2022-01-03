@@ -2,20 +2,13 @@
 
 using namespace face;
 
-const std::vector<cv::Point2f> Face::direction_vectors = {
-		cv::Point2f(0.707, 0.707),
-		cv::Point2f(1,0),
-		cv::Point2f(0.7071, -0.7071),
-		cv::Point2f(-0.7071, 0.7071),
-		cv::Point2f(-1,0),
-		cv::Point2f(-0.707, 0.707)
-};
-
 const u8 L_CHEEK_I = 2;
 const u8 R_CHEEK_I = 14;
 const u8 NOSE_TIP_I = 33;
 const u8 NOSE_BASE_I = 27;
 const u8 CHIN_I = 8;
+const u8 OUTER_LAST_I = 26;
+
 
 auto Face::get_fg_mask(
 	const cv::Mat& img,
@@ -67,12 +60,8 @@ auto Face::get_fg_edge_points(
 	const cv::Mat& img
 ) const -> std::vector<cv::Point2f>
 {
-	auto local_direction_vectors = direction_vectors;
-	for (auto& v : local_direction_vectors) {
-		v.y *= 0.5 + fabsf(direction.y);
-	}
 	auto mask = get_fg_mask(img);
-	auto num_points = local_direction_vectors.size();
+	auto num_points = direction_vectors.size();
 	auto midpoint = utils::mean(vertices[L_CHEEK_I], vertices[R_CHEEK_I], 0.5);
 
 	auto boundary = cv::Rect(
@@ -93,7 +82,7 @@ auto Face::get_fg_edge_points(
 
 	for (u8 i = 0; i < num_points; ++i) {
 		auto& cur_ray = edge_points[i];
-		auto& cur_dir = local_direction_vectors[i];
+		auto& cur_dir = direction_vectors[i];
 		auto next_ray = cur_ray + cur_dir;
 		while (
 			next_ray.inside(boundary)
@@ -113,16 +102,23 @@ void Face::estimate_direction()
 {
 	const auto& l_cheek = vertices[L_CHEEK_I];
 	const auto& r_cheek = vertices[R_CHEEK_I];
+	const auto&& midpoint = utils::mean(l_cheek, r_cheek, 0.5);
 	const auto& nose_tip = vertices[NOSE_TIP_I];
 	const auto& nose_base = vertices[NOSE_BASE_I];
 	const auto& chin = vertices[CHIN_I];
-	auto upper_cheek = fminf(l_cheek.y, r_cheek.y);
-	auto x = (nose_tip.x - l_cheek.x) / (r_cheek.x - l_cheek.x);
-	auto y = (nose_tip.y - upper_cheek) / (chin.y - upper_cheek);
-	direction.x = fmaxf(-1, fminf(1, 2 * x - 1));
+
+	auto x = (nose_tip.x - midpoint.x) / (r_cheek.x - midpoint.x);
+	auto y = (nose_tip.y - midpoint.y) / (chin.y - midpoint.y);
+	direction.x = fmaxf(-1, fminf(1, 2 * x));
 	direction.y = fmaxf(-1, fminf(1, 2 * y));
 	std::cout << "face is probably pointing in direction " << direction
 		<< std::endl;
+
+	direction_vectors.clear();
+	for (u8 i = 0; i <= OUTER_LAST_I; ++i) {
+		auto& v = vertices[i];
+		direction_vectors.push_back(utils::normalize_vec(v - midpoint));
+	}
 }
 
 Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
@@ -138,7 +134,6 @@ Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 
 	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	calc_delaunay();
-
 }
 
 void Face::set_vertex_at(const cv::Point2f& vertex, const int i)

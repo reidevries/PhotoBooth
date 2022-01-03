@@ -13,7 +13,7 @@ namespace face
 class Face
 {
 	/// the vectors used for raytracing to edge of the foreground
-	static const std::vector<cv::Point2f> direction_vectors;
+	std::vector<cv::Point2f> direction_vectors;
 	/// The rectangle bounding the face in the photo (in pixels)
 	cv::Rect rect;
 	/// The rectangle of the size of the img itself (in pixels)

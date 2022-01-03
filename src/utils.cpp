@@ -89,10 +89,20 @@ void utils::normalize_default(cv::Mat& mat)
     cv::normalize(mat, mat, 0, 255, cv::NORM_MINMAX, CV_8UC3);
 }
 
-auto utils::normalize_vec(const cv::Point2f& p) -> cv::Point2f
+auto utils::length_vec(const cv::Point2f& v) -> float
 {
-	auto dividend = p.x*p.x + p.y*p.y;
-	return cv::Point2f(p.x/dividend, p.y/dividend);
+	return v.x*v.x + v.y*v.y;
+}
+
+auto utils::normalize_vec(const cv::Point2f& v) -> cv::Point2f
+{
+	auto dividend = length_vec(v);
+	return cv::Point2f(v.x/dividend, v.y/dividend);
+}
+
+auto utils::distance(const cv::Point2f& a, const cv::Point2f& b) -> float
+{
+	return length_vec(a - b);
 }
 
 auto utils::scale_point_to_other_rect(

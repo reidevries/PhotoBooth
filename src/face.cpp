@@ -16,9 +16,6 @@ auto Face::get_fg_mask(
 	const int iter_count
 ) const -> cv::Mat
 {
-	// make a new rect to attempt to capture the entire face rather than just
-	// central features (a better way to do this might be to try analyze the
-	// direction that the face is looking in)
 	auto rect_head = cv::Rect(
 		fmax(0, rect.x - rect.width/2.0),
 		fmax(0, rect.y - rect.height/2.0),
@@ -114,6 +111,7 @@ void Face::estimate_direction()
 	std::cout << "face is probably pointing in direction " << direction
 		<< std::endl;
 
+	// now find direction vectors
 	direction_vectors.clear();
 	for (u8 i = 0; i <= OUTER_LAST_I; ++i) {
 		auto& v = vertices[i];

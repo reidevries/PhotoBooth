@@ -27,7 +27,11 @@ auto reshape_row_to_raw_grayscale_images(const cv::Mat& row, const u64 img_rows)
 
 void normalize_default(cv::Mat& mat);
 
-auto normalize_vec(const cv::Point2f& p) -> cv::Point2f;
+
+auto length_vec(const cv::Point2f& v) -> float;
+auto normalize_vec(const cv::Point2f& v) -> cv::Point2f;
+auto distance(const cv::Point2f& a, const cv::Point2f& b) -> float;
+
 
 auto scale_point_to_other_rect(
 	const cv::Point2f& p,

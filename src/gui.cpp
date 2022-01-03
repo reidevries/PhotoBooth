@@ -88,14 +88,12 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 	p->img2 = p->images[pos];
 	p->face2 = face::Face(p->img2, p->face_detector);
 	for (u8 i = 0; i < 11; ++i) {
-		p->faces[i] = p->img2.img;
+		p->faces[i] = p->img2.img.clone();
 		p->faces[i].setTo(
 			cv::Scalar(0,0,0),
 			face::FaceDetector::get_fg_mask(
 				p->img2.img,
-				p->face2.get_rect(),
-				2,
-				4
+				p->face2.get_rect()
 			)
 		);
 		p->face2.draw_markers(p->faces[i]);

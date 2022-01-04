@@ -93,41 +93,21 @@ void Face::estimate_direction()
 	}
 }
 
-void Face::flip(cv::Mat& img)
-{
-	// flip the image
-	cv::flip(img, img, 1);
-
-	// flip the direction vectors
-	for (auto& v : direction_vectors) {
-		v.x *= -1;
-	}
-
-	// flip the rectangle (img_rect stays the same)
-	rect.x = img_rect.width - (rect.x + rect.width);
-
-	// flip the fg mask
-	cv::flip(mask, mask, 1);
-
-	// flip the vertices
-	for (auto& v: vertices) {
-		v.x = img_rect.width - v.x;
-	}
-
-	// flip direction
-	direction.x *= -1;
-
-	// need to recalculate delaunay
-	delaunay_valid = false;
-}
-
-Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
+Face::Face(NamedImg& img, FaceDetector& face_detector) : name(img.name)
 {
 	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	auto img_dlib = convert::cv_to_dlib_rgb(img.img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	vertices = face_detector.predict(img_dlib, rect_dlib);
 	estimate_direction();
+
+	if (direction.x < 0) {
+		cv::flip(img.img, img.img, 1);
+		img_dlib = convert::cv_to_dlib_rgb(img.img);
+		rect_dlib = face_detector.detect(img_dlib);
+		vertices = face_detector.predict(img_dlib, rect_dlib);
+		estimate_direction();
+	}
 
 	rect = convert::dlib_to_cv(rect_dlib);
 	store_fg_mask(img.img, face_detector);

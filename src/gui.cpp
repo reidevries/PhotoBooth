@@ -10,7 +10,7 @@ void FaceAverager::trackbar_callback(int pos, void* ptr)
 	cv::imshow(window_name, p->avg_images[pos]);
 }
 
-FaceAverager::FaceAverager(const std::vector<NamedImg>& images) : params(images)
+FaceAverager::FaceAverager(std::vector<NamedImg>& images) : params(images)
 {
 	auto face_averager = face::FaceAverager();
 	std::cout << "averaging faces, pls wait" << std::endl;
@@ -32,7 +32,7 @@ FaceAverager::FaceAverager(const std::vector<NamedImg>& images) : params(images)
 
 std::string FaceMorpher::window_name = "face morpher";
 
-FaceMorpher::FaceMorpher(const std::vector<NamedImg>& images) : params(images)
+FaceMorpher::FaceMorpher(std::vector<NamedImg>& images) : params(images)
 {
 	params.img1 = images[0];
 	params.img2 = images[1];

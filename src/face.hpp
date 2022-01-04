@@ -51,20 +51,16 @@ class Face
 	 * Estimates the direction that the Face is facing
 	 */
 	void estimate_direction();
-
-	/**
-	 * Flips the entire Face as well as the given img
-	 */
-	void flip(cv::Mat& img);
 public:
 	Face() {}
 	/**
-	 * Analyzes an image to generate facial data
+	 * Analyzes an image to generate facial data. It may flip the image so that
+	 * all of them are facing in the same direction.
 	 * @param img The image containing the face
 	 * @param filename The filename of the image, for debugging purposes
 	 * @param face_detector An instance of `FaceDetector`
 	 */
-	Face(const NamedImg& img, FaceDetector& face_detector);
+	Face(NamedImg& img, FaceDetector& face_detector);
 
 	/**
 	 * Allows setting a vertex, it will invalidate the delaunay indices

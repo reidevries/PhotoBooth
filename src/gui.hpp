@@ -30,7 +30,7 @@ class FaceAverager
 
 	static void trackbar_callback(int pos, void* ptr);
 public:
-	FaceAverager(const std::vector<NamedImg>& images);
+	FaceAverager(std::vector<NamedImg>& images);
 };
 
 class FaceMorpher
@@ -56,7 +56,7 @@ class FaceMorpher
 	static void select_face2_callback(int pos, void* ptr);
 	static void trackbar_callback(int pos, void* ptr);
 public:
-	FaceMorpher(const std::vector<NamedImg>& images);
+	FaceMorpher(std::vector<NamedImg>& images);
 };
 
 } // namespace gui

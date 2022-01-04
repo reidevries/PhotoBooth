@@ -10,11 +10,10 @@ const u8 CHIN_I = 8;
 const u8 OUTER_LAST_I = 26;
 
 
-auto Face::get_fg_mask(
+void Face::store_fg_mask(
 	const cv::Mat& img,
-	const int threshold,
-	const int iter_count
-) const -> cv::Mat
+	FaceDetector& face_detector
+)
 {
 	auto rect_head = cv::Rect(
 		fmax(0, rect.x - rect.width/2.0),
@@ -22,42 +21,13 @@ auto Face::get_fg_mask(
 		fmin(img.size().width, rect.width*2),
 		fmin(img.size().height, rect.height*2)
 	);
-	cv::Mat bg_model;
-	cv::Mat fg_model;
-	cv::Mat mask;
-	cv::grabCut(
-		img,
-		mask,
-		rect_head,
-		bg_model,
-		fg_model,
-		iter_count,
-		cv::GC_INIT_WITH_RECT
-	);
-	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
-	mask.convertTo(output_mask, CV_8UC1);
-	if (threshold == 0) { // basically just includes the whole face
-		output_mask = mask;
-	} else if (threshold == 1) { // GC_PR_FGD and GC_FGD included
-		output_mask = mask & cv::GC_FGD;
-	} else if (threshold == 2) { // only GC_FGD included
-		for (u16 row_i = 0; row_i < mask.rows; ++row_i) {
-			uchar* p = output_mask.ptr(row_i);
-			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
-				auto p_i = *p;
-				*p = p_i & cv::GC_FGD & ! ((p_i & cv::GC_PR_BGD) >> 1 );
-				++p;
-			}
-		}
-	}
-	return output_mask*255;
+	mask = face_detector.get_fg_mask(img, rect_head, 1, 3);
 }
 
-auto Face::get_fg_edge_points(
-	const cv::Mat& img
-) const -> std::vector<cv::Point2f>
+void Face::store_fg_edge_points()
 {
-	auto mask = get_fg_mask(img);
+	// mask should have been initialized by store_fg_mask!
+	CV_Assert(!mask.empty());
 	auto num_points = direction_vectors.size();
 	auto midpoint = utils::mean(vertices[L_CHEEK_I], vertices[R_CHEEK_I], 0.5);
 
@@ -74,7 +44,7 @@ auto Face::get_fg_edge_points(
 		vertices.begin()+OUTER_LAST_I+1
 	);
 
-	std::cout << "Face::get_fg_edge_points Starting ray tracing"
+	std::cout << "Face::store_fg_edge_points Starting ray tracing"
 		<< std::endl;
 
 	for (u8 i = 0; i < num_points; ++i) {
@@ -93,11 +63,10 @@ auto Face::get_fg_edge_points(
 		) {
 			cur_ray = next_ray;
 		}
-		std::cout << "Face::get_fg_edge_points "
+		std::cout << "Face::store_fg_edge_points "
 			<< "found mask edge at " << cur_ray << std::endl;
 	}
-
-	return edge_points;
+	vertices.insert(vertices.end(), edge_points.begin(), edge_points.end());
 }
 
 void Face::estimate_direction()
@@ -132,8 +101,8 @@ Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 	estimate_direction();
 
 	rect = convert::dlib_to_cv(rect_dlib);
-	auto fg_edges = get_fg_edge_points(img.img);
-	vertices.insert(vertices.end(), fg_edges.begin(), fg_edges.end());
+	store_fg_mask(img.img, face_detector);
+	store_fg_edge_points();
 
 	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	calc_delaunay();
@@ -218,7 +187,7 @@ auto Face::get_delaunay_indices() const -> std::vector<cv::Point3i>
 
 void Face::draw_markers(cv::Mat& img) const
 {
-	img.setTo(cv::Scalar(0,0,0), get_fg_mask(img));
+	img.setTo(cv::Scalar(0,0,0), mask);
 	static const cv::Scalar RED(0,0,255);
 	static const cv::Scalar DLIBCOLOR(255,100,20);
 	static const cv::Scalar YELLOW(0,255,255);

@@ -23,6 +23,7 @@ class FaceDetector
 	static std::string predictor_filename;
 	dlib::frontal_face_detector detector;
 	dlib::shape_predictor predictor;
+	cv::Mat bg_model, fg_model; // for grabCut algorithm
 
 	/**
 	 * Used to extract the vertices along the boundary of an image.
@@ -58,6 +59,22 @@ public:
 		const dlib::array2d<dlib::rgb_pixel>& img,
 		const dlib::rectangle& rect
 	) -> std::vector<cv::Point2f>;
+
+	/**
+	 * Runs the grabcut algorithm to extract a mask of the foreground
+	 * @param img The image to run the algorithm on in CV format
+	 * @param rect The rectangle containing the foreground in CV format
+	 * @param threshold When `threshold = 2`, only the definite foreground
+	 *	is included, when `threshold = 1`, the probable foreground is included,
+	 *	when `threshold = 0`, the entire input rect is included
+	 * @param iter_count How many iterations of the algorithm to run
+	 */
+	auto get_fg_mask(
+		const cv::Mat& img,
+		const cv::Rect& rect,
+		const int threshold,
+		const int iter_count
+	) -> cv::Mat;
 };
 
 }

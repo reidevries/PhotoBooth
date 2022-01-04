@@ -18,6 +18,8 @@ class Face
 	cv::Rect rect;
 	/// The rectangle of the size of the img itself (in pixels)
 	cv::Rect img_rect;
+	/// The mask corresponding to the foreground of the img
+	cv::Mat mask;
 	/// The vertices of the facial landmarks detected by FaceDetector::predict
 	std::vector<cv::Point2f> vertices;
 	/// A list of triples, each has indices to three vertices forming a triangle
@@ -31,21 +33,23 @@ class Face
 	std::string name;
 
 	/**
-	 * Used to extract a mask of the image foreground using GrabCut
+	 * Used to extract a mask of the image foreground using GrabCut and store it
+	 * as `mask`
 	 */
-	auto get_fg_mask(
+	void store_fg_mask(
 		const cv::Mat& img,
-		const int threshold = 1,
-		const int iter_count = 3
-	) const -> cv::Mat;
+		FaceDetector& face_Detector
+	);
 
 	/**
-	 * Calls get_fg_edge_points with default direction vectors
+	 * Calls get_fg_edge_points with default direction vectors and stores them
+	 * in the `vertices` vector
 	 */
-	auto get_fg_edge_points(
-		const cv::Mat& img
-	) const -> std::vector<cv::Point2f>;
+	void store_fg_edge_points();
 
+	/**
+	 * Estimates the direction that the Face is facing
+	 */
 	void estimate_direction();
 public:
 	Face() {}

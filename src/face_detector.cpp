@@ -72,3 +72,39 @@ auto FaceDetector::predict(
 
 	return vertices_cv;
 }
+
+auto FaceDetector::get_fg_mask(
+	const cv::Mat& img,
+	const cv::Rect& rect,
+	const int threshold,
+	const int iter_count
+) -> cv::Mat
+{
+	cv::Mat mask;
+	cv::grabCut(
+		img,
+		mask,
+		rect,
+		bg_model,
+		fg_model,
+		iter_count,
+		cv::GC_INIT_WITH_RECT
+	);
+	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
+	mask.convertTo(output_mask, CV_8UC1);
+	if (threshold == 0) { // basically just includes the whole face
+		output_mask = mask;
+	} else if (threshold == 1) { // GC_PR_FGD and GC_FGD included
+		output_mask = mask & cv::GC_FGD;
+	} else if (threshold == 2) { // only GC_FGD included
+		for (u16 row_i = 0; row_i < mask.rows; ++row_i) {
+			uchar* p = output_mask.ptr(row_i);
+			for (u16 col_i = 0; col_i < mask.cols; ++col_i) {
+				auto p_i = *p;
+				*p = p_i & cv::GC_FGD & ! ((p_i & cv::GC_PR_BGD) >> 1 );
+				++p;
+			}
+		}
+	}
+	return output_mask*255;
+}

@@ -51,6 +51,11 @@ class Face
 	 * Estimates the direction that the Face is facing
 	 */
 	void estimate_direction();
+
+	/**
+	 * Flips the entire Face as well as the given img
+	 */
+	void flip(cv::Mat& img);
 public:
 	Face() {}
 	/**

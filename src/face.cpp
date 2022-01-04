@@ -29,7 +29,7 @@ void Face::store_fg_edge_points()
 	// mask should have been initialized by store_fg_mask!
 	CV_Assert(!mask.empty());
 	auto num_points = direction_vectors.size();
-	auto midpoint = utils::mean(vertices[L_CHEEK_I], vertices[R_CHEEK_I], 0.5);
+	auto midpoint = vertices[NOSE_TIP_I];
 
 	auto boundary = cv::Rect(
 		1,
@@ -93,8 +93,37 @@ void Face::estimate_direction()
 	}
 }
 
+void Face::flip(cv::Mat& img)
+{
+	// flip the image
+	cv::flip(img, img, 1);
+
+	// flip the direction vectors
+	for (auto& v : direction_vectors) {
+		v.x *= -1;
+	}
+
+	// flip the rectangle (img_rect stays the same)
+	rect.x = img_rect.width - (rect.x + rect.width);
+
+	// flip the fg mask
+	cv::flip(mask, mask, 1);
+
+	// flip the vertices
+	for (auto& v: vertices) {
+		v.x = img_rect.width - v.x;
+	}
+
+	// flip direction
+	direction.x *= -1;
+
+	// need to recalculate delaunay
+	delaunay_valid = false;
+}
+
 Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 {
+	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	auto img_dlib = convert::cv_to_dlib_rgb(img.img);
 	auto rect_dlib = face_detector.detect(img_dlib);
 	vertices = face_detector.predict(img_dlib, rect_dlib);
@@ -104,7 +133,6 @@ Face::Face(const NamedImg& img, FaceDetector& face_detector) : name(img.name)
 	store_fg_mask(img.img, face_detector);
 	store_fg_edge_points();
 
-	img_rect = cv::Rect(0, 0, img.img.size().width, img.img.size().height);
 	calc_delaunay();
 }
 

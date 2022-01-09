@@ -63,10 +63,11 @@ void Face::store_fg_edge_points()
 		) {
 			cur_ray = next_ray;
 		}
-		std::cout << "Face::store_fg_edge_points "
-			<< "found mask edge at " << cur_ray << std::endl;
+//		std::cout << "Face::store_fg_edge_points "
+//			<< "found mask edge at " << cur_ray << std::endl;
 	}
 	vertices.insert(vertices.end(), edge_points.begin(), edge_points.end());
+	std::cout << "Face::store_fg_edge_points Finished ray tracing" << std::endl;
 }
 
 void Face::estimate_direction()
@@ -82,7 +83,7 @@ void Face::estimate_direction()
 	auto y = (nose_tip.y - midpoint.y) / (chin.y - midpoint.y);
 	direction.x = fmaxf(-1, fminf(1, 2 * x));
 	direction.y = fmaxf(-1, fminf(1, 2 * y));
-	std::cout << "face is probably pointing in direction " << direction
+	std::cout << "Face::estimate_direction: " << direction
 		<< std::endl;
 
 	// now find direction vectors
@@ -138,7 +139,8 @@ void Face::calc_delaunay()
 	}
 	std::vector<cv::Vec6f> tri_list;
 	subdiv.getTriangleList(tri_list);
-	std::cout << "stored " << tri_list.size() << " triangles" << std::endl;
+	std::cout << "Face::calc_delaunay stored "
+		<< tri_list.size() << " triangles" << std::endl;
 
 	// the triangles need to be in a different format for getAffineTransform
 	for (const auto& tri: tri_list) {
@@ -166,7 +168,7 @@ void Face::calc_delaunay()
 		}
 		delaunay_indices.push_back(index);
 	}
-	std::cout << "stored " << delaunay_indices.size()
+	std::cout << "Face::calc_delaunay stored " << delaunay_indices.size()
 		<< " delaunay indices" << std::endl;
 
 	delaunay_valid = true;

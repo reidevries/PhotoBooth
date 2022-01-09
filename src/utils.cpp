@@ -14,13 +14,23 @@ void utils::read_img_list(
 		CV_Error(cv::Error::StsBadArg, "invalid input filename");
 	}
 	std::string line;
+	auto output_size = cv::Size(0,0);
 	while (std::getline(file, line)) {
 		try {
 			auto named_img = NamedImg{
 				line,
 				cv::imread(dir + line, cv::IMREAD_COLOR)
 			};
-			images.push_back(named_img);
+			if (output_size.width == 0 && output_size.height == 0) {
+				output_size = named_img.img.size();
+				images.push_back(named_img);
+			} else if (output_size == named_img.img.size()) {
+				images.push_back(named_img);
+			} else {
+				std::cout << "dropping img " << named_img.name
+					<< " because its size is " << named_img.img.size()
+					<< " when it should be " << output_size << std::endl;
+			}
 		} catch (const cv::Exception& e) {
 			std::cerr << "Got error " << e.msg
 				<< " on line '" << line << "'"

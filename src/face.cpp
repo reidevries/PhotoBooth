@@ -125,6 +125,10 @@ void Face::set_vertex_at(const cv::Point2f& vertex, const int i)
 
 void Face::calc_delaunay()
 {
+	if (delaunay_valid) {
+		std::cout << "Face::calc_delaunay did not need to run because delaunay"
+			<< " already valid" << std::endl;
+	}
 	auto subdiv = cv::Subdiv2D();
 
 	subdiv.initDelaunay(img_rect);

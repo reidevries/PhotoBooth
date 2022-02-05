@@ -15,6 +15,8 @@ void Face::store_fg_mask(
 	FaceDetector& face_detector
 )
 {
+	// calculate a rectangle containing the entire head (not just the face)
+	// do this by averaging `rect` and the image border rect
 	auto img_w = img.size().width;
 	auto img_h = img.size().height;
 	auto rect_head = cv::Rect(

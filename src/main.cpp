@@ -11,9 +11,9 @@ int main(int argc, char** argv)
 	auto img_list_filename = std::string("img_list.txt");
 	auto gui_type = gui::Morph;
 
-	if (argc > 0) {
+	if (argc > 1) {
 		img_list_filename = argv[1];
-		if (argc > 1) {
+		if (argc > 2) {
 			if (strncmp("morph", argv[2], 5) == 0) {
 				gui_type = gui::Morph;
 			} else if (strncmp("average", argv[2], 5) == 0) {

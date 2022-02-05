@@ -15,11 +15,21 @@ void Face::store_fg_mask(
 	FaceDetector& face_detector
 )
 {
+	auto img_w = img.size().width;
+	auto img_h = img.size().height;
 	auto rect_head = cv::Rect(
-		fmax(0, rect.x - rect.width/2.0),
-		fmax(0, rect.y - rect.height/2.0),
-		fmin(img.size().width, rect.width*2),
-		fmin(img.size().height, rect.height*2)
+		fmax(1, rect.x/2.0),
+		fmax(1, rect.y/2.0),
+		img_w-1,
+		img_h-1
+	);
+	rect_head.width = fmin(
+		rect_head.width,
+		(rect.x + rect.width + img_w)/2.0 - rect_head.x
+	);
+	rect_head.height = fmin(
+		rect_head.height,
+		(rect.y + rect.height + img_h)/2.0 - rect_head.y
 	);
 	mask = face_detector.get_fg_mask(img, rect_head, 1, 3);
 }

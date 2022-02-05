@@ -81,15 +81,23 @@ auto FaceDetector::get_fg_mask(
 ) -> cv::Mat
 {
 	cv::Mat mask;
-	cv::grabCut(
-		img,
-		mask,
-		rect,
-		bg_model,
-		fg_model,
-		iter_count,
-		cv::GC_INIT_WITH_RECT
-	);
+	try {
+		cv::grabCut(
+			img,
+			mask,
+			rect,
+			bg_model,
+			fg_model,
+			iter_count,
+			cv::GC_INIT_WITH_RECT
+		);
+	} catch (const cv::Exception& e) {
+		std::cout << "! ! !" << std::endl;
+		std::cout << "FaceDetector::get_fg_mask: grabCut algorithm failed to "
+			<< "separate background from foreground with this error: " << e.msg;
+		std::cout << "rect was " << rect << std::endl;
+		std::cout << "! ! !" << std::endl;
+	}
 	auto output_mask = cv::Mat(mask.size(), CV_8UC1);
 	mask.convertTo(output_mask, CV_8UC1);
 	if (threshold == 0) { // basically just includes the whole face

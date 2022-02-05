@@ -6,7 +6,7 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {
 	auto coef = 1.0;
 	if (num_faces > 0) {
-		coef = 1.0/(num_faces+1);
+		coef = fmin(2.0/(num_faces+1), 1.0);
 	} else {
 		// if num_faces == 0 then we need to initialize the averages
 		avg_face = face;

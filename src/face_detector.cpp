@@ -69,7 +69,6 @@ auto FaceDetector::predict(
 
 	store_boundary_vertices(img, vertices_cv);
 
-
 	return vertices_cv;
 }
 

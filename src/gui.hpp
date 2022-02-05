@@ -9,6 +9,7 @@
 namespace gui
 {
 enum Type {
+	None,
 	Average,
 	Morph
 };

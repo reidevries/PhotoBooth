@@ -9,7 +9,7 @@ int main(int argc, char** argv)
 	std::vector<NamedImg> images;
 
 	auto img_list_filename = std::string("img_list.txt");
-	auto gui_type = gui::Morph;
+	auto gui_type = gui::None;
 
 	if (argc > 1) {
 		img_list_filename = argv[1];
@@ -43,6 +43,9 @@ int main(int argc, char** argv)
 	case gui::Average: {
 		auto gui = gui::FaceAverager(images);
 		while(cv::waitKey() != 'q') {}
+		break;
+	}
+	case gui::None: {
 		break;
 	}
 	}

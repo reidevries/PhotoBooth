@@ -63,6 +63,12 @@ public:
 	Face(NamedImg& img, FaceDetector& face_detector);
 
 	/**
+	 * Create a Face object from serialized data
+	 * @param serial The serialized data created by `Face::serialize`
+	 */
+	Face(const std::stringstream& serial);
+
+	/**
 	 * Allows setting a vertex, it will invalidate the delaunay indices
 	 * @param vertex The new vertex to put into the vector
 	 * @param i The index of the new vertex
@@ -97,6 +103,11 @@ public:
 		-> const std::vector<cv::Point2f>& { return vertices; }
 	auto get_vertex_at(const int i) const
 		-> cv::Point2f { return vertices.at(i); }
+
+	/**
+	 * serialize the face into a stringstream
+	 */
+	auto serialize() const -> std::stringstream;
 };
 
 }

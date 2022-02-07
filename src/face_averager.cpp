@@ -15,7 +15,7 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		return avg_img;
 	}
 
-	if (fabsf(coef) <= 0.0000000001) {
+	if (std::abs(coef) <= 0.0000000001) {
 		std::cout << "we may not be able to add more faces due to rounding :("
 			<< std::endl;
 		return avg_img;

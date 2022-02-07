@@ -9,6 +9,8 @@ const u8 NOSE_BASE_I = 27;
 const u8 CHIN_I = 8;
 const u8 OUTER_LAST_I = 26;
 
+const std::string Face::separator = "++";
+const std::string Face::array_end = ".";
 
 void Face::store_fg_mask(
 	const cv::Mat& img,
@@ -240,4 +242,38 @@ void Face::draw_markers(cv::Mat& img) const
 		cv::drawMarker(img, p, color, marker, 6);
 	}
 	cv::rectangle(img, rect, YELLOW);
+}
+
+auto Face::serialize() const -> std::stringstream
+{
+	if (!delaunay_valid) {
+		std::cout << "Delaunay triangulation invalid when serializing" << std::endl;
+	}
+	auto serial = std::stringstream("");
+
+	serial << name << separator;
+
+	serial << direction.x << separator;
+	serial << direction.y << separator;
+
+	serial << delaunay_indices.size() << separator;
+	for (const auto& index : delaunay_indices) {
+		serial << index.x << separator;
+		serial << index.y << separator;
+		serial << index.z << separator;
+	}
+	serial << array_end << separator;
+
+	serial << vertices.size() << separator;
+	for (const auto& vertex : vertices) {
+		serial << vertex.x << separator;
+		serial << vertex.y << separator;
+	}
+	serial << array_end << separator;
+
+	serial << rect.x << separator;
+	serial << rect.y << separator;
+	serial << rect.width << separator;
+	serial << rect.height << separator;
+	return serial;
 }

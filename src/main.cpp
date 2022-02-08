@@ -12,14 +12,16 @@ int main(int argc, char** argv)
 	auto gui_type = gui::None;
 
 	auto img_filename = std::string("test.jpg");
-	auto avg_img_filename = std::string("test.jpg");
-	auto avg_face_filename = std::string("");
+	auto avg_img_filename = std::string("avg.jpg");
+	auto avg_face_filename = std::string("avg.face");
 
 	if (argc > 1) {
 		if (strncmp("morph", argv[1], 5) == 0) {
 			gui_type = gui::Morph;
 		} else if (strncmp("average", argv[1], 5) == 0) {
 			gui_type = gui::Average;
+		} else if (strncmp("none", argv[1], 4) == 0) {
+			gui_type = gui::None;
 		} else {
 			std::cout << "argument " << argv[1] << " invalid" << std::endl;
 		}
@@ -27,15 +29,15 @@ int main(int argc, char** argv)
 			if (gui_type != gui::None) {
 				img_list_filename = argv[2];
 			} else {
-				if (argc <= 4) {
+				if (argc < 4) {
 					std::cout << "too few args, expected two image filenames"
 						<< std::endl;
 				} else {
-					img_filename = argv[3];
-					avg_img_filename = argv[4];
+					img_filename = argv[2];
+					avg_img_filename = argv[3];
 				}
 				if (argc > 5) {
-					avg_face_filename = argv[5];
+					avg_face_filename = argv[4];
 				}
 			}
 		}
@@ -65,6 +67,8 @@ int main(int argc, char** argv)
 		break;
 	}
 	case gui::None: {
+		std::cout << "using img filename " << img_filename
+			<< " and avg img filename " << avg_img_filename << std::endl;
 		face::FaceAverager averager;
 		face::FaceDetector detector;
 		auto img = NamedImg{
@@ -73,13 +77,11 @@ int main(int argc, char** argv)
 		};
 		auto face = face::Face(img, detector);
 		auto avg_img = NamedImg{
-			img_filename,
-			cv::imread(img_filename, cv::IMREAD_COLOR)
+			avg_img_filename,
+			cv::imread(avg_img_filename, cv::IMREAD_COLOR)
 		};
-		auto avg_face = face::Face();
-		if (avg_face_filename.size() > 0) {
-			avg_face = face::Face::load(avg_face_filename);
-		} else {
+		auto avg_face = face::Face::load(avg_face_filename);
+		if (avg_face.get_vertices().size() == 0) {
 			avg_face = face::Face(avg_img, detector);
 		}
 		auto num_faces = utils::load_num_faces();
@@ -90,7 +92,9 @@ int main(int argc, char** argv)
 			avg_face,
 			num_faces
 		);
-
+		utils::save_num_faces(++num_faces);
+		new_avg.second.save(avg_face_filename);
+		cv::imwrite(avg_img_filename, new_avg.first);
 		break;
 	}
 	}

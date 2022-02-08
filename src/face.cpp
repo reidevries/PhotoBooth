@@ -364,7 +364,9 @@ auto Face::load(const std::string& filename) -> Face
 {
 	auto file = std::ifstream(filename.c_str(), std::ifstream::in);
 	if (!file) {
-		CV_Error(cv::Error::StsBadArg, "invalid filename for Face::load");
+		std::cout << "Face::load: file not found, returning empty Face"
+			<< std::endl;
+		return Face();
 	}
 	auto ss = std::stringstream();
 	ss << file.rdbuf();
@@ -377,6 +379,6 @@ void Face::save(const std::string& filename)
 	if (!file) {
 		CV_Error(cv::Error::StsBadArg, "invalid filename for Face::save");
 	}
-	file << serialize();
+	file << serialize().str();
 	file.close();
 }

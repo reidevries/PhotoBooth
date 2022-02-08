@@ -41,14 +41,16 @@ int main(int argc, char** argv)
 		}
 	}
 
-	try {
-		utils::read_img_list(img_list_filename, images);
-	} catch (const cv::Exception& e) {
-		std::cerr << "Error opening img list: " << e.msg << std::endl;
-		exit(1);
+	if (gui_type != gui::None) {
+		try {
+			utils::read_img_list(img_list_filename, images);
+		} catch (const cv::Exception& e) {
+			std::cerr << "Error opening img list: " << e.msg << std::endl;
+			exit(1);
+		}
+		std::cout << "loaded " << images.size() << " images from "
+			<< img_list_filename << std::endl;
 	}
-	std::cout << "loaded " << images.size() << " images from "
-		<< img_list_filename << std::endl;
 
 	//initialize gui
 	switch (gui_type) {
@@ -63,6 +65,32 @@ int main(int argc, char** argv)
 		break;
 	}
 	case gui::None: {
+		face::FaceAverager averager;
+		face::FaceDetector detector;
+		auto img = NamedImg{
+			img_filename,
+			cv::imread(img_filename, cv::IMREAD_COLOR)
+		};
+		auto face = face::Face(img, detector);
+		auto avg_img = NamedImg{
+			img_filename,
+			cv::imread(img_filename, cv::IMREAD_COLOR)
+		};
+		auto avg_face = face::Face();
+		if (avg_face_filename.size() > 0) {
+			avg_face = face::Face::load(avg_face_filename);
+		} else {
+			avg_face = face::Face(avg_img, detector);
+		}
+		auto num_faces = utils::load_num_faces();
+		auto new_avg = averager.process(
+			img.img,
+			face,
+			avg_img.img,
+			avg_face,
+			num_faces
+		);
+
 		break;
 	}
 	}

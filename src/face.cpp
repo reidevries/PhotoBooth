@@ -9,7 +9,7 @@ const u8 NOSE_BASE_I = 27;
 const u8 CHIN_I = 8;
 const u8 OUTER_LAST_I = 26;
 
-const std::string Face::separator = "++";
+const std::string Face::separator = ":";
 const std::string Face::array_end = ".";
 
 void Face::store_fg_mask(

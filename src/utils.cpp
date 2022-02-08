@@ -165,3 +165,11 @@ auto utils::mean(const cv::Rect& a, const cv::Rect& b, const float pos)
 		utils::mean(a.height,b.height,pos)
 	);
 }
+
+auto utils::load_num_faces() -> u64
+{
+	auto file = std::ifstream("num_faces", std::ifstream::in);
+	u64 out = 0;
+	file >> out;
+	return out;
+}

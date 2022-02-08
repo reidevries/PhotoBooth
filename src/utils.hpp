@@ -58,6 +58,8 @@ auto mean(const T& a, const T& b, const float pos) -> T
 	return a*(1-pos) + b*pos;
 }
 
+auto load_num_faces() -> u64;
+
 }
 
 #endif // __UTILS_HPP_

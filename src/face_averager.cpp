@@ -56,3 +56,17 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 	++num_faces;
 	return avg_img;
 }
+
+auto FaceAverager::process(
+	const cv::Mat& img,
+	const Face& face,
+	const cv::Mat& _avg_img,
+	const Face& _avg_face,
+	const u64 _num_faces
+) -> cv::Mat
+{
+	avg_img = _avg_img;
+	avg_face = _avg_face;
+	num_faces = _num_faces;
+	return push(img, face);
+}

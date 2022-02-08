@@ -11,15 +11,32 @@ int main(int argc, char** argv)
 	auto img_list_filename = std::string("img_list.txt");
 	auto gui_type = gui::None;
 
+	auto img_filename = std::string("test.jpg");
+	auto avg_img_filename = std::string("test.jpg");
+	auto avg_face_filename = std::string("");
+
 	if (argc > 1) {
-		img_list_filename = argv[1];
+		if (strncmp("morph", argv[1], 5) == 0) {
+			gui_type = gui::Morph;
+		} else if (strncmp("average", argv[1], 5) == 0) {
+			gui_type = gui::Average;
+		} else {
+			std::cout << "argument " << argv[1] << " invalid" << std::endl;
+		}
 		if (argc > 2) {
-			if (strncmp("morph", argv[2], 5) == 0) {
-				gui_type = gui::Morph;
-			} else if (strncmp("average", argv[2], 5) == 0) {
-				gui_type = gui::Average;
+			if (gui_type != gui::None) {
+				img_list_filename = argv[2];
 			} else {
-				std::cout << "argument " << argv[2] << " invalid" << std::endl;
+				if (argc <= 4) {
+					std::cout << "too few args, expected two image filenames"
+						<< std::endl;
+				} else {
+					img_filename = argv[3];
+					avg_img_filename = argv[4];
+				}
+				if (argc > 5) {
+					avg_face_filename = argv[5];
+				}
 			}
 		}
 	}

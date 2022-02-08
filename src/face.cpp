@@ -278,7 +278,81 @@ auto Face::serialize() const -> std::stringstream
 Face::Face(std::stringstream serial)
 {
 	std::string token;
+	auto i = 0;
+	auto j = 0;
+	auto delaunay_indices_end_pos = 0;
+	auto cur_delaunay_tri = cv::Point3i(-1,-1,-1);
+	auto vertices_end_pos = 0;
+	auto cur_vertex = cv::Point2f(-1,-1);
 	while (std::getline(serial, token, delim)) {
-		std::cout << token << std::endl;
+		if (i == 0) {
+			name = token;
+		} else if (i == 1) {
+			direction.x = std::stof(token);
+		} else if (i == 2) {
+			direction.y = std::stof(token);
+		} else if (i == 3) {
+			delaunay_indices_end_pos = 4 + std::stoi(token);
+			j = -1; // set to -1 because it will incr at end of loop
+		} else if (i < delaunay_indices_end_pos) {
+			if (j%3 == 0) {
+				cur_delaunay_tri.x = std::stoi(token);
+			} else if (j%3 == 1) {
+				cur_delaunay_tri.y = std::stoi(token);
+			} else if (j%3 == 2) {
+				cur_delaunay_tri.z = std::stoi(token);
+				if (cur_delaunay_tri.x == -1
+					|| cur_delaunay_tri.y == -1
+					|| cur_delaunay_tri.z == -1) {
+					std::cout << "encountered invalid delaunay tri "
+						<< cur_delaunay_tri << " while deserializing for "
+						<< name << " at index" << j << std::endl;
+				}
+				delaunay_indices.push_back(cur_delaunay_tri);
+				cur_delaunay_tri = cv::Point3i(-1,-1,-1);
+			}
+		} else if (i == delaunay_indices_end_pos) {
+			if (token != array_end) {
+				std::cout << "expected array end token '" << array_end
+					<< "', but instead found '" << token << "' while"
+					<< " deserializing delaunay_indices array for "
+					<< name << std::endl;
+			}
+		} else if (i == delaunay_indices_end_pos+1) {
+			vertices_end_pos = delaunay_indices_end_pos + 2 + std::stoi(token);
+			j = -1; // set to -1 because it will incr at end of loop
+		} else if (i < vertices_end_pos) {
+			if (j%2 == 0) {
+				cur_vertex.x = std::stof(token);
+			} else if (j%2 == 1) {
+				cur_vertex.y = std::stof(token);
+				if (cur_vertex.x == -1
+					|| cur_vertex.y == -1) {
+					std::cout << "encountered invalid vertex "
+						<< cur_vertex << " while deserializing for "
+						<< name << " at index " << j << std::endl;
+				}
+				vertices.push_back(cur_vertex);
+				cur_vertex = cv::Point2f(-1,-1);
+			}
+		} else if (i == vertices_end_pos) {
+			if (token != array_end) {
+				std::cout << "expected array end token '" << array_end
+					<< "', but instead found '" << token << "' while"
+					<< " deserializing vertices array for "
+					<< name << std::endl;
+			}
+		} else if (i == vertices_end_pos+1) {
+			j = 0;
+			rect.x = std::stoi(token);
+		} else if (j == 1) {
+			rect.y = std::stoi(token);
+		} else if (j == 2) {
+			rect.width = std::stoi(token);
+		} else if (j == 3) {
+			rect.height = std:stoi(token);
+		}
+		++i;
+		++j;
 	}
 }

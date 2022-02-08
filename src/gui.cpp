@@ -87,6 +87,7 @@ void FaceMorpher::select_face2_callback(int pos, void* ptr)
 	auto p = static_cast<GuiParams*>(ptr);
 	p->img2 = p->images[pos];
 	p->face2 = face::Face(p->img2, p->face_detector);
+
 	for (u8 i = 0; i < 11; ++i) {
 		p->faces[i] = p->img2.img.clone();
 		p->face2.draw_markers(p->faces[i]);

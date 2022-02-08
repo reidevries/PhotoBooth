@@ -169,6 +169,9 @@ auto utils::mean(const cv::Rect& a, const cv::Rect& b, const float pos)
 auto utils::load_num_faces() -> u64
 {
 	auto file = std::ifstream("num_faces", std::ifstream::in);
+	if (!file) {
+		return 0;
+	}
 	u64 out = 0;
 	file >> out;
 	return out;

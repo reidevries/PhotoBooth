@@ -170,9 +170,21 @@ auto utils::load_num_faces() -> u64
 {
 	auto file = std::ifstream("num_faces", std::ifstream::in);
 	if (!file) {
+		std::cout << "file not found 'num_faces', assuming 0 faces" << std::endl;
 		return 0;
 	}
 	u64 out = 0;
 	file >> out;
 	return out;
+}
+
+void utils::save_num_faces(u64 num_faces)
+{
+	auto file = std::ofstream("num_faces", std::ios::binary);
+	if (!file) {
+		std::cout << "could not open 'num_faces' for writing" << std::endl;
+		return 0;
+	}
+	file << num_faces;
+	file.close();
 }

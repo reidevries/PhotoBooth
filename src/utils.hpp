@@ -59,6 +59,7 @@ auto mean(const T& a, const T& b, const float pos) -> T
 }
 
 auto load_num_faces() -> u64;
+void save_num_faces(u64 num_faces);
 
 }
 

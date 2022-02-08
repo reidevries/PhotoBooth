@@ -17,13 +17,14 @@ int main(int argc, char** argv)
 	if (serial == serial2) {
 		std::cout << "pass" << std::endl;
 	} else {
-		for (u8 i = 0; i < std::max(serial.size(), serial2.size()); ++i) {
+		for (u64 i = 0; i < std::max(serial.size(), serial2.size()); ++i) {
 			if (i > serial.size()
 				|| i > serial2.size()
 				|| serial[i] != serial2[i]) {
 				std::cout << serial[i] << "/" << serial2[i] << " "
-					<< std::endl;
+					<< std::flush;
 			}
 		}
+		std::cout << std::endl;
 	}
 }

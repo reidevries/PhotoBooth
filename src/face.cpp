@@ -293,7 +293,7 @@ Face::Face(std::string serial_str)
 		} else if (i == 2) {
 			direction.y = std::stof(token);
 		} else if (i == 3) {
-			delaunay_indices_end_pos = 4 + std::stoi(token);
+			delaunay_indices_end_pos = 4 + 3*std::stoi(token);
 			j = -1; // set to -1 because it will incr at end of loop
 		} else if (i < delaunay_indices_end_pos) {
 			if (j%3 == 0) {
@@ -318,9 +318,11 @@ Face::Face(std::string serial_str)
 					<< "', but instead found '" << token << "' while"
 					<< " deserializing delaunay_indices array for "
 					<< name << std::endl;
+			} else {
+				delaunay_valid = true;
 			}
 		} else if (i == delaunay_indices_end_pos+1) {
-			vertices_end_pos = delaunay_indices_end_pos + 2 + std::stoi(token);
+			vertices_end_pos = delaunay_indices_end_pos + 2 + 2*std::stoi(token);
 			j = -1; // set to -1 because it will incr at end of loop
 		} else if (i < vertices_end_pos) {
 			if (j%2 == 0) {

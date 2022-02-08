@@ -15,16 +15,8 @@ int main(int argc, char** argv)
 	auto face2 = face::Face(serial);
 	auto serial2 = face2.serialize().str();
 	if (serial == serial2) {
-		std::cout << "pass" << std::endl;
+		std::cout << "pass!" << std::endl;
 	} else {
-		for (u64 i = 0; i < std::max(serial.size(), serial2.size()); ++i) {
-			if (i > serial.size()
-				|| i > serial2.size()
-				|| serial[i] != serial2[i]) {
-				std::cout << serial[i] << "/" << serial2[i] << " "
-					<< std::flush;
-			}
-		}
-		std::cout << std::endl;
+		std::cout << "serialized forms do not match!" << std::endl;
 	}
 }

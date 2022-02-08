@@ -111,7 +111,7 @@ public:
 	 * Create a Face object from serialized data
 	 * @param serial The serialized data created by `Face::serialize`
 	 */
-	Face(std::stringstream serial);
+	Face(std::string serial);
 };
 
 }

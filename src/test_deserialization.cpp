@@ -11,9 +11,9 @@ int main(int argc, char** argv)
 	};
 	auto face_detector = face::FaceDetector();
 	auto face = face::Face(named_img, face_detector);
-	auto serial = face.serialize();
+	auto serial = face.serialize().str();
 	auto face2 = face::Face(serial);
-	auto serial2 = face2.serialize();
+	auto serial2 = face2.serialize().str();
 	if (serial == serial2) {
 		std::cout << "pass" << std::endl;
 	} else {

@@ -275,8 +275,9 @@ auto Face::serialize() const -> std::stringstream
 	return serial;
 }
 
-Face::Face(std::stringstream serial)
+Face::Face(std::string serial_str)
 {
+	auto serial = std::stringstream(serial_str);
 	std::string token;
 	auto i = 0;
 	auto j = 0;
@@ -312,7 +313,7 @@ Face::Face(std::stringstream serial)
 				cur_delaunay_tri = cv::Point3i(-1,-1,-1);
 			}
 		} else if (i == delaunay_indices_end_pos) {
-			if (token != array_end) {
+			if (token[0] != array_end) {
 				std::cout << "expected array end token '" << array_end
 					<< "', but instead found '" << token << "' while"
 					<< " deserializing delaunay_indices array for "
@@ -336,7 +337,7 @@ Face::Face(std::stringstream serial)
 				cur_vertex = cv::Point2f(-1,-1);
 			}
 		} else if (i == vertices_end_pos) {
-			if (token != array_end) {
+			if (token[0] != array_end) {
 				std::cout << "expected array end token '" << array_end
 					<< "', but instead found '" << token << "' while"
 					<< " deserializing vertices array for "
@@ -350,7 +351,7 @@ Face::Face(std::stringstream serial)
 		} else if (j == 2) {
 			rect.width = std::stoi(token);
 		} else if (j == 3) {
-			rect.height = std:stoi(token);
+			rect.height = std::stoi(token);
 		}
 		++i;
 		++j;

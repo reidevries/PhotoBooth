@@ -1,8 +1,6 @@
 #ifndef APP_PROCESS_HPP_
 #define APP_PROCESS_HPP_
 
-#include "morph.hpp"
-#include "named_img.hpp"
 #include "face_averager.hpp"
 
 namespace app

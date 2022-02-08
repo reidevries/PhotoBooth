@@ -1,6 +1,6 @@
 #include "gui.hpp"
 
-using namespace gui;
+using namespace app;
 
 std::string FaceAverager::window_name = "face averager";
 

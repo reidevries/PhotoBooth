@@ -1,6 +1,7 @@
 #include "numbers.hpp"
 #include "named_img.hpp"
 #include <opencv2/highgui.hpp>
+#include <gphoto2/gphoto2.h>
 
 #include "gui.hpp"
 
@@ -9,7 +10,7 @@ int main(int argc, char** argv)
 	std::vector<NamedImg> images;
 
 	auto img_list_filename = std::string("img_list.txt");
-	auto gui_type = gui::None;
+	auto app_type = app::Process;
 
 	auto img_filename = std::string("test.jpg");
 	auto avg_img_filename = std::string("avg.jpg");
@@ -17,16 +18,16 @@ int main(int argc, char** argv)
 
 	if (argc > 1) {
 		if (strncmp("morph", argv[1], 5) == 0) {
-			gui_type = gui::Morph;
+			app_type = app::GuiMorph;
 		} else if (strncmp("average", argv[1], 5) == 0) {
-			gui_type = gui::Average;
+			app_type = app::GuiAverage;
 		} else if (strncmp("none", argv[1], 4) == 0) {
-			gui_type = gui::None;
+			app_type = app::Process;
 		} else {
 			std::cout << "argument " << argv[1] << " invalid" << std::endl;
 		}
 		if (argc > 2) {
-			if (gui_type != gui::None) {
+			if (app_type != app::Process) {
 				img_list_filename = argv[2];
 			} else {
 				if (argc < 4) {
@@ -43,7 +44,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if (gui_type != gui::None) {
+	if (app_type != app::Process) {
 		try {
 			utils::read_img_list(img_list_filename, images);
 		} catch (const cv::Exception& e) {
@@ -54,19 +55,19 @@ int main(int argc, char** argv)
 			<< img_list_filename << std::endl;
 	}
 
-	//initialize gui
-	switch (gui_type) {
-	case gui::Morph: {
-		auto gui = gui::FaceMorpher(images);
+	//initialize app
+	switch (app_type) {
+	case app::GuiMorph: {
+		auto gui = app::FaceMorpher(images);
 		while(cv::waitKey() != 'q') {}
 		break;
 	}
-	case gui::Average: {
-		auto gui = gui::FaceAverager(images);
+	case app::GuiAverage: {
+		auto gui = app::FaceAverager(images);
 		while(cv::waitKey() != 'q') {}
 		break;
 	}
-	case gui::None: {
+	case app::Process: {
 		std::cout << "using img filename " << img_filename
 			<< " and avg img filename " << avg_img_filename << std::endl;
 		face::FaceAverager averager;

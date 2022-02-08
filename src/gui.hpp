@@ -6,12 +6,13 @@
 #include <opencv2/highgui.hpp>
 #include "face_averager.hpp"
 
-namespace gui
+namespace app
 {
 enum Type {
-	None,
-	Average,
-	Morph
+	Process,
+	Live,
+	GuiAverage,
+	GuiMorph
 };
 
 class FaceAverager

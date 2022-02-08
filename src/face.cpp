@@ -364,9 +364,19 @@ auto Face::load(const std::string& filename) -> Face
 {
 	auto file = std::ifstream(filename.c_str(), std::ifstream::in);
 	if (!file) {
-		CV_Error(cv::Error::StsBadArg, "invalid filename for Face");
+		CV_Error(cv::Error::StsBadArg, "invalid filename for Face::load");
 	}
 	auto ss = std::stringstream();
 	ss << file.rdbuf();
 	return Face(ss.str());
+}
+
+void Face::save(const std::string& filename)
+{
+	auto file = std::ofstream(filename.c_str(), std::ios::binary);
+	if (!file) {
+		CV_Error(cv::Error::StsBadArg, "invalid filename for Face::save");
+	}
+	file << serialize();
+	file.close();
 }

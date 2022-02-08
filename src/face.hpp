@@ -118,6 +118,12 @@ public:
 	 * @param filename The filename of the serialized face data
 	 */
 	static auto load(const std::string& filename) -> Face;
+
+	/**
+	 * Saves this Face object to a file
+	 * @param filename The filename to be saved to
+	 */
+	void save(const std::string& filename);
 };
 
 }

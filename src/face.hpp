@@ -112,6 +112,12 @@ public:
 	 * @param serial The serialized data created by `Face::serialize`
 	 */
 	Face(std::string serial);
+
+	/**
+	 * Creates a Face object by loading it from file
+	 * @param filename The filename of the serialized face data
+	 */
+	static auto load(const std::string& filename) -> Face;
 };
 
 }

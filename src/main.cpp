@@ -3,7 +3,8 @@
 #include <opencv2/highgui.hpp>
 #include <gphoto2/gphoto2.h>
 
-#include "gui.hpp"
+#include "app_gui.hpp"
+#include "app_type.hpp"
 
 int main(int argc, char** argv)
 {

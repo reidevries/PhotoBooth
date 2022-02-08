@@ -8,13 +8,6 @@
 
 namespace app
 {
-enum Type {
-	Process,
-	Live,
-	GuiAverage,
-	GuiMorph
-};
-
 class FaceAverager
 {
 	static std::string window_name;

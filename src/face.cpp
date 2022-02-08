@@ -9,9 +9,6 @@ const u8 NOSE_BASE_I = 27;
 const u8 CHIN_I = 8;
 const u8 OUTER_LAST_I = 26;
 
-const std::string Face::separator = ":";
-const std::string Face::array_end = ".";
-
 void Face::store_fg_mask(
 	const cv::Mat& img,
 	FaceDetector& face_detector
@@ -251,29 +248,37 @@ auto Face::serialize() const -> std::stringstream
 	}
 	auto serial = std::stringstream("");
 
-	serial << name << separator;
+	serial << name << delim;
 
-	serial << direction.x << separator;
-	serial << direction.y << separator;
+	serial << direction.x << delim;
+	serial << direction.y << delim;
 
-	serial << delaunay_indices.size() << separator;
+	serial << delaunay_indices.size() << delim;
 	for (const auto& index : delaunay_indices) {
-		serial << index.x << separator;
-		serial << index.y << separator;
-		serial << index.z << separator;
+		serial << index.x << delim;
+		serial << index.y << delim;
+		serial << index.z << delim;
 	}
-	serial << array_end << separator;
+	serial << array_end << delim;
 
-	serial << vertices.size() << separator;
+	serial << vertices.size() << delim;
 	for (const auto& vertex : vertices) {
-		serial << vertex.x << separator;
-		serial << vertex.y << separator;
+		serial << vertex.x << delim;
+		serial << vertex.y << delim;
 	}
-	serial << array_end << separator;
+	serial << array_end << delim;
 
-	serial << rect.x << separator;
-	serial << rect.y << separator;
-	serial << rect.width << separator;
-	serial << rect.height << separator;
+	serial << rect.x << delim;
+	serial << rect.y << delim;
+	serial << rect.width << delim;
+	serial << rect.height << delim;
 	return serial;
+}
+
+Face::Face(std::stringstream serial)
+{
+	std::string token;
+	while (std::getline(serial, token, delim)) {
+		std::cout << token << std::endl;
+	}
 }

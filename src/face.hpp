@@ -32,6 +32,10 @@ class Face
 	/// stores the filename of the img it came from for debugging
 	std::string name;
 
+	/// separator used during (de)serialization
+	static const char delim = ';';
+	static const char array_end = '.';
+
 	/**
 	 * Used to extract a mask of the image foreground using GrabCut and store it
 	 * as `mask`
@@ -61,12 +65,6 @@ public:
 	 * @param face_detector An instance of `FaceDetector`
 	 */
 	Face(NamedImg& img, FaceDetector& face_detector);
-
-	/**
-	 * Create a Face object from serialized data
-	 * @param serial The serialized data created by `Face::serialize`
-	 */
-	Face(const std::stringstream& serial);
 
 	/**
 	 * Allows setting a vertex, it will invalidate the delaunay indices
@@ -108,6 +106,12 @@ public:
 	 * serialize the face into a stringstream
 	 */
 	auto serialize() const -> std::stringstream;
+
+	/**
+	 * Create a Face object from serialized data
+	 * @param serial The serialized data created by `Face::serialize`
+	 */
+	Face(std::stringstream serial);
 };
 
 }

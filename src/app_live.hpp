@@ -1,6 +1,7 @@
 #ifndef APP_LIVE_HPP_
 #define APP_LIVE_HPP_
 
+#include <gphoto2/gphoto2.h>
 #include "face_averager.hpp"
 
 namespace app

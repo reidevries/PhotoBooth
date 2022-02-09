@@ -2,9 +2,12 @@
 
 using namespace face;
 
-FaceAverager::FaceAverager(float _param)
-	: param(_param)
-{}
+void FaceAverager::set_param(float param)
+{
+	if (param >= 0) {
+		this->param = param;
+	}
+}
 
 auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {

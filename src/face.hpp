@@ -125,7 +125,7 @@ public:
 	 * Saves this Face object to a file
 	 * @param filename The filename to be saved to
 	 */
-	void save(const std::string& filename);
+	void save(const std::string& filename) const;
 };
 
 }

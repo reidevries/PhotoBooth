@@ -386,7 +386,7 @@ auto Face::load(const std::string& filename) -> Face
 	return Face(ss.str());
 }
 
-void Face::save(const std::string& filename)
+void Face::save(const std::string& filename) const
 {
 	auto file = std::ofstream(filename.c_str(), std::ios::binary);
 	if (!file) {

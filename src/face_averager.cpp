@@ -10,6 +10,7 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 	} else {
 		// if num_faces == 0 then we need to initialize the averages
 		avg_face = face;
+		avg_face.set_name("avg");
 		avg_img = img;
 		++num_faces;
 		return avg_img;

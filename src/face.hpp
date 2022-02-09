@@ -95,6 +95,8 @@ public:
 	 */
 	void draw_markers(cv::Mat& img) const;
 
+	auto get_name() -> std::string { return name; }
+	void set_name(const std::string& name) { this->name = name; }
 	void set_rect(const cv::Rect& rect) { this->rect = rect; }
 	auto get_rect() const -> cv::Rect { return rect; }
 	auto get_vertices() const

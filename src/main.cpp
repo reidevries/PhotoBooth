@@ -1,7 +1,6 @@
 #include "numbers.hpp"
 #include "named_img.hpp"
 #include <opencv2/highgui.hpp>
-#include <gphoto2/gphoto2.h>
 
 #include "app_gui.hpp"
 #include "app_type.hpp"
@@ -23,7 +22,7 @@ int main(int argc, char** argv)
 			app_type = app::GuiMorph;
 		} else if (strncmp("average", argv[1], 5) == 0) {
 			app_type = app::GuiAverage;
-		} else if (strncmp("none", argv[1], 4) == 0) {
+		} else if (strncmp("process", argv[1], 4) == 0) {
 			app_type = app::Process;
 		} else {
 			std::cout << "argument " << argv[1] << " invalid" << std::endl;

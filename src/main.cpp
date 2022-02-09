@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	if (app_type != app::Process) {
+	if (app_type == app::GuiMorph || app_type == app::GuiAverage ) {
 		try {
 			utils::read_img_list(img_list_filename, images);
 		} catch (const cv::Exception& e) {

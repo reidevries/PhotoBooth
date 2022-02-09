@@ -6,6 +6,8 @@ using namespace app;
 void Live::create_context()
 {
 	context = gp_context_new();
+	gp_context_set_error_func(context, context_error, NULL);
+	gp_context_set_status_func(context, context_status, NULL);
 }
 
 // copied from gphoto2 `context.c` example
@@ -49,5 +51,10 @@ void Live::init()
 	gp_camera_new(&camera);
 
 	std::cout << "Camera initializing, may take 10 seconds" << std::endl;
-	gp_cam_return_val = gp_camera_init(camera, context);
+	auto return_val = gp_camera_init(camera, context);
+	if (return_val != GP_OK) {
+		std::cout << "app::Live::init: camera init failed: " << return_val
+			<< std::endl;
+		exit(1);
+	}
 }

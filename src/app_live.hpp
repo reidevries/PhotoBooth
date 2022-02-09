@@ -10,9 +10,8 @@ namespace app
 class Live {
 	face::FaceAverager face_averager;
 	face::FaceDetector face_detector;
-	Camera* camera;
-	GPContext* context;
-	int gp_cam_return_val;
+	Camera* camera; //convert to unique_ptr
+	GPContext* context; //convert to unique_ptr
 
 	void create_context();
 

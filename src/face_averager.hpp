@@ -11,7 +11,9 @@ class FaceAverager
 	cv::Mat avg_img;
 	Face avg_face;
 	int num_faces;
+	float param = 1.0;
 public:
+	FaceAverager();
 	auto push(const cv::Mat& img, const Face& face) -> cv::Mat;
 	auto process(
 		const cv::Mat& img,

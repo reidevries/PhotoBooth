@@ -9,6 +9,17 @@ void FaceAverager::set_param(float param)
 	}
 }
 
+void FaceAverager::set(
+	const cv::Mat& avg_img,
+	const Face& avg_face,
+	u64 num_faces
+)
+{
+	this->avg_img = avg_img;
+	this->avg_face = avg_face;
+	this->num_faces = num_faces;
+}
+
 auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {
 	auto coef = 1.0;
@@ -69,14 +80,12 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 auto FaceAverager::process(
 	const cv::Mat& img,
 	const Face& face,
-	const cv::Mat& _avg_img,
-	const Face& _avg_face,
-	const u64 _num_faces
+	const cv::Mat& avg_img,
+	const Face& avg_face,
+	const u64 num_faces
 ) -> std::pair<cv::Mat, Face>
 {
-	avg_img = _avg_img;
-	avg_face = _avg_face;
-	num_faces = _num_faces;
+	set(avg_img, avg_face, num_faces);
 	auto out = push(img, face);
 	return std::pair<cv::Mat, Face>(out, avg_face);
 }

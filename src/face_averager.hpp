@@ -17,6 +17,11 @@ public:
 	auto get_avg_img() -> cv::Mat { return avg_img; }
 	auto get_avg_face() -> Face { return avg_face; }
 	auto get_num_faces() -> u64 { return num_faces; }
+	void set(
+		const cv::Mat& avg_img,
+		const Face& avg_face,
+		u64 num_faces
+	);
 	auto push(const cv::Mat& img, const Face& face) -> cv::Mat;
 	auto process(
 		const cv::Mat& img,

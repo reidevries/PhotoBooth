@@ -13,8 +13,6 @@ class Live {
 	Camera* camera; //convert to unique_ptr
 	GPContext* context; //convert to unique_ptr
 
-	void create_context();
-
 	static void context_error(
 		GPContext* context,
 		const char* str,
@@ -33,6 +31,11 @@ class Live {
 		const char* str,
 		void* data
 	);
+
+	void create_context();
+
+	void capture();
+
 public:
 	void init_cam();
 	void take_photo();

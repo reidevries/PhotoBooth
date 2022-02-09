@@ -12,17 +12,10 @@ class Live {
 	face::FaceAverager averager;
 	face::FaceDetector detector;
 
-	std::filesystem::path output_img_path;
-	std::filesystem::path output_face_path;
-	std::filesystem::path num_faces_path;
-
+	face::OutputPaths save_paths;
 public:
 	void check_for_new_capture(const std::string& filename);
-
-	void set_output_folder(const std::string& output_folder);
-
-	void save();
-	void load(const std::string& folder);
+	void set_save_paths(const std::string& folder);
 };
 
 }

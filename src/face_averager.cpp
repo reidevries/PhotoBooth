@@ -2,6 +2,14 @@
 
 using namespace face;
 
+OutputPaths::OutputPaths(const std::string& folder)
+{
+	auto path = std::filesystem::path(folder);
+	img = path / "avg.jpg";
+	face = path / "avg.face";
+	num_faces = path / "num_faces.u64";
+}
+
 void FaceAverager::set_param(float param)
 {
 	if (param >= 0) {
@@ -88,4 +96,18 @@ auto FaceAverager::process(
 	set(avg_img, avg_face, num_faces);
 	auto out = push(img, face);
 	return std::pair<cv::Mat, Face>(out, avg_face);
+}
+
+void FaceAverager::save(const OutputPaths& paths) const
+{
+	utils::save_num_faces(paths.num_faces, num_faces);
+	avg_face.save(paths.face);
+	cv::imwrite(paths.img, avg_img);
+}
+
+void FaceAverager::load(const OutputPaths& paths)
+{
+	avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
+	avg_face = face::Face::load(paths.face);
+	num_faces = utils::load_num_faces(paths.num_faces);
 }

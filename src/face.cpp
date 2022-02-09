@@ -244,7 +244,7 @@ void Face::draw_markers(cv::Mat& img) const
 auto Face::serialize() const -> std::stringstream
 {
 	if (!delaunay_valid) {
-		std::cout << "Delaunay triangulation invalid when serializing" << std::endl;
+		std::cout << "Face::serialize: note: Delaunay triangulation invalid when serializing" << std::endl;
 	}
 	auto serial = std::stringstream("");
 

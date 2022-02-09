@@ -33,10 +33,12 @@ int main(int argc, char** argv)
 				img_list_filename = argv[2];
 			} else {
 				if (argc < 4) {
-					std::cout << "too few args, expected two image filenames"
+					std::cout << "too few args, expected a filename or two"
 						<< std::endl;
 				} else {
 					img_filename = argv[2];
+				}
+				if (argc > 4) {
 					avg_img_filename = argv[3];
 				}
 				if (argc > 5) {

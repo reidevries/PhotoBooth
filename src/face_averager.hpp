@@ -14,9 +14,9 @@ class FaceAverager
 	float param = 1.0;
 public:
 	void set_param(float param);
-	auto get_avg_img() -> cv::Mat { return avg_img; }
-	auto get_avg_face() -> Face { return avg_face; }
-	auto get_num_faces() -> u64 { return num_faces; }
+	auto get_avg_img() const -> cv::Mat { return avg_img; }
+	auto get_avg_face() const -> Face { return avg_face; }
+	auto get_num_faces() const -> u64 { return num_faces; }
 	void set(
 		const cv::Mat& avg_img,
 		const Face& avg_face,

@@ -9,7 +9,7 @@ void app::process_img(
 	const std::string& num_faces_filename
 )
 {
-	std::cout << "using img filename " << img_filename
+	std::cout << "app::process_img using img filename " << img_filename
 		<< " and avg img filename " << avg_img_filename << std::endl;
 	face::FaceAverager averager;
 	face::FaceDetector detector;
@@ -25,6 +25,8 @@ void app::process_img(
 	auto avg_face = face::Face::load(avg_face_filename);
 	avg_face.set_name(avg_img_filename);
 	if (avg_face.get_vertices().size() == 0) {
+		std::cout << "app::process_img couldn't load face vertices,"
+			<< " calculating them now... " << std::endl;
 		avg_face = face::Face(avg_img, detector);
 	}
 	auto num_faces = utils::load_num_faces();

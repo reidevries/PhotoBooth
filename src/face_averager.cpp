@@ -23,6 +23,7 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 	}
 
 	auto old_avg_face = avg_face;
+	old_avg_face.set_name("old avg face");
 
 	// set the rect of avg_face to a new mean
 	avg_face.set_rect(utils::mean(avg_face.get_rect(), face.get_rect(), coef));

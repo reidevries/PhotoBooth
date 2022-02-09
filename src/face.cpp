@@ -253,6 +253,16 @@ auto Face::serialize() const -> std::stringstream
 	serial << direction.x << delim;
 	serial << direction.y << delim;
 
+	serial << rect.x << delim;
+	serial << rect.y << delim;
+	serial << rect.width << delim;
+	serial << rect.height << delim;
+
+	serial << img_rect.x << delim;
+	serial << img_rect.y << delim;
+	serial << img_rect.width << delim;
+	serial << img_rect.height << delim;
+
 	serial << delaunay_indices.size() << delim;
 	for (const auto& index : delaunay_indices) {
 		serial << index.x << delim;
@@ -268,10 +278,6 @@ auto Face::serialize() const -> std::stringstream
 	}
 	serial << array_end << delim;
 
-	serial << rect.x << delim;
-	serial << rect.y << delim;
-	serial << rect.width << delim;
-	serial << rect.height << delim;
 	return serial;
 }
 
@@ -293,7 +299,23 @@ Face::Face(std::string serial_str)
 		} else if (i == 2) {
 			direction.y = std::stof(token);
 		} else if (i == 3) {
-			delaunay_indices_end_pos = 4 + 3*std::stoi(token);
+			rect.x = std::stof(token);
+		} else if (i == 4) {
+			rect.y = std::stof(token);
+		} else if (i == 5) {
+			rect.width = std::stof(token);
+		} else if (i == 6) {
+			rect.height = std::stof(token);
+		} else if (i == 7) {
+			img_rect.x = std::stof(token);
+		} else if (i == 8) {
+			img_rect.y = std::stof(token);
+		} else if (i == 9) {
+			img_rect.width = std::stof(token);
+		} else if (i == 10) {
+			img_rect.height = std::stof(token);
+		} else if (i == 11) {
+			delaunay_indices_end_pos = 12 + 3*std::stoi(token);
 			j = -1; // set to -1 because it will incr at end of loop
 		} else if (i < delaunay_indices_end_pos) {
 			if (j%3 == 0) {
@@ -345,15 +367,6 @@ Face::Face(std::string serial_str)
 					<< " deserializing vertices array for "
 					<< name << std::endl;
 			}
-		} else if (i == vertices_end_pos+1) {
-			j = 0;
-			rect.x = std::stoi(token);
-		} else if (j == 1) {
-			rect.y = std::stoi(token);
-		} else if (j == 2) {
-			rect.width = std::stoi(token);
-		} else if (j == 3) {
-			rect.height = std::stoi(token);
 		}
 		++i;
 		++j;

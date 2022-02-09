@@ -43,7 +43,7 @@ void Live::error_dumper(
 	std::cout << "app::Live::error_dumper: " << str << std::endl;
 }
 
-void Live::init()
+void Live::init_cam()
 {
 	std::cout << "starting app::Live::init()..." << std::endl;
 	// copied from gphoto2 `sample-capture.c` example

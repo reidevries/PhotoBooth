@@ -34,7 +34,7 @@ class Live {
 		void* data
 	);
 public:
-	void init();
+	void init_cam();
 	void take_photo();
 	void poll_button();
 	void save_backup();

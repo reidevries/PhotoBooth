@@ -28,7 +28,7 @@ void app::process_img(
 		img.img
 	};
 	if (num_faces > 0) {
-		auto avg_img = NamedImg{
+		avg_img = NamedImg{
 			avg_img_filename,
 			cv::imread(avg_img_filename, cv::IMREAD_COLOR)
 		};

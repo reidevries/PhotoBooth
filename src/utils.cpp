@@ -166,6 +166,17 @@ auto utils::mean(const cv::Rect& a, const cv::Rect& b, const float pos)
 	);
 }
 
+auto utils::check_file_exists(const std::string& filename) -> bool
+{
+	auto file = std::ifstream(filename, std::ifstream::in);
+	if (!file) {
+		return false;
+	} else {
+		file.close();
+		return true;
+	}
+}
+
 auto utils::load_num_faces() -> u64
 {
 	auto file = std::ifstream("num_faces", std::ifstream::in);

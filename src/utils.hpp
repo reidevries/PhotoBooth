@@ -58,6 +58,8 @@ auto mean(const T& a, const T& b, const float pos) -> T
 	return a*(1-pos) + b*pos;
 }
 
+auto check_file_exists(const std::string& filename) -> bool;
+
 auto load_num_faces() -> u64;
 void save_num_faces(u64 num_faces);
 

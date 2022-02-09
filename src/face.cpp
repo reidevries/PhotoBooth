@@ -147,9 +147,9 @@ void Face::calc_delaunay()
 		try {
 			subdiv.insert(point);
 		} catch (const cv::Exception& e) {
-			std::cerr << "Got this cv exception: " << e.msg << std::endl
+			std::cerr << "Got this cv exception: " << e.msg
 				<< "When adding point" << point
-				<< " for face '" << name << "'" << std::endl;
+				<< " for face '" << name << "'" << std::endl << std::endl;
 		}
 	}
 	std::vector<cv::Vec6f> tri_list;

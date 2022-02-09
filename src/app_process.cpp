@@ -23,6 +23,7 @@ void app::process_img(
 		cv::imread(avg_img_filename, cv::IMREAD_COLOR)
 	};
 	auto avg_face = face::Face::load(avg_face_filename);
+	avg_face.set_name(avg_img_filename);
 	if (avg_face.get_vertices().size() == 0) {
 		avg_face = face::Face(avg_img, detector);
 	}

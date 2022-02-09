@@ -9,12 +9,13 @@ void app::process_img(
 	const std::string& num_faces_filename
 )
 {
-	std::cout << "app::process_img using img filename " << img_filename
+	std::cout << "app::process_img: using img filename " << img_filename
 		<< " and avg img filename " << avg_img_filename << std::endl;
 	face::FaceAverager averager;
 	face::FaceDetector detector;
 
 	auto num_faces = utils::load_num_faces(num_faces_filename);
+	std::cout << "app::process_img: num_faces = " << num_faces << std::endl;
 
 	auto img = NamedImg{
 		img_filename,

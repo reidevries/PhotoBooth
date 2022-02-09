@@ -73,9 +73,7 @@ int main(int argc, char** argv)
 	case app::Process: {
 		app::process_img(
 			img_filename,
-			avg_img_filename,
-			avg_face_filename,
-			"num_faces"
+			"output"
 		);
 		break;
 	}

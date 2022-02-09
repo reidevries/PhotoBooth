@@ -8,9 +8,7 @@ namespace app
 
 void process_img(
 	const std::string& img_filename,
-	const std::string& avg_img_filename,
-	const std::string& avg_face_filename,
-	const std::string& num_faces_filename
+	const std::string& output_folder
 );
 
 }

@@ -14,8 +14,7 @@ int main(int argc, char** argv)
 	auto app_type = app::Process;
 
 	auto img_filename = std::string("test.jpg");
-	auto avg_img_filename = std::string("avg.jpg");
-	auto avg_face_filename = std::string("avg.face");
+	auto output_folder_filename = std::string("output");
 
 	if (argc > 1) {
 		if (strncmp("morph", argv[1], 5) == 0) {
@@ -31,17 +30,14 @@ int main(int argc, char** argv)
 			if (app_type != app::Process) {
 				img_list_filename = argv[2];
 			} else {
-				if (argc < 4) {
-					std::cout << "too few args, expected a filename or two"
+				if (argc < 3) {
+					std::cout << "too few args, expected an output folder name"
 						<< std::endl;
 				} else {
-					img_filename = argv[2];
+					img_filename = argv[3];
 				}
 				if (argc > 4) {
-					avg_img_filename = argv[3];
-				}
-				if (argc > 5) {
-					avg_face_filename = argv[4];
+					output_folder_filename = argv[4];
 				}
 			}
 		}
@@ -73,7 +69,7 @@ int main(int argc, char** argv)
 	case app::Process: {
 		app::process_img(
 			img_filename,
-			"output"
+			output_folder_filename
 		);
 		break;
 	}

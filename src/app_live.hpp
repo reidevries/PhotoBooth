@@ -8,12 +8,13 @@
 namespace app
 {
 
-class Live {
+class LiveProcess {
 	face::FaceAverager averager;
 	face::FaceDetector detector;
 
 	face::OutputPaths save_paths;
 public:
+	LiveProcess();
 	void check_for_new_capture(const std::string& filename);
 	void set_save_paths(const std::string& folder);
 };

@@ -10,6 +10,7 @@ namespace face
 struct OutputPaths
 {
 	std::filesystem::path img, face, num_faces;
+	OutputPaths();
 	OutputPaths(const std::string& folder);
 };
 

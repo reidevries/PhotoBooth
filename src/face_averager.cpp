@@ -2,6 +2,8 @@
 
 using namespace face;
 
+OutputPaths::OutputPaths() {}
+
 OutputPaths::OutputPaths(const std::string& folder)
 {
 	auto path = std::filesystem::path(folder);
@@ -110,4 +112,9 @@ void FaceAverager::load(const OutputPaths& paths)
 	avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
 	avg_face = face::Face::load(paths.face);
 	num_faces = utils::load_num_faces(paths.num_faces);
+	std::cout << "FaceAverager::load: read img from "
+		<< paths.img << ", read face from"
+		<< paths.face << ", read num_faces from"
+		<< paths.num_faces << ". got this num faces: "
+		<< num_faces << std::endl;
 }

@@ -5,6 +5,7 @@
 #include "app_gui.hpp"
 #include "app_type.hpp"
 #include "app_process.hpp"
+#include "app_live.hpp"
 
 int main(int argc, char** argv)
 {
@@ -17,27 +18,32 @@ int main(int argc, char** argv)
 	auto output_folder_filename = std::string("output");
 
 	if (argc > 1) {
-		if (strncmp("morph", argv[1], 5) == 0) {
+		if (strncmp("morph", argv[1], 4) == 0) {
 			app_type = app::GuiMorph;
-		} else if (strncmp("average", argv[1], 5) == 0) {
+		} else if (strncmp("average", argv[1], 4) == 0) {
 			app_type = app::GuiAverage;
 		} else if (strncmp("process", argv[1], 4) == 0) {
 			app_type = app::Process;
+		} else if (strncmp("live", argv[1], 4) == 0) {
+			app_type = app::Live;
 		} else {
 			std::cout << "argument " << argv[1] << " invalid" << std::endl;
 		}
 		if (argc > 2) {
-			if (app_type != app::Process) {
+			if (app_type == app::GuiMorph || app_type == app::GuiAverage) {
 				img_list_filename = argv[2];
 			} else {
 				if (argc < 3) {
 					std::cout << "too few args, expected an output folder name"
 						<< std::endl;
 				} else {
-					img_filename = argv[3];
+					img_filename = argv[2];
+					std::cout << "using img_filename " << img_filename << std::endl;
 				}
 				if (argc > 4) {
-					output_folder_filename = argv[4];
+					output_folder_filename = argv[3];
+					std::cout << "using output_folder_filename "
+						<< output_folder_filename << std::endl;
 				}
 			}
 		}
@@ -72,6 +78,12 @@ int main(int argc, char** argv)
 			output_folder_filename
 		);
 		break;
+	}
+	case app::Live: {
+		auto app = app::LiveProcess();
+		while (true) {
+			app.check_for_new_capture(img_filename);
+		}
 	}
 	}
 	return 0;

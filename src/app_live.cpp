@@ -2,7 +2,11 @@
 
 using namespace app;
 
-void Live::check_for_new_capture(const std::string& filename)
+LiveProcess::LiveProcess()
+{
+}
+
+void LiveProcess::check_for_new_capture(const std::string& filename)
 {
 	auto path = std::filesystem::path(filename);
 	if (std::filesystem::exists(path)) {
@@ -23,7 +27,7 @@ void Live::check_for_new_capture(const std::string& filename)
 	std::filesystem::remove(path);
 }
 
-void Live::set_save_paths(const std::string &folder)
+void LiveProcess::set_save_paths(const std::string &folder)
 {
 	save_paths = face::OutputPaths(folder);
 }

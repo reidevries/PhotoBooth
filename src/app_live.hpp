@@ -13,6 +13,7 @@ class LiveProcess {
 	face::FaceDetector detector;
 
 	face::OutputPaths save_paths;
+	std::filesystem::file_time_type last_write_time;
 public:
 	LiveProcess();
 	void check_for_new_capture(const std::string& filename);

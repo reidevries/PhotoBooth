@@ -9,9 +9,14 @@ LiveProcess::LiveProcess()
 void LiveProcess::check_for_new_capture(const std::string& filename)
 {
 	auto path = std::filesystem::path(filename);
-	if (std::filesystem::exists(path)) {
+	if (!std::filesystem::exists(path)) {
 		return;
 	}
+	auto new_last_write_time = std::filesystem::last_write_time(path);
+	if (new_last_write_time == last_write_time) {
+		return;
+	}
+	last_write_time = new_last_write_time;
 
 	std::cout << "loading " << path << "..." << std::endl;
 	auto img = NamedImg{

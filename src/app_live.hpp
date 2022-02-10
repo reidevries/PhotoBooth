@@ -19,6 +19,7 @@ public:
 	LiveProcess(const std::string& save_folder);
 	void check_for_new_capture(const std::string& filename);
 	void set_save_paths(const std::string& folder);
+	void load_avg();
 };
 
 }

@@ -17,11 +17,15 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	if (!std::filesystem::exists(path)) {
 		return;
 	}
-	auto new_last_write_time = std::filesystem::last_write_time(path);
-	if (new_last_write_time == last_write_time) {
+	try {
+		auto new_last_write_time = std::filesystem::last_write_time(path);
+		if (new_last_write_time == last_write_time) {
+			return;
+		}
+		last_write_time = new_last_write_time;
+	} catch (const std::filesystem::filesystem_error& e) {
 		return;
 	}
-	last_write_time = new_last_write_time;
 
 	std::cout << "loading " << path << "..." << std::endl;
 	auto img = NamedImg{
@@ -31,11 +35,18 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	auto face = face::Face(img, detector);
 
 	averager.push(img.img, face);
-
 	averager.save(save_paths);
+	std::cout << "saved new avg at " << last_write_time << std::endl;
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)
 {
 	save_paths = face::OutputPaths(folder);
+}
+
+void LiveProcess::load_avg()
+{
+	if (utils::check_file_exists(save_paths.num_faces)) {
+		averager.load(save_paths);
+	}
 }

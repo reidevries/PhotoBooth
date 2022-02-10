@@ -80,7 +80,8 @@ int main(int argc, char** argv)
 		break;
 	}
 	case app::Live: {
-		auto app = app::LiveProcess();
+		auto app = app::LiveProcess(output_folder_filename);
+		app.load_avg();
 		while (true) {
 			app.check_for_new_capture(img_filename);
 		}

@@ -9,7 +9,7 @@ namespace face
 
 struct OutputPaths
 {
-	std::filesystem::path img, face, num_faces;
+	std::filesystem::path img, face, num_faces, folder;
 	OutputPaths();
 	OutputPaths(const std::string& folder);
 };
@@ -18,7 +18,7 @@ class FaceAverager
 {
 	cv::Mat avg_img;
 	Face avg_face;
-	u64 num_faces;
+	u64 num_faces = 0;
 	float param = 1.0;
 public:
 	void set_param(float param);

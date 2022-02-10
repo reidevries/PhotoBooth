@@ -36,7 +36,7 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 
 	averager.push(img.img, face);
 	averager.save(save_paths);
-	std::cout << "saved new avg at " << last_write_time << std::endl;
+	std::cout << "saved new avg" << std::endl;
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

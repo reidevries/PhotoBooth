@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <filesystem>
+#include <chrono>
 #include "face_averager.hpp"
 
 namespace app

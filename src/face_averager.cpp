@@ -7,6 +7,7 @@ OutputPaths::OutputPaths() {}
 OutputPaths::OutputPaths(const std::string& folder)
 {
 	auto path = std::filesystem::path(folder);
+	this->folder = path;
 	img = path / "avg.jpg";
 	face = path / "avg.face";
 	num_faces = path / "num_faces.u64";
@@ -37,6 +38,8 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		coef = fmin((1.0+param)/(num_faces+1+static_cast<int>(param)), 1.0);
 	} else {
 		// if num_faces == 0 then we need to initialize the averages
+		std::cout << "as 0 faces have been processed,"
+			<< " initializing FaceAverager" << std::endl;
 		avg_face = face;
 		avg_face.set_name("avg");
 		avg_img = img;
@@ -102,6 +105,11 @@ auto FaceAverager::process(
 
 void FaceAverager::save(const OutputPaths& paths) const
 {
+	if (!std::filesystem::exists(paths.folder)) {
+		std::cout << "directory " << paths.folder << " not found,"
+			<< " creating it now" << std::endl;
+		std::filesystem::create_directory(paths.folder);
+	}
 	utils::save_num_faces(paths.num_faces, num_faces);
 	avg_face.save(paths.face);
 	cv::imwrite(paths.img, avg_img);

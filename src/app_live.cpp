@@ -6,6 +6,11 @@ LiveProcess::LiveProcess()
 {
 }
 
+LiveProcess::LiveProcess(const std::string& save_folder)
+	: save_paths(save_folder)
+{
+}
+
 void LiveProcess::check_for_new_capture(const std::string& filename)
 {
 	auto path = std::filesystem::path(filename);
@@ -28,8 +33,6 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	averager.push(img.img, face);
 
 	averager.save(save_paths);
-
-	std::filesystem::remove(path);
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

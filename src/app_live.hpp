@@ -16,6 +16,7 @@ class LiveProcess {
 	std::filesystem::file_time_type last_write_time;
 public:
 	LiveProcess();
+	LiveProcess(const std::string& save_folder);
 	void check_for_new_capture(const std::string& filename);
 	void set_save_paths(const std::string& folder);
 };

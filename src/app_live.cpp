@@ -27,16 +27,17 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 		return;
 	}
 
-	std::cout << "loading " << path << "..." << std::endl;
-	auto img = NamedImg{
-		filename,
-		cv::imread(filename, cv::IMREAD_COLOR)
-	};
+	std::cout << "loading " << path
+		<< ", taken at " << utils::to_time_t(last_write_time)
+		<< " ..." << std::endl;
+	auto img = utils::load_img_and_process(filename);
 	auto face = face::Face(img, detector);
 
 	averager.push(img.img, face);
 	averager.save(save_paths);
 	std::cout << "saved new avg" << std::endl;
+
+	std::filesystem::remove(filename);
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

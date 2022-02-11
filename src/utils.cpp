@@ -201,3 +201,20 @@ void utils::save_num_faces(const std::string& filename, u64 num_faces)
 	file << num_faces;
 	file.close();
 }
+
+auto utils::load_img_and_process(const std::string& filename) -> NamedImg
+{
+	auto img = cv::imread(filename, cv::IMREAD_COLOR);
+	if (img.size().width > img.size().height) {
+		cv::rotate(img,img,cv::ROTATE_90_CLOCKWISE);
+	}
+
+	//shrink img to be less than 400 pixels tall
+	auto denom = static_cast<int>(std::ceil(img.size().height/400));
+	auto new_size = cv::Size(img.size().width/denom, img.size().height/denom);
+	cv::resize(img, img, new_size, cv::INTER_LINEAR);
+
+	std::cout << "resized to " << new_size << std::endl;
+
+	return NamedImg{ filename, img };
+}

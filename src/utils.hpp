@@ -11,6 +11,7 @@
 #include <dlib/opencv.h>
 #include <dlib/image_transforms.h>
 #include <opencv2/imgproc.hpp>
+#include <chrono>
 
 namespace utils
 {
@@ -63,6 +64,20 @@ auto check_file_exists(const std::string& filename) -> bool;
 auto load_num_faces(const std::string& filename) -> u64;
 void save_num_faces(const std::string& filename, u64 num_faces);
 
+auto load_img_and_process(const std::string& filename) -> NamedImg;
+
+template<typename T>
+auto to_time_t(T tp) -> std::time_t
+{
+	auto sctp = std::chrono::time_point_cast<
+		std::chrono::system_clock::duration
+	>(
+		tp - T::clock::now() + std::chrono::system_clock::now()
+	);
+	return std::chrono::system_clock::to_time_t(sctp);
 }
+
+}
+
 
 #endif // __UTILS_HPP_

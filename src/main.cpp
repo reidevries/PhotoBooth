@@ -41,12 +41,12 @@ int main(int argc, char** argv)
 					img_filename = argv[2];
 					std::cout << "using img_filename " << img_filename << std::endl;
 				}
-				if (argc > 4) {
+				if (argc > 3) {
 					output_folder_filename = argv[3];
 					std::cout << "using output_folder_filename "
 						<< output_folder_filename << std::endl;
 				}
-				if (argc > 5) {
+				if (argc > 4) {
 					printer_name = argv[4];
 					std::cout << "using printer name "
 						<< printer_name << std::endl;

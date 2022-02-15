@@ -1,4 +1,5 @@
 #include "app_live.hpp"
+#include <stdlib.h>
 
 using namespace app;
 
@@ -6,9 +7,19 @@ LiveProcess::LiveProcess()
 {
 }
 
-LiveProcess::LiveProcess(const std::string& save_folder)
-	: save_paths(save_folder)
+LiveProcess::LiveProcess(
+	const std::string& save_folder,
+	const std::string& printer_name
+) : save_paths(save_folder)
 {
+	if (printer_name != std::string("")) {
+		print_cmd = std::string("lp -d ") + printer_name 
+			+ std::string(" ")
+			+ std::string(save_paths.img.c_str());
+	} else {
+		print_cmd = "";
+	}
+	std::cout << "using print command " << print_cmd << std::endl;
 }
 
 void LiveProcess::check_for_new_capture(const std::string& filename)
@@ -36,6 +47,8 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	averager.push(img.img, face);
 	averager.save(save_paths);
 	std::cout << "saved new avg" << std::endl;
+
+	system(print_cmd.c_str());
 
 	std::filesystem::remove(filename);
 }

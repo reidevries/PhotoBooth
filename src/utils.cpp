@@ -208,9 +208,6 @@ auto utils::load_img_and_process(
 ) -> NamedImg
 {
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
-	if (img.size().width > img.size().height) {
-		cv::rotate(img,img,cv::ROTATE_90_CLOCKWISE);
-	}
 
 	//shrink img to be less than 400 pixels tall
 	auto denom = static_cast<int>(std::ceil(img.size().height/400));

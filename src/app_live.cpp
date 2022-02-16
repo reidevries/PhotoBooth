@@ -41,7 +41,10 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	std::cout << "loading " << path
 		<< ", taken at " << utils::to_time_t(last_write_time)
 		<< " ..." << std::endl;
-	auto img = utils::load_img_and_process(filename);
+	auto img = utils::load_img_and_process(
+		filename,
+		averager.get_avg_img().size()
+	);
 	auto face = face::Face(img, detector);
 
 	// reload if output folder doesn't exist

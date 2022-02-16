@@ -15,7 +15,7 @@ LiveProcess::LiveProcess(
 	if (printer_name != std::string("")) {
 		print_cmd = std::string("lp -d ") + printer_name 
 			+ std::string(" ")
-			+ std::string(save_paths.img.c_str());
+			+ std::string(save_paths.img_proc.c_str());
 	} else {
 		print_cmd = "";
 	}
@@ -41,7 +41,7 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	std::cout << "loading " << path
 		<< ", taken at " << utils::to_time_t(last_write_time)
 		<< " ..." << std::endl;
-	auto img = utils::load_img_and_process(
+	auto img = imaging::load_img_and_process(
 		filename,
 		averager.get_avg_img().size()
 	);

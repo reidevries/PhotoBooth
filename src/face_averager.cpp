@@ -9,6 +9,7 @@ OutputPaths::OutputPaths(const std::string& folder)
 	auto path = std::filesystem::path(folder);
 	this->folder = path;
 	img = path / "avg.jpg";
+	img_proc = path / "avg_proc.jpg";
 	face = path / "avg.face";
 	num_faces = path / "num_faces.u64";
 }
@@ -113,6 +114,7 @@ void FaceAverager::save(const OutputPaths& paths)
 	utils::save_num_faces(paths.num_faces, num_faces);
 	avg_face.save(paths.face);
 	cv::imwrite(paths.img, avg_img);
+	cv::imwrite(paths.img_proc, imaging::process_aly_style(avg_img));
 }
 
 void FaceAverager::load(const OutputPaths& paths)

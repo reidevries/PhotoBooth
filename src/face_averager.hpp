@@ -3,13 +3,14 @@
 
 #include "morph.hpp"
 #include <filesystem>
+#include "imaging.hpp"
 
 namespace face
 {
 
 struct OutputPaths
 {
-	std::filesystem::path img, face, num_faces, folder;
+	std::filesystem::path img, img_proc, face, num_faces, folder;
 	OutputPaths();
 	OutputPaths(const std::string& folder);
 };

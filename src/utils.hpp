@@ -64,11 +64,6 @@ auto check_file_exists(const std::string& filename) -> bool;
 auto load_num_faces(const std::string& filename) -> u64;
 void save_num_faces(const std::string& filename, u64 num_faces);
 
-auto load_img_and_process(
-	const std::string& filename,
-	const cv::Size& expected_size
-) -> NamedImg;
-
 template<typename T>
 auto to_time_t(T tp) -> std::time_t
 {

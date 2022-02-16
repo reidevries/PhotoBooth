@@ -3,6 +3,10 @@
 
 #include "named_img.hpp"
 #include <iostream>
+#include <sstream>
+#include <ctime>
+#include <iomanip>
+#include <locale>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/imgproc.hpp>

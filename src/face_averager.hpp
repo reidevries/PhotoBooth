@@ -39,7 +39,7 @@ public:
 		const u64 num_faces
 	) -> std::pair<cv::Mat, Face>;
 
-	void save(const OutputPaths& paths) const;
+	void save(const OutputPaths& paths);
 	void load(const OutputPaths& paths);
 };
 

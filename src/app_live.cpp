@@ -44,6 +44,10 @@ void LiveProcess::check_for_new_capture(const std::string& filename)
 	auto img = utils::load_img_and_process(filename);
 	auto face = face::Face(img, detector);
 
+	// reload if output folder doesn't exist
+	if (!std::filesystem::exists(save_paths.folder)) {
+		averager.load(save_paths);
+	}
 	averager.push(img.img, face);
 	averager.save(save_paths);
 	std::cout << "saved new avg" << std::endl;

@@ -103,7 +103,7 @@ auto FaceAverager::process(
 	return std::pair<cv::Mat, Face>(out, avg_face);
 }
 
-void FaceAverager::save(const OutputPaths& paths) const
+void FaceAverager::save(const OutputPaths& paths)
 {
 	if (!std::filesystem::exists(paths.folder)) {
 		std::cout << "directory " << paths.folder << " not found,"
@@ -117,9 +117,18 @@ void FaceAverager::save(const OutputPaths& paths) const
 
 void FaceAverager::load(const OutputPaths& paths)
 {
-	avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
-	avg_face = face::Face::load(paths.face);
-	num_faces = utils::load_num_faces(paths.num_faces);
+	if (!std::filesystem::exists(paths.folder)) {
+		std::cout << "directory " << paths.folder << " not found,"
+			<< " resetting" << std::endl;
+		std::filesystem::create_directory(paths.folder);
+		avg_img = cv::Mat();
+		avg_face = face::Face();
+		num_faces = 0;
+	} else {
+		avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
+		avg_face = face::Face::load(paths.face);
+		num_faces = utils::load_num_faces(paths.num_faces);
+	}
 	std::cout << "FaceAverager::load: read img from "
 		<< paths.img << ", read face from"
 		<< paths.face << ", read num_faces from"

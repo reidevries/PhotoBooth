@@ -124,11 +124,10 @@ void FaceAverager::load(const OutputPaths& paths)
 		avg_img = cv::Mat();
 		avg_face = face::Face();
 		num_faces = 0;
-	} else {
-		avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
-		avg_face = face::Face::load(paths.face);
-		num_faces = utils::load_num_faces(paths.num_faces);
 	}
+	avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
+	avg_face = face::Face::load(paths.face);
+	num_faces = utils::load_num_faces(paths.num_faces);
 	std::cout << "FaceAverager::load: read img from "
 		<< paths.img << ", read face from"
 		<< paths.face << ", read num_faces from"

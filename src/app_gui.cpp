@@ -14,9 +14,14 @@ FaceAverager::FaceAverager(std::vector<NamedImg>& images) : params(images)
 {
 	auto face_averager = face::FaceAverager();
 	std::cout << "averaging faces, pls wait" << std::endl;
+	u64 i = 0;
 	for (auto& img : images) {
 		auto face = face::Face(img, params.face_detector);
 		params.avg_images.push_back(face_averager.push(img.img, face));
+		face_averager.save(face::OutputPaths(
+			std::string("averages/") + std::to_string(i)
+		));
+		++i;
 	}
 	cv::namedWindow(window_name, cv::WINDOW_NORMAL);
 	cv::createTrackbar(

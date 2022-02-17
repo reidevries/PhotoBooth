@@ -55,7 +55,7 @@ auto get_cur_time_str() -> std::string
 
 auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 {
-	auto proc = img;
+	auto proc = img.clone();
 
 	static const cv::Scalar WHITE = cv::Scalar(255, 255, 255);
 	static const cv::Scalar BLACK = cv::Scalar(0, 0, 0);

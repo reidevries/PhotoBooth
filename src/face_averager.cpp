@@ -109,7 +109,7 @@ void FaceAverager::save(const OutputPaths& paths)
 	if (!std::filesystem::exists(paths.folder)) {
 		std::cout << "directory " << paths.folder << " not found,"
 			<< " creating it now" << std::endl;
-		std::filesystem::create_directory(paths.folder);
+		std::filesystem::create_directories(paths.folder);
 	}
 	utils::save_num_faces(paths.num_faces, num_faces);
 	avg_face.save(paths.face);
@@ -122,7 +122,7 @@ void FaceAverager::load(const OutputPaths& paths)
 	if (!std::filesystem::exists(paths.folder)) {
 		std::cout << "directory " << paths.folder << " not found,"
 			<< " resetting" << std::endl;
-		std::filesystem::create_directory(paths.folder);
+		std::filesystem::create_directories(paths.folder);
 		avg_img = cv::Mat();
 		avg_face = face::Face();
 		num_faces = 0;

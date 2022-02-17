@@ -27,13 +27,28 @@ auto get_cur_time_str() -> std::string
 	time_t cur_time;
 	time(&cur_time);
 	auto local_time = localtime(&cur_time);
+	int y = local_time->tm_year - 100;
+	int mo = local_time->tm_mon + 1;
+	int d = local_time->tm_mday;
 	int h = local_time->tm_hour;
-	int m = local_time->tm_min;
+	int mi = local_time->tm_min;
 	int s = local_time->tm_sec;
 
 	std::stringstream buf;
-	buf << std::setw(2) << std::setfill('0')
-		<< h << "h" << m << "m" << s << "s";
+	// not sure why but seems like i need to set these before every
+	// int for some reason
+	buf << std::setfill('0') << std::setw(2)
+		<< y << ":"
+		<< std::setfill('0') << std::setw(2)
+		<< mo << ":"
+		<< std::setfill('0') << std::setw(2)
+		<< d << ":"
+		<< std::setfill('0') << std::setw(2)
+		<< h << ":"
+		<< std::setfill('0') << std::setw(2)
+		<< mi << ":"
+		<< std::setfill('0') << std::setw(2)
+		<< s;
 	std::cout << "got current time as " << buf.str() << std::endl;
 	return buf.str();
 }
@@ -43,6 +58,7 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	auto proc = img;
 
 	static const cv::Scalar WHITE = cv::Scalar(255, 255, 255);
+	static const cv::Scalar BLACK = cv::Scalar(0, 0, 0);
 	static const cv::Scalar GREEN = cv::Scalar(0,255,0);
 
 	auto size = img.size();
@@ -77,15 +93,71 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	cv::line(proc, p_br, p_br_t, WHITE, l_w, l_t);
 	cv::line(proc, p_br, p_br_l, WHITE, l_w, l_t);
 
-	auto text_bl = p_bl + cv::Point(x_d-2*l_w, -2*l_w);
+	auto cur_time_str = get_cur_time_str();
+	auto time_size = cv::getTextSize(
+		cur_time_str,
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		1.5,
+		0
+	);
+	auto loc_size = cv::getTextSize(
+		"Kaurna Land",
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		1.5,
+		0
+	);
+	auto time_bl = cv::Point(
+		(size.width - time_size.width)/2,
+		p_tl.y + time_size.height + 2*l_w
+	);
+	auto loc_bl = cv::Point(
+		(size.width - loc_size.width)/2,
+		p_bl.y - 2*l_w
+	);
+	// outline
 	cv::putText(
 		proc,
 		get_cur_time_str(),
-		text_bl,
-		cv::FONT_HERSHEY_SIMPLEX,
-		1,
-		GREEN,
+		time_bl,
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		BLACK,
 		2,
+		l_t
+	);
+	// main text
+	cv::putText(
+		proc,
+		get_cur_time_str(),
+		time_bl,
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		GREEN,
+		1.5,
+		l_t
+	);
+	// outline
+	cv::putText(
+		proc,
+		"Kaurna Land",
+		loc_bl,
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		BLACK,
+		2,
+		l_t
+	);
+	// main text
+	cv::putText(
+		proc,
+		"Kaurna Land",
+		loc_bl,
+		cv::FONT_HERSHEY_DUPLEX,
+		0.7,
+		GREEN,
+		1.5,
 		l_t
 	);
 

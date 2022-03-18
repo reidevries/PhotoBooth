@@ -92,7 +92,7 @@ int main(int argc, char** argv)
 		);
 		app.load_avg();
 		while (true) {
-			app.check_for_new_capture(img_filename);
+			app.try_process_new_capture(img_filename);
 		}
 	}
 	}

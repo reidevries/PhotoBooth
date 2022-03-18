@@ -15,7 +15,11 @@ auto imaging::load_img_and_process(
 			<< " but expected size was " << expected_size;
 		new_size = expected_size;
 	}
-	cv::resize(img, img, new_size, cv::INTER_LINEAR);
+	try {
+		cv::resize(img, img, new_size, cv::INTER_LINEAR);
+	} catch (const cv::Exception& e) {
+
+	}
 
 	std::cout << "resized to " << new_size << std::endl;
 

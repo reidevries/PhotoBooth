@@ -22,7 +22,7 @@ LiveProcess::LiveProcess(
 	std::cout << "using print command " << print_cmd << std::endl;
 }
 
-void LiveProcess::check_for_new_capture(const std::string& filename)
+void LiveProcess::try_process_new_capture(const std::string& filename)
 {
 	auto path = std::filesystem::path(filename);
 	if (!std::filesystem::exists(path)) {

@@ -22,7 +22,11 @@ public:
 		const std::string& save_folder,
 		const std::string& printer_name
 	);
-	void check_for_new_capture(const std::string& filename);
+
+	/**
+	 * check for a new
+	 */
+	void try_process_new_capture(const std::string& filename);
 	void set_save_paths(const std::string& folder);
 	void load_avg();
 };

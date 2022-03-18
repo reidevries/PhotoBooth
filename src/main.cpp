@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 				img_list_filename = argv[2];
 			} else {
 				if (argc < 3) {
-					std::cout << "too few args, expected an output folder name"
+					std::cout << "too few args, expected an image filename"
 						<< std::endl;
 				} else {
 					img_filename = argv[2];

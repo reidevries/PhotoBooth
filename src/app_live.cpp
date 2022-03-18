@@ -9,17 +9,10 @@ LiveProcess::LiveProcess()
 
 LiveProcess::LiveProcess(
 	const std::string& save_folder,
-	const std::string& printer_name
-) : save_paths(save_folder)
+	const std::string& _printer_name
+) : save_paths(save_folder),
+	printer_name(_printer_name)
 {
-	if (printer_name != std::string("")) {
-		print_cmd = std::string("lp -d ") + printer_name 
-			+ std::string(" ")
-			+ std::string(save_paths.img_proc.c_str());
-	} else {
-		print_cmd = "";
-	}
-	std::cout << "using print command " << print_cmd << std::endl;
 }
 
 void LiveProcess::try_process_new_capture(const std::string& filename)
@@ -55,7 +48,7 @@ void LiveProcess::try_process_new_capture(const std::string& filename)
 	averager.save(save_paths);
 	std::cout << "saved new avg" << std::endl;
 
-	system(print_cmd.c_str());
+	print_processed_img();
 
 	std::filesystem::remove(filename);
 }
@@ -69,5 +62,19 @@ void LiveProcess::load_avg()
 {
 	if (utils::check_file_exists(save_paths.num_faces)) {
 		averager.load(save_paths);
+	}
+}
+
+void LiveProcess::print_processed_img()
+{
+	if (printer_name != std::string("")) {
+		auto print_cmd = std::string("lp -d ") + printer_name 
+			+ std::string(" ")
+			+ std::string(save_paths.img_proc.c_str());
+		std::cout << "printing using this command: " << print_cmd << std::endl;
+		system(print_cmd.c_str());
+	} else {
+		std::cout << "no printer name specified, can't print" << std::endl;
+		return;
 	}
 }

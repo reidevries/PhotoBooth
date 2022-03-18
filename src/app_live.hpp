@@ -20,8 +20,8 @@ class LiveProcess {
 	face::OutputPaths save_paths;
 	/// stores the last clock time a capture was found
 	std::filesystem::file_time_type last_write_time;
-	/// stores the system call used to print
-	std::string print_cmd;
+	/// stores the name of the printer for lp in `print_processed_img`
+	std::string printer_name;
 public:
 	LiveProcess();
 	LiveProcess(
@@ -50,6 +50,11 @@ public:
 	 * Loads the average stored in `save_paths`
 	 */
 	void load_avg();
+
+	/**
+	 * Prints the processed image saved at `save_paths`
+	 */
+	void print_processed_img();
 };
 
 }

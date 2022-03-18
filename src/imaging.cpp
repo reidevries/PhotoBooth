@@ -5,18 +5,18 @@ auto imaging::load_img_and_process(
 	const cv::Size& expected_size
 ) -> NamedImg
 {
-	const float ASPECT_RATIO = 5.0/4.0;
+	const float ASPECT_RATIO = 3.0/4.0;
 	const float MAX_HEIGHT = 400;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
 	
 	// crop to 5:4 aspect ratio if possible
-	auto new_height = img.size().width*ASPECT_RATIO;
+	auto new_height = img.size().width/ASPECT_RATIO;
 	if (new_height < img.size().height) {
 		auto crop_y = (img.size().height - new_height)/2;
 		img = img.rowRange(crop_y, img.size().height-crop_y);
 	} else {
-		auto new_width = img.size().height/ASPECT_RATIO;
+		auto new_width = img.size().height*ASPECT_RATIO;
 		auto crop_x = (img.size().width - new_width)/2;
 		img = img.colRange(crop_x, img.size().width-crop_x);
 	}

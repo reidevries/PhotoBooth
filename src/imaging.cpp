@@ -9,6 +9,17 @@ auto imaging::load_img_and_process(
 	const float MAX_HEIGHT = 400;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
+	
+	// crop to 5:4 aspect ratio if possible
+	auto new_height = img.size().width*ASPECT_RATIO;
+	if (new_height < img.size().height) {
+		auto crop_y = (img.size().height - new_height)/2;
+		img = img.rowRange(crop_y, img.size().height-crop_y);
+	} else {
+		auto new_width = img.size().height/ASPECT_RATIO;
+		auto crop_x = (img.size().width - new_width)/2;
+		img = img.colRange(crop_x, img.size().width-crop_x);
+	}
 
 	// calculate a new size less than 400px tall 
 	auto denom = static_cast<int>(std::ceil(img.size().height/MAX_HEIGHT));
@@ -25,17 +36,6 @@ auto imaging::load_img_and_process(
 		std::cout << "resized to " << new_size << std::endl;
 	} catch (const cv::Exception& e) {
 		std::cout << "got error while resizing: " << e.msg << std::endl;
-	}
-
-	// crop to 5:4 aspect ratio if possible
-	auto new_height = img.size().width*ASPECT_RATIO;
-	if (new_height < img.size().height) {
-		auto crop_y = (img.size().height - new_height)/2;
-		img = img.rowRange(crop_y, img.size().height-crop_y);
-	} else {
-		auto new_width = img.size().height/ASPECT_RATIO;
-		auto crop_x = (img.size().width - new_width)/2;
-		img = img.colRange(crop_x, img.size().width-crop_x);
 	}
 
 	return NamedImg{ filename, img };

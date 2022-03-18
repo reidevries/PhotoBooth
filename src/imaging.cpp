@@ -5,23 +5,34 @@ auto imaging::load_img_and_process(
 	const cv::Size& expected_size
 ) -> NamedImg
 {
+	const float ASPECT_RATIO = 5/4;
+	const float MAX_HEIGHT = 400;
+
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
 
-	//shrink img to be less than 400 pixels tall
-	auto denom = static_cast<int>(std::ceil(img.size().height/400));
+	// calculate a new size less than 400px tall 
+	auto denom = static_cast<int>(std::ceil(img.size().height/MAX_HEIGHT));
 	auto new_size = cv::Size(img.size().width/denom, img.size().height/denom);
+	// check if the resized image is the expected side
 	if (new_size != expected_size) {
 		std::cout << "hmm, new size is " << new_size
 			<< " but expected size was " << expected_size;
 		new_size = expected_size;
 	}
+	// try to resize image
 	try {
 		cv::resize(img, img, new_size, cv::INTER_LINEAR);
+		std::cout << "resized to " << new_size << std::endl;
 	} catch (const cv::Exception& e) {
-
+		std::cout << "got error while resizing: " << e.msg << std::endl;
 	}
 
-	std::cout << "resized to " << new_size << std::endl;
+	// crop to 5:4 aspect ratio if possible
+	auto new_height = img.size().width*ASPECT_RATIO;
+	if (new_height < img.size().height) {
+		auto crop_y = (img.size().height - new_height)/2;
+		img = img.rowRange(crop_y, img.size().height-crop_y);
+	}
 
 	return NamedImg{ filename, img };
 }

@@ -181,6 +181,6 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	);
 
 	auto out = proc;
-	cv::repeat(proc, 2, 2, out);
+	cv::repeat(proc, 4, 1, out);
 	return out;
 }

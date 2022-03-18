@@ -5,7 +5,7 @@ auto imaging::load_img_and_process(
 	const cv::Size& expected_size
 ) -> NamedImg
 {
-	const float ASPECT_RATIO = 5/4;
+	const float ASPECT_RATIO = 5.0/4.0;
 	const float MAX_HEIGHT = 400;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
@@ -16,7 +16,7 @@ auto imaging::load_img_and_process(
 	// check if the resized image is the expected side
 	if (new_size != expected_size) {
 		std::cout << "hmm, new size is " << new_size
-			<< " but expected size was " << expected_size;
+			<< " but expected size was " << expected_size << std::endl;
 		new_size = expected_size;
 	}
 	// try to resize image
@@ -32,6 +32,10 @@ auto imaging::load_img_and_process(
 	if (new_height < img.size().height) {
 		auto crop_y = (img.size().height - new_height)/2;
 		img = img.rowRange(crop_y, img.size().height-crop_y);
+	} else {
+		auto new_width = img.size().height/ASPECT_RATIO;
+		auto crop_x = (img.size().width - new_width)/2;
+		img = img.colRange(crop_x, img.size().width-crop_x);
 	}
 
 	return NamedImg{ filename, img };

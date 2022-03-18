@@ -39,7 +39,8 @@ int main(int argc, char** argv)
 						<< std::endl;
 				} else {
 					img_filename = argv[2];
-					std::cout << "using img_filename " << img_filename << std::endl;
+					std::cout << "using img_filename " << img_filename
+						<< std::endl;
 				}
 				if (argc > 3) {
 					output_folder_filename = argv[3];

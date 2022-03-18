@@ -18,15 +18,15 @@ LiveProcess::LiveProcess(
 void LiveProcess::try_process_new_capture(const std::string& filename)
 {
 	auto path = std::filesystem::path(filename);
+	auto new_last_write_time = std::filesystem::file_time_type();
 	if (!std::filesystem::exists(path)) {
 		return;
 	}
 	try {
-		auto new_last_write_time = std::filesystem::last_write_time(path);
+		new_last_write_time = std::filesystem::last_write_time(path);
 		if (new_last_write_time == last_write_time) {
 			return;
 		}
-		last_write_time = new_last_write_time;
 	} catch (const std::filesystem::filesystem_error& e) {
 		return;
 	}
@@ -51,6 +51,7 @@ void LiveProcess::try_process_new_capture(const std::string& filename)
 	print_processed_img();
 
 	std::filesystem::remove(filename);
+	last_write_time = new_last_write_time;
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

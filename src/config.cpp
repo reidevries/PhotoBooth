@@ -1,10 +1,10 @@
 #include "config.hpp"
 
-void Config::load(const std::string& filename)
+void Config::load()
 {
-	auto file = std::ifstream(filename, std::ifstream::in);
+	auto file = std::ifstream(config_filename, std::ifstream::in);
 	if (!file) {
-		std::cout << "file not found '" << filename
+		std::cout << "file not found '" << config_filename
 			<< "', can't load config" << std::endl;
 		return;
 	} 
@@ -16,4 +16,5 @@ void Config::load(const std::string& filename)
 		}
 		line_num++;
 	}
+	file.close();
 }

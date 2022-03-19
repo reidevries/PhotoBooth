@@ -7,11 +7,15 @@
 
 class Config
 {
+	std::string config_filename = "config";
+	// should put OutputPaths here? but need to define in separate file
+	std::string capture_path;
 	std::string printer_name;
 public:
 	Config() {}
-	Config(const std::string& _printer_name) : printer_name(_printer_name) {}
-	void load(const std::string& filename);
+	Config(const std::string& _config_filename) 
+		: config_filename(_config_filename) {}
+	void load();
 	auto get_printer_name() -> const std::string& { return printer_name; }
 };
 

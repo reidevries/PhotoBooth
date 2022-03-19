@@ -36,7 +36,8 @@ void LiveProcess::try_process_new_capture(const std::string& filename)
 	std::cout << "loading " << path
 		<< ", taken at " << utils::to_time_t(last_write_time)
 		<< " ..." << std::endl;
-	
+
+	config.load();
 	// need to sleep because raspberry pi SD card is slow, and sometimes the
 	// image is detected before it's been completely copied
 	std::this_thread::sleep_for(std::chrono::milliseconds(666));

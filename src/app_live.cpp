@@ -12,8 +12,8 @@ LiveProcess::LiveProcess()
 LiveProcess::LiveProcess(
 	const std::string& save_folder,
 	const std::string& _printer_name
-) : save_paths(save_folder),
-	printer_name(_printer_name)
+) : save_paths(save_folder)
+  , config(_printer_name)
 {
 }
 
@@ -76,8 +76,8 @@ void LiveProcess::load_avg()
 
 void LiveProcess::print_processed_img()
 {
-	if (printer_name != std::string("")) {
-		auto print_cmd = std::string("lp -d ") + printer_name 
+	if (config.get_printer_name() != std::string("")) {
+		auto print_cmd = std::string("lp -d ") + config.get_printer_name()
 			+ std::string(" ")
 			+ std::string(save_paths.img_proc.c_str());
 		std::cout << "printing using this command: " << print_cmd << std::endl;

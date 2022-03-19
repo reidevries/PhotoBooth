@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <chrono>
 #include "face_averager.hpp"
+#include "config.hpp"
 
 namespace app
 {
@@ -21,7 +22,7 @@ class LiveProcess {
 	/// stores the last clock time a capture was found
 	std::filesystem::file_time_type last_write_time;
 	/// stores the name of the printer for lp in `print_processed_img`
-	std::string printer_name;
+	Config config;
 public:
 	LiveProcess();
 	LiveProcess(

@@ -1,0 +1,9 @@
+[Unit]
+Description=Begin program to process new captures when they are dumped
+After=multi-user.target
+
+[Service]
+ExecStart=/home/photobooth/photobooth_process live capt0000.jpg output 
+
+[Install]
+WantedBy=multi-user.target

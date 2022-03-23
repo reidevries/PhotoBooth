@@ -12,7 +12,8 @@ void Config::load()
 	int line_num;
 	while (std::getline(file, line)) {
 		if (line_num == 0) {
-			printer_name = line;	
+			printer_name = line;
+			std::cout << "printer_name loaded: " << printer_name << std::endl;
 		}
 		line_num++;
 	}

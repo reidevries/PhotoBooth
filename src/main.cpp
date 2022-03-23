@@ -6,6 +6,7 @@
 #include "app_type.hpp"
 #include "app_process.hpp"
 #include "app_live.hpp"
+#include "shutter_button.hpp"
 
 int main(int argc, char** argv)
 {
@@ -93,9 +94,9 @@ int main(int argc, char** argv)
 			printer_name
 		);
 		app.load_avg();
-		while (true) {
-			app.try_process_new_capture();
-		}
+		auto shutter_button = ShutterButton(21, &app);
+		shutter_button.cancel();
+		gpioTerminate();
 	}
 	}
 	return 0;

@@ -6,13 +6,26 @@
 
 class ShutterButton
 {
+public:
+	class Callback
+	{
+	public:
+		virtual void button_pressed() = 0;
+	};
+
+private:
 	int gpio;
-	void (*callback)();
-	static void pressed(int _gpio, int level, uint32_t tick, void *callback); 
+	Callback *callback;
+	static void pressed(
+		int _gpio,
+		int level,
+		uint32_t tick,
+		void *callback
+	); 
 
 public:
-	ShutterButton(int _gpio, void (*_callback)());
-	~ShutterButton();
+	ShutterButton(int _gpio, Callback *callback);
+	void cancel();
 };
 
 #endif

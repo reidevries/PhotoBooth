@@ -6,11 +6,12 @@
 #include <chrono>
 #include "face_averager.hpp"
 #include "config.hpp"
+#include "shutter_button.hpp"
 
 namespace app
 {
 
-class LiveProcess {
+class LiveProcess : public ShutterButton::Callback {
 	/// the face averager, handles face averaging
 	face::FaceAverager averager;
 	/// the face detector, used as part of face averager
@@ -25,6 +26,10 @@ class LiveProcess {
 	std::filesystem::file_time_type last_write_time;
 	/// stores the name of the printer for lp in `print_processed_img`
 	Config config;
+
+protected:
+	void button_pressed() override;
+
 public:
 	LiveProcess();
 	LiveProcess(

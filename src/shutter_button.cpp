@@ -1,11 +1,11 @@
 #include "shutter_button.hpp"
 
-void ShutterButton::pressed(int gpio, int level, uint32_t tick, void* user)
+void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 {
 	auto self = static_cast<ShutterButton*>(user);
 	if (gpio == self->gpio) {
 		if (level == 1) { // rising edge
-			(self->callback)();
+			self->callback->button_pressed();
 		}
 	} else {
 		std::cout << "callback called on wrong gpio number " << gpio
@@ -13,7 +13,7 @@ void ShutterButton::pressed(int gpio, int level, uint32_t tick, void* user)
 	}
 }
 
-ShutterButton::ShutterButton(int _gpio, void (*_callback)())
+ShutterButton::ShutterButton(int _gpio, Callback *_callback)
 	: gpio(_gpio)
 	, callback(_callback)
 {
@@ -22,7 +22,7 @@ ShutterButton::ShutterButton(int _gpio, void (*_callback)())
 	gpioSetAlertFuncEx(gpio, ShutterButton::pressed, this);
 }
 
-ShutterButton::~ShutterButton()
+void ShutterButton::cancel()
 {
 	gpioSetAlertFuncEx(gpio, 0, this);
 }

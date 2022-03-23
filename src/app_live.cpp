@@ -5,6 +5,11 @@
 
 using namespace app;
 
+void LiveProcess::button_pressed()
+{
+	capture_and_process();
+}
+
 LiveProcess::LiveProcess()
 {
 }
@@ -23,6 +28,8 @@ void LiveProcess::capture_and_process()
 {
 	std::cout << "shutter button pressed! capturing" << std::endl;
 	system("gphoto2 --capture-image-and-download");
+
+	config.load();
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(666));
 

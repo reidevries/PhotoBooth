@@ -16,11 +16,10 @@ LiveProcess::LiveProcess()
 
 LiveProcess::LiveProcess(
 	const std::string& _capture_filename,
-	const std::string& save_folder,
-	const std::string& _printer_name
+	const std::string& save_folder
 )	: capture_filename(_capture_filename)
 	, save_paths(save_folder)
-	, config(_printer_name)
+	, config()
 {
 }
 

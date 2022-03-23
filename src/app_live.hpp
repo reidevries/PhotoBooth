@@ -34,8 +34,7 @@ public:
 	LiveProcess();
 	LiveProcess(
 		const std::string& capture_filename,
-		const std::string& save_folder,
-		const std::string& printer_name
+		const std::string& save_folder
 	);
 
 	/**

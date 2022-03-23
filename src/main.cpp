@@ -17,7 +17,6 @@ int main(int argc, char** argv)
 
 	auto img_filename = std::string("test.jpg");
 	auto output_folder_filename = std::string("output");
-	auto printer_name = std::string("");
 
 	if (argc > 1) {
 		if (strncmp("morph", argv[1], 4) == 0) {
@@ -47,11 +46,6 @@ int main(int argc, char** argv)
 					output_folder_filename = argv[3];
 					std::cout << "using output_folder_filename "
 						<< output_folder_filename << std::endl;
-				}
-				if (argc > 4) {
-					printer_name = argv[4];
-					std::cout << "using printer name "
-						<< printer_name << std::endl;
 				}
 			}
 		}
@@ -90,8 +84,7 @@ int main(int argc, char** argv)
 	case app::Live: {
 		auto app = app::LiveProcess(
 			img_filename,
-			output_folder_filename,
-			printer_name
+			output_folder_filename
 		);
 		app.load_avg();
 		

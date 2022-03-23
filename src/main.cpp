@@ -88,12 +88,13 @@ int main(int argc, char** argv)
 	}
 	case app::Live: {
 		auto app = app::LiveProcess(
+			img_filename,
 			output_folder_filename,
 			printer_name
 		);
 		app.load_avg();
 		while (true) {
-			app.try_process_new_capture(img_filename);
+			app.try_process_new_capture();
 		}
 	}
 	}

@@ -94,9 +94,19 @@ int main(int argc, char** argv)
 			printer_name
 		);
 		app.load_avg();
-		auto shutter_button = ShutterButton(21, &app);
-		shutter_button.cancel();
-		gpioTerminate();
+		
+		// initialize gpio
+		if (gpioInitialise() < 0) {
+			std::cerr << "couldn't initialize gpio! using fallback"
+				<< std::endl;
+			while (true) {
+				app.try_process_new_capture();
+			}
+		} else {
+			auto shutter_button = ShutterButton(21, &app);
+			shutter_button.cancel();
+			gpioTerminate();
+		}
 	}
 	}
 	return 0;

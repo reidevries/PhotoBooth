@@ -7,9 +7,11 @@
 class ShutterButton
 {
 	int gpio;
-	re_decoderCB_t callback;
+	void (*callback)();
+	static void pressed(int _gpio, int level, uint32_t tick, void *callback); 
+
 public:
-	ShutterButton(int _gpio, re_decoderCB_t _callback);
+	ShutterButton(int _gpio, void (*_callback)());
 	~ShutterButton();
 };
 

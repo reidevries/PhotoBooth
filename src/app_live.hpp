@@ -16,6 +16,8 @@ class LiveProcess {
 	/// the face detector, used as part of face averager
 	face::FaceDetector detector;
 
+	/// the filename of the capture from the camera
+	std::string capture_filename;
 	/// stores the output paths of each component required to save/load the
 	/// state of `averager`
 	face::OutputPaths save_paths;
@@ -26,9 +28,15 @@ class LiveProcess {
 public:
 	LiveProcess();
 	LiveProcess(
+		const std::string& capture_filename,
 		const std::string& save_folder,
 		const std::string& printer_name
 	);
+
+	/**
+	 * Newer way of capturing an image and processing it, as a pigpio callback
+	 */
+	void capture_and_process();
 
 	/**
 	 * First, check if a new capture image exists. If it does, and it's more
@@ -40,7 +48,7 @@ public:
 	 * Finally, delete the processed capture.
 	 * @param filename The filename to look for the new capture at
 	 */
-	void try_process_new_capture(const std::string& filename);
+	void try_process_new_capture();
 
 	/**
 	 * sets `save_paths` using the given folder.

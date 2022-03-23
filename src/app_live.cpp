@@ -10,16 +10,22 @@ LiveProcess::LiveProcess()
 }
 
 LiveProcess::LiveProcess(
+	const std::string& _capture_filename,
 	const std::string& save_folder,
 	const std::string& _printer_name
-) : save_paths(save_folder)
-  , config(_printer_name)
+)	: capture_filename(_capture_filename)
+	, save_paths(save_folder)
+	, config(_printer_name)
 {
 }
 
-void LiveProcess::try_process_new_capture(const std::string& filename)
+void LiveProcess::capture_and_process()
 {
-	auto path = std::filesystem::path(filename);
+}
+
+void LiveProcess::try_process_new_capture()
+{
+	auto path = std::filesystem::path(capture_filename);
 	auto new_last_write_time = std::filesystem::file_time_type();
 	if (!std::filesystem::exists(path)) {
 		return;
@@ -44,7 +50,7 @@ void LiveProcess::try_process_new_capture(const std::string& filename)
 
 	// load image and face
 	auto img = imaging::load_img_and_process(
-		filename,
+		capture_filename,
 		averager.get_avg_img().size()
 	);
 	auto face = face::Face(img, detector);
@@ -59,7 +65,7 @@ void LiveProcess::try_process_new_capture(const std::string& filename)
 
 	print_processed_img();
 
-	std::filesystem::remove(filename);
+	std::filesystem::remove(capture_filename);
 	last_write_time = new_last_write_time;
 }
 

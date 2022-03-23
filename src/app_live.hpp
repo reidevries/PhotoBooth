@@ -46,9 +46,13 @@ public:
 	 * in a folder that can be set with `set_save_paths`. 
 	 * Third, print it using a system call to the linux utility `lp`.
 	 * Finally, delete the processed capture.
-	 * @param filename The filename to look for the new capture at
 	 */
 	void try_process_new_capture();
+
+	/**
+	 * Process a new capture
+	 */
+	void process_capture_and_save();
 
 	/**
 	 * sets `save_paths` using the given folder.

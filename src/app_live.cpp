@@ -21,6 +21,14 @@ LiveProcess::LiveProcess(
 
 void LiveProcess::capture_and_process()
 {
+	std::cout << "shutter button pressed! capturing" << std::endl;
+	system("gphoto2 --capture-image-and-download");
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(666));
+
+	process_capture_and_save();
+
+	print_processed_img();
 }
 
 void LiveProcess::try_process_new_capture()
@@ -48,7 +56,16 @@ void LiveProcess::try_process_new_capture()
 	// image is detected before it's been completely copied
 	std::this_thread::sleep_for(std::chrono::milliseconds(666));
 
-	// load image and face
+	process_capture_and_save();
+
+	print_processed_img();
+
+	std::filesystem::remove(capture_filename);
+	last_write_time = new_last_write_time;
+}
+
+void LiveProcess::process_capture_and_save()
+{
 	auto img = imaging::load_img_and_process(
 		capture_filename,
 		averager.get_avg_img().size()
@@ -62,11 +79,6 @@ void LiveProcess::try_process_new_capture()
 	averager.push(img.img, face);
 	averager.save(save_paths);
 	std::cout << "saved new avg" << std::endl;
-
-	print_processed_img();
-
-	std::filesystem::remove(capture_filename);
-	last_write_time = new_last_write_time;
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

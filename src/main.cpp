@@ -97,7 +97,7 @@ int main(int argc, char** argv)
 			}
 		} else {
 			std::cout << "initiliazing shutter button callback"
-				<< std::end;
+				<< std::endl;
 			auto shutter_button = ShutterButton(21, &app);
 			while (true) {
 				//?

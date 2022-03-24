@@ -96,6 +96,8 @@ int main(int argc, char** argv)
 				app.try_process_new_capture();
 			}
 		} else {
+			std::cout << "gpio initialized, activating shutter button callback"
+				<< std::endl;
 			auto shutter_button = ShutterButton(21, &app);
 			shutter_button.cancel();
 			gpioTerminate();

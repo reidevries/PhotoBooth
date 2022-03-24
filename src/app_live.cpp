@@ -32,7 +32,19 @@ void LiveProcess::capture_and_process()
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(666));
 
-	process_capture_and_save();
+	auto path = std::filesystem::path(capture_filename);
+	if (std::filesystem::exists(path)) {
+		try {
+			process_capture_and_save();
+		} catch (const cv::Exception& e) {
+			std::cout << "process_capture_and_save failed with this opencv"
+				<< " error: " << e.msg << std::endl;
+			std::cout << "printing most recent average instead" << std::endl;
+		}
+	} else {
+		std::cout << "file " << capture_filename << " not found, printing"
+			<< " most recent average" << std::endl;
+	}
 
 	print_processed_img();
 }

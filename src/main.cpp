@@ -99,6 +99,9 @@ int main(int argc, char** argv)
 			std::cout << "initiliazing shutter button callback"
 				<< std::end;
 			auto shutter_button = ShutterButton(21, &app);
+			while (true) {
+				//?
+			}
 			shutter_button.cancel();
 			gpioTerminate();
 		}

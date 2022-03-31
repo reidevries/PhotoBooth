@@ -41,6 +41,7 @@ public:
 	) -> std::pair<cv::Mat, Face>;
 
 	void save(const OutputPaths& paths);
+	void save(const OutputPaths& paths, const Config& config);
 	void load(const OutputPaths& paths);
 };
 

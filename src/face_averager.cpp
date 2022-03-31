@@ -104,6 +104,19 @@ auto FaceAverager::process(
 	return std::pair<cv::Mat, Face>(out, avg_face);
 }
 
+void FaceAverager::save(const OutputPaths& paths, const Config& config)
+{
+	if (!std::filesystem::exists(paths.folder)) {
+		std::cout << "directory " << paths.folder << " not found,"
+			<< " creating it now" << std::endl;
+		std::filesystem::create_directories(paths.folder);
+	}
+	utils::save_num_faces(paths.num_faces, num_faces);
+	avg_face.save(paths.face);
+	cv::imwrite(paths.img, avg_img);
+	cv::imwrite(paths.img_proc, imaging::process_aly_style(avg_img, config));
+}
+
 void FaceAverager::save(const OutputPaths& paths)
 {
 	if (!std::filesystem::exists(paths.folder)) {

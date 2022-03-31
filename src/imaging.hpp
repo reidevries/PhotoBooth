@@ -2,6 +2,7 @@
 #define IMAGING_HPP_
 
 #include "named_img.hpp"
+#include "config.hpp"
 #include <iostream>
 #include <sstream>
 #include <ctime>
@@ -19,6 +20,12 @@ auto load_img_and_process(
 	const cv::Size& expected_size
 ) -> NamedImg;
 
+auto process_aly_style(
+	const cv::Mat& img,
+	const std::string& top_text,
+	const std::string& bottom_text
+) -> cv::Mat;
+auto process_aly_style(const cv::Mat& img, const Config& config) -> cv::Mat;
 auto process_aly_style(const cv::Mat& img) -> cv::Mat;
 
 }

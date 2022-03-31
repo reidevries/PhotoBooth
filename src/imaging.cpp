@@ -72,7 +72,11 @@ auto get_cur_time_str() -> std::string
 	return buf.str();
 }
 
-auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
+auto imaging::process_aly_style(
+	const cv::Mat& img,
+	const std::string& top_text,
+	const std::string& bottom_text
+) -> cv::Mat
 {
 	auto proc = img.clone();
 
@@ -112,16 +116,15 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	cv::line(proc, p_br, p_br_t, WHITE, l_w, l_t);
 	cv::line(proc, p_br, p_br_l, WHITE, l_w, l_t);
 
-	auto cur_time_str = get_cur_time_str();
 	auto time_size = cv::getTextSize(
-		cur_time_str,
+		top_text,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
 		1.5,
 		0
 	);
 	auto loc_size = cv::getTextSize(
-		"Kaurna Land",
+		bottom_text,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
 		1.5,
@@ -138,7 +141,7 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	// outline
 	cv::putText(
 		proc,
-		get_cur_time_str(),
+		top_text,
 		time_bl,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
@@ -149,7 +152,7 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	// main text
 	cv::putText(
 		proc,
-		get_cur_time_str(),
+		top_text,
 		time_bl,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
@@ -160,7 +163,7 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	// outline
 	cv::putText(
 		proc,
-		"Kaurna Land",
+		bottom_text,
 		loc_bl,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
@@ -171,7 +174,7 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	// main text
 	cv::putText(
 		proc,
-		"Kaurna Land",
+		bottom_text,
 		loc_bl,
 		cv::FONT_HERSHEY_DUPLEX,
 		0.7,
@@ -183,4 +186,35 @@ auto imaging::process_aly_style(const cv::Mat& img) -> cv::Mat
 	auto out = proc;
 	cv::repeat(proc, 4, 1, out);
 	return out;
+}
+
+auto imaging::process_aly_style(
+	const cv::Mat& img,
+	const Config& config
+) -> cv::Mat
+{
+	auto top_text = config.get_top_text();
+	auto bottom_text = config.get_bottom_text();
+	if (top_text == "") {
+		top_text = get_cur_time_str();
+	}
+	if (bottom_text == "") {
+		bottom_text = "Kaurna Land";
+	}
+	return process_aly_style(
+		img,
+		top_text,
+		bottom_text
+	);
+}
+
+auto imaging::process_aly_style(
+	const cv::Mat& img
+) -> cv::Mat
+{
+	return process_aly_style(
+		img,
+		get_cur_time_str(),
+		"Kaurna Land"
+	);
 }

@@ -23,9 +23,13 @@ public:
 	Config(const std::string& _config_filename) 
 		: config_filename(_config_filename) {}
 	void load();
-	auto get_printer_name() -> const std::string& { return printer_name; }
-	auto get_top_text() -> const std::string& { return top_text; }
-	auto get_bottom_text() -> const std::string& { return bottom_text; }
+
+	auto get_printer_name() const -> const std::string&
+	{
+		return printer_name; 
+	}
+	auto get_top_text() const -> const std::string& { return top_text; }
+	auto get_bottom_text() const -> const std::string& { return bottom_text; }
 };
 
 #endif //__CONFIG_HPP_

@@ -6,7 +6,7 @@ auto imaging::load_img_and_process(
 ) -> NamedImg
 {
 	const float ASPECT_RATIO = 3.0/4.0;
-	const float MAX_HEIGHT = 400;
+	const float MAX_HEIGHT = 600;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
 	
@@ -21,11 +21,11 @@ auto imaging::load_img_and_process(
 		img = img.colRange(crop_x, img.size().width-crop_x);
 	}
 
-	// calculate a new size less than 400px tall 
+	// calculate a new size less than MAX_HEIGHT tall 
 	auto denom = static_cast<int>(std::ceil(img.size().height/MAX_HEIGHT));
 	auto new_size = cv::Size(img.size().width/denom, img.size().height/denom);
 	// check if the resized image is the expected side
-	if (new_size != expected_size) {
+	if (new_size != expected_size && expected_size != cv::Size(0,0)) {
 		std::cout << "hmm, new size is " << new_size
 			<< " but expected size was " << expected_size << std::endl;
 		new_size = expected_size;

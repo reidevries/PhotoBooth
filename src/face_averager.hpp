@@ -20,7 +20,7 @@ class FaceAverager
 	cv::Mat avg_img;
 	Face avg_face;
 	u64 num_faces = 0;
-	float param = 1.0;
+	float param = 0.0;
 public:
 	void set_param(float param);
 	auto get_avg_img() const -> cv::Mat { return avg_img; }

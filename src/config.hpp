@@ -10,13 +10,22 @@ class Config
 	std::string config_filename = "config";
 	// should put OutputPaths here? but need to define in separate file
 	std::string capture_path;
-	std::string printer_name;
+
+	enum class Entry
+	{
+		PrinterName = 0,
+		TopText,
+		BottomText
+	};
+	std::string printer_name, top_text, bottom_text;
 public:
 	Config() {}
 	Config(const std::string& _config_filename) 
 		: config_filename(_config_filename) {}
 	void load();
 	auto get_printer_name() -> const std::string& { return printer_name; }
+	auto get_top_text() -> const std::string& { return top_text; }
+	auto get_bottom_text() -> const std::string& { return bottom_text; }
 };
 
 #endif //__CONFIG_HPP_

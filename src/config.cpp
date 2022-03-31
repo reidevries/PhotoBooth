@@ -11,9 +11,15 @@ void Config::load()
 	std::string line;
 	int line_num;
 	while (std::getline(file, line)) {
-		if (line_num == 0) {
+		if (static_cast<Entry>(line_num) == Entry::PrinterName) {
 			printer_name = line;
 			std::cout << "printer_name loaded: " << printer_name << std::endl;
+		} else if (static_cast<Entry>(line_num) == Entry::TopText) {
+			top_text = line;
+			std::cout << "top_text loaded: " << top_text << std::endl;
+		} else if (static_cast<Entry>(line_num) == Entry::BottomText) {
+			bottom_text = line;
+			std::cout << "bottom_text loaded: " << bottom_text << std::endl;
 		}
 		line_num++;
 	}

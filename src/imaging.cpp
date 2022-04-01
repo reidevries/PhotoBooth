@@ -5,12 +5,12 @@ auto imaging::load_img_and_process(
 	const cv::Size& expected_size
 ) -> NamedImg
 {
-	const float ASPECT_RATIO = 3.0/4.0;
-	const float MAX_HEIGHT = 600;
+	const float ASPECT_RATIO = 3.0/3.0;
+	const float MAX_HEIGHT = 100000;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
-	
-	// crop to 5:4 aspect ratio if possible
+
+	// crop to 3:4 aspect ratio if possible
 	auto new_height = img.size().width/ASPECT_RATIO;
 	if (new_height < img.size().height) {
 		auto crop_y = (img.size().height - new_height)/2;
@@ -78,6 +78,10 @@ auto imaging::process_aly_style(
 	const std::string& bottom_text
 ) -> cv::Mat
 {
+	// probably don't need to load the font every time, can just pass as arg
+	auto font = cv::freetype::createFreeType2();
+	font->loadFontData("OCRA.ttf", 0);
+	
 	auto proc = img.clone();
 
 	static const cv::Scalar WHITE = cv::Scalar(255, 255, 255);
@@ -116,75 +120,80 @@ auto imaging::process_aly_style(
 	cv::line(proc, p_br, p_br_t, WHITE, l_w, l_t);
 	cv::line(proc, p_br, p_br_l, WHITE, l_w, l_t);
 
-	auto time_size = cv::getTextSize(
+	auto larger_text_w = std::max(top_text.size(), bottom_text.size());
+	auto char_w_target = (p_br.x - p_bl.x - l_w*2)/larger_text_w;
+	auto char_h = char_w_target*1.4;
+	std::cout << "char height calculated as " << char_h << std::endl;
+
+	auto top_size = font->getTextSize(
 		top_text,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		char_h,
 		1.5,
 		0
 	);
-	auto loc_size = cv::getTextSize(
+	auto bottom_size = font->getTextSize(
 		bottom_text,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		char_h,
 		1.5,
 		0
 	);
-	auto time_bl = cv::Point(
-		(size.width - time_size.width)/2,
-		p_tl.y + time_size.height + 2*l_w
+	std::cout << "bottom width is " << bottom_size.width << std::endl;
+
+	auto top_bl = cv::Point(
+		(size.width - top_size.width)/2,
+		p_tl.y + top_size.height + 2*l_w
 	);
-	auto loc_bl = cv::Point(
-		(size.width - loc_size.width)/2,
+	auto bottom_bl = cv::Point(
+		(size.width - bottom_size.width)/2,
 		p_bl.y - 2*l_w
 	);
 	// outline
-	cv::putText(
+	font->putText(
 		proc,
 		top_text,
-		time_bl,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		top_bl,
+		char_h,
 		BLACK,
-		2,
-		l_t
+		3,
+		l_t,
+		true
 	);
 	// main text
-	cv::putText(
+	font->putText(
 		proc,
 		top_text,
-		time_bl,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		top_bl,
+		char_h,
 		GREEN,
-		1.5,
-		l_t
+		-1,
+		l_t,
+		true
 	);
 	// outline
-	cv::putText(
+	font->putText(
 		proc,
 		bottom_text,
-		loc_bl,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		bottom_bl,
+		char_h,
 		BLACK,
-		2,
-		l_t
+		3,
+		l_t,
+		true
 	);
 	// main text
-	cv::putText(
+	font->putText(
 		proc,
 		bottom_text,
-		loc_bl,
-		cv::FONT_HERSHEY_DUPLEX,
-		0.7,
+		bottom_bl,
+		char_h,
 		GREEN,
-		1.5,
-		l_t
+		-1,
+		l_t,
+		true
 	);
 
 	auto out = proc;
-	cv::repeat(proc, 4, 1, out);
+	cv::repeat(proc, 3, 1, out);
 	return out;
 }
 

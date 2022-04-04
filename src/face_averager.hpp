@@ -2,18 +2,11 @@
 #define __FACE_AVERAGER_HPP_
 
 #include "morph.hpp"
-#include <filesystem>
 #include "imaging.hpp"
+#include "config.hpp"
 
 namespace face
 {
-
-struct OutputPaths
-{
-	std::filesystem::path img, img_proc, face, num_faces, folder;
-	OutputPaths();
-	OutputPaths(const std::string& folder);
-};
 
 class FaceAverager
 {
@@ -41,7 +34,7 @@ public:
 	) -> std::pair<cv::Mat, Face>;
 
 	void save(const OutputPaths& paths);
-	void save(const OutputPaths& paths, const Config& config);
+	void save(const Config& config);
 	void load(const OutputPaths& paths);
 };
 

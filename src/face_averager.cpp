@@ -2,18 +2,6 @@
 
 using namespace face;
 
-OutputPaths::OutputPaths() {}
-
-OutputPaths::OutputPaths(const std::string& folder)
-{
-	auto path = std::filesystem::path(folder);
-	this->folder = path;
-	img = path / "avg.jpg";
-	img_proc = path / "avg_proc.jpg";
-	face = path / "avg.face";
-	num_faces = path / "num_faces.u64";
-}
-
 void FaceAverager::set_param(float param)
 {
 	if (param >= 0) {
@@ -104,8 +92,9 @@ auto FaceAverager::process(
 	return std::pair<cv::Mat, Face>(out, avg_face);
 }
 
-void FaceAverager::save(const OutputPaths& paths, const Config& config)
+void FaceAverager::save(const Config& config)
 {
+	auto paths = config.get_output_paths();
 	if (!std::filesystem::exists(paths.folder)) {
 		std::cout << "directory " << paths.folder << " not found,"
 			<< " creating it now" << std::endl;

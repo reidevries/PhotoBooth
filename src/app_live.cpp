@@ -95,13 +95,13 @@ void LiveProcess::process_capture_and_save()
 		averager.load(save_paths);
 	}
 	averager.push(img.img, face);
-	averager.save(save_paths, config);
+	averager.save(config);
 	std::cout << "saved new avg" << std::endl;
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)
 {
-	save_paths = face::OutputPaths(folder);
+	save_paths = OutputPaths(folder);
 }
 
 void LiveProcess::load_avg()

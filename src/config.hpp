@@ -4,6 +4,14 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <filesystem>
+
+struct OutputPaths
+{
+	std::filesystem::path img, img_proc, face, num_faces, folder;
+	OutputPaths();
+	OutputPaths(const std::string& folder);
+};
 
 class Config
 {
@@ -18,6 +26,8 @@ class Config
 		BottomText
 	};
 	std::string printer_name, top_text, bottom_text;
+
+	OutputPaths output_paths;
 public:
 	Config() {}
 	Config(const std::string& _config_filename) 
@@ -30,6 +40,9 @@ public:
 	}
 	auto get_top_text() const -> const std::string& { return top_text; }
 	auto get_bottom_text() const -> const std::string& { return bottom_text; }
+
+	void set_output_paths(const std::string& folder);
+	auto get_output_paths() const -> OutputPaths { return output_paths; }
 };
 
 #endif //__CONFIG_HPP_

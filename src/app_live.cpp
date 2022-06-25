@@ -26,7 +26,7 @@ LiveProcess::LiveProcess(
 void LiveProcess::capture_and_process()
 {
 	std::cout << "shutter button pressed! capturing" << std::endl;
-	system("gphoto2 --capture-image-and-download");
+	system("gphoto2 --capture-image-and-download --force-overwrite");
 
 	config.load();
 

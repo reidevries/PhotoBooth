@@ -113,8 +113,6 @@ void LiveProcess::process_capture_and_save()
 void LiveProcess::set_save_paths(const std::string &folder)
 {
 	save_paths = OutputPaths(folder);
-	// not sure why there are two versions of save paths
-	config.set_output_paths(folder);
 }
 
 void LiveProcess::load_avg()

@@ -7,6 +7,7 @@
 #include "app_process.hpp"
 #include "app_live.hpp"
 #include "shutter_button.hpp"
+#include "output_paths.hpp"
 
 int main(int argc, char** argv)
 {

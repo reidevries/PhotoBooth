@@ -5,6 +5,7 @@
 #include "imaging.hpp"
 #include "config.hpp"
 #include "face_io.hpp"
+#include "output_paths.hpp"
 
 namespace face
 {

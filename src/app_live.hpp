@@ -7,6 +7,7 @@
 #include "face_averager.hpp"
 #include "config.hpp"
 #include "shutter_button.hpp"
+#include "output_paths.hpp"
 
 namespace app
 {

@@ -46,7 +46,9 @@ void LiveProcess::capture_and_process()
 			<< " most recent average" << std::endl;
 	}
 
-	print_processed_img();
+	if (averager.get_num_faces()%2 == 1) {
+		print_processed_img();
+	}
 }
 
 void LiveProcess::try_process_new_capture()

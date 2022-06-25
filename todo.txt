@@ -1,0 +1,13 @@
+1. reduce resolution target again
+2. make it save the last two strips for each capture
+3. make it conjoin the last two strips every second capture
+4. make it print only after every second capture 
+5. if bug keeps happening with subdivision, investigate
+6. make it autostart program when raspberry pi starts
+7. make it automatically save each average face to external hard drive
+8. make the image capture function not ask to overwrite
+9. make sure captured image is deleted from camera so we don't run out of space.
+10. reconfigure so top text is blank
+11. program LED button
+12. debounce LED button (can just stop callback if already processing)
+

@@ -12,14 +12,8 @@ class IO
 {
 	cv::Mat photo_strip[2];
 public:
-	static auto load_num_faces(const std::string& filename) -> bool;
-	static void save_num_faces(
-		const std::string& filename,
-		const u64 num_faces
-	);
-
-	auto generate_photo_strip(const cv::Mat& avg_img, const u64 num_faces); 
-	auto save_combined_photo_strip(const std::string& filename);
+	void generate_photo_strip(const cv::Mat& avg_img, const u64 num_faces); 
+	void save_combined_photo_strip(const std::string& filename);
 };
 
 }

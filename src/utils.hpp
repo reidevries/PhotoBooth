@@ -61,9 +61,6 @@ auto mean(const T& a, const T& b, const float pos) -> T
 
 auto check_file_exists(const std::string& filename) -> bool;
 
-auto load_num_faces(const std::string& filename) -> u64;
-void save_num_faces(const std::string& filename, u64 num_faces);
-
 template<typename T>
 auto to_time_t(T tp) -> std::time_t
 {

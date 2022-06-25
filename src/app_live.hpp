@@ -12,6 +12,8 @@ namespace app
 {
 
 class LiveProcess : public ShutterButton::Callback {
+	/// the IO file, handles saving the photo strip output
+	face::IO io;
 	/// the face averager, handles face averaging
 	face::FaceAverager averager;
 	/// the face detector, used as part of face averager

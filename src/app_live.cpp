@@ -76,7 +76,9 @@ void LiveProcess::try_process_new_capture()
 
 	process_capture_and_save();
 
-	print_processed_img();
+	if (averager.get_num_faces()%2 == 1) {
+		print_processed_img();
+	}
 
 	std::filesystem::remove(capture_filename);
 	last_write_time = new_last_write_time;
@@ -95,13 +97,22 @@ void LiveProcess::process_capture_and_save()
 		averager.load(save_paths);
 	}
 	averager.push(img.img, face);
-	averager.save(config);
-	std::cout << "saved new avg" << std::endl;
+	averager.save(save_paths);
+	std::cout << "saved new avg, generating photo strip" << std::endl;
+
+	auto num_faces = averager.get_num_faces();
+	io.generate_photo_strip(averager.get_avg_img(), num_faces);
+	if (num_faces%2 == 1) {
+		std::cout << "saving combined photo strip" << std::endl;
+		io.save_combined_photo_strip(save_paths.img_proc);
+	}
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)
 {
 	save_paths = OutputPaths(folder);
+	// not sure why there are two versions of save paths
+	config.set_output_paths(folder);
 }
 
 void LiveProcess::load_avg()

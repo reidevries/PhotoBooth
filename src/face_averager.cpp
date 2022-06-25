@@ -2,6 +2,32 @@
 
 using namespace face;
 
+auto FaceAverager::load_num_faces(const std::string& filename) -> u64 {
+	auto file = std::ifstream(filename, std::ifstream::in);
+	if (!file) {
+		std::cout << "file not found '" << filename
+			<< "', assuming 0 faces" << std::endl;
+		return 0;
+	}
+	u64 out = 0;
+	file >> out;
+	return out;
+}
+
+void FaceAverager::save_num_faces(
+	const std::string& filename,
+	const u64 num_faces
+)
+{
+	auto file = std::ofstream(filename, std::ios::binary);
+	if (!file) {
+		std::cout << "could not open '" << filename
+			<< "' for writing" << std::endl;
+	}
+	file << num_faces;
+	file.close();
+}
+
 void FaceAverager::set_param(float param)
 {
 	if (param >= 0) {
@@ -92,20 +118,6 @@ auto FaceAverager::process(
 	return std::pair<cv::Mat, Face>(out, avg_face);
 }
 
-void FaceAverager::save(const Config& config)
-{
-	auto paths = config.get_output_paths();
-	if (!std::filesystem::exists(paths.folder)) {
-		std::cout << "directory " << paths.folder << " not found,"
-			<< " creating it now" << std::endl;
-		std::filesystem::create_directories(paths.folder);
-	}
-	utils::save_num_faces(paths.num_faces, num_faces);
-	avg_face.save(paths.face);
-	cv::imwrite(paths.img, avg_img);
-	cv::imwrite(paths.img_proc, imaging::process_aly_style(avg_img, config));
-}
-
 void FaceAverager::save(const OutputPaths& paths)
 {
 	if (!std::filesystem::exists(paths.folder)) {
@@ -113,10 +125,9 @@ void FaceAverager::save(const OutputPaths& paths)
 			<< " creating it now" << std::endl;
 		std::filesystem::create_directories(paths.folder);
 	}
-	utils::save_num_faces(paths.num_faces, num_faces);
+	save_num_faces(paths.num_faces, num_faces);
 	avg_face.save(paths.face);
 	cv::imwrite(paths.img, avg_img);
-	cv::imwrite(paths.img_proc, imaging::process_aly_style(avg_img));
 }
 
 void FaceAverager::load(const OutputPaths& paths)
@@ -131,7 +142,7 @@ void FaceAverager::load(const OutputPaths& paths)
 	}
 	avg_img = cv::imread(paths.img, cv::IMREAD_COLOR);
 	avg_face = face::Face::load(paths.face);
-	num_faces = utils::load_num_faces(paths.num_faces);
+	num_faces = load_num_faces(paths.num_faces);
 	std::cout << "FaceAverager::load: read img from "
 		<< paths.img << ", read face from"
 		<< paths.face << ", read num_faces from"

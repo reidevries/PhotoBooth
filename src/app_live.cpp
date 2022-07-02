@@ -7,7 +7,7 @@ using namespace app;
 
 void LiveProcess::button_pressed()
 {
-	capture_and_process();
+	if (!capturing) capture_and_process();
 }
 
 LiveProcess::LiveProcess()
@@ -25,6 +25,7 @@ LiveProcess::LiveProcess(
 
 void LiveProcess::capture_and_process()
 {
+	capturing = true;
 	std::cout << "shutter button pressed! capturing" << std::endl;
 	system("gphoto2 --capture-image-and-download --force-overwrite");
 
@@ -47,6 +48,7 @@ void LiveProcess::capture_and_process()
 	}
 
 	print_processed_img();
+	capturing = false;
 }
 
 void LiveProcess::try_process_new_capture()
@@ -65,6 +67,7 @@ void LiveProcess::try_process_new_capture()
 		return;
 	}
 
+	capturing = true;
 	std::cout << "loading " << path
 		<< ", taken at " << utils::to_time_t(last_write_time)
 		<< " ..." << std::endl;
@@ -80,6 +83,7 @@ void LiveProcess::try_process_new_capture()
 
 	std::filesystem::remove(capture_filename);
 	last_write_time = new_last_write_time;
+	capturing = false;
 }
 
 void LiveProcess::process_capture_and_save()

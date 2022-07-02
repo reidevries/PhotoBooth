@@ -35,6 +35,9 @@ class LiveProcess : public ShutterButton::Callback {
 	/// the number of captures by this program since it started
 	u64 num_captures = 0;
 
+	/// whether the system is in the process of capturing
+	bool capturing = false;
+
 protected:
 	void button_pressed() override;
 

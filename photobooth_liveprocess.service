@@ -5,6 +5,7 @@ After=multi-user.target
 [Service]
 ExecStart=/home/pi/PhotoBooth/build/photobooth_process live capt0000.jpg output 
 WorkingDirectory=/home/pi/PhotoBooth/build
+Restart=Always
 
 [Install]
 WantedBy=multi-user.target

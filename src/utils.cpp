@@ -177,28 +177,3 @@ auto utils::check_file_exists(const std::string& filename) -> bool
 	}
 }
 
-auto utils::load_num_faces(const std::string& filename) -> u64
-{
-	auto file = std::ifstream(filename, std::ifstream::in);
-	if (!file) {
-		std::cout << "file not found '" << filename
-			<< "', assuming 0 faces" << std::endl;
-		return 0;
-	}
-	u64 out = 0;
-	file >> out;
-	return out;
-}
-
-void utils::save_num_faces(const std::string& filename, u64 num_faces)
-{
-	auto file = std::ofstream(filename, std::ios::binary);
-	if (!file) {
-		std::cout << "could not open '" << filename
-			<< "' for writing" << std::endl;
-		return;
-	}
-	file << num_faces;
-	file.close();
-}
-

@@ -26,7 +26,7 @@ LiveProcess::LiveProcess(
 void LiveProcess::capture_and_process()
 {
 	std::cout << "shutter button pressed! capturing" << std::endl;
-	system("gphoto2 --capture-image-and-download");
+	system("gphoto2 --capture-image-and-download --force-overwrite");
 
 	config.load();
 
@@ -95,13 +95,19 @@ void LiveProcess::process_capture_and_save()
 		averager.load(save_paths);
 	}
 	averager.push(img.img, face);
-	averager.save(save_paths, config);
-	std::cout << "saved new avg" << std::endl;
+	averager.save(save_paths);
+	std::cout << "saved new avg, generating photo strip" << std::endl;
+
+	auto num_faces = averager.get_num_faces();
+	io.generate_2x_photo_strip(averager.get_avg_img());
+	
+	std::cout << "saving photo strip" << std::endl;
+	io.save_combined_photo_strip(save_paths.img_proc);
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)
 {
-	save_paths = face::OutputPaths(folder);
+	save_paths = OutputPaths(folder);
 }
 
 void LiveProcess::load_avg()

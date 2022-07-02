@@ -6,7 +6,7 @@ auto imaging::load_img_and_process(
 ) -> NamedImg
 {
 	const float ASPECT_RATIO = 3.0/3.0;
-	const float MAX_HEIGHT = 100000;
+	const float MAX_HEIGHT = 500;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
 

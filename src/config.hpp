@@ -8,7 +8,6 @@
 class Config
 {
 	std::string config_filename = "config";
-	// should put OutputPaths here? but need to define in separate file
 	std::string capture_path;
 
 	enum class Entry

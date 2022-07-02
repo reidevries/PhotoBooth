@@ -18,7 +18,7 @@ FaceAverager::FaceAverager(std::vector<NamedImg>& images) : params(images)
 	for (auto& img : images) {
 		auto face = face::Face(img, params.face_detector);
 		params.avg_images.push_back(face_averager.push(img.img, face));
-		face_averager.save(face::OutputPaths(
+		face_averager.save(OutputPaths(
 			std::string("averages/") + std::to_string(i)
 		));
 		++i;

@@ -7,11 +7,14 @@
 #include "face_averager.hpp"
 #include "config.hpp"
 #include "shutter_button.hpp"
+#include "output_paths.hpp"
 
 namespace app
 {
 
 class LiveProcess : public ShutterButton::Callback {
+	/// the IO file, handles saving the photo strip output
+	face::IO io;
 	/// the face averager, handles face averaging
 	face::FaceAverager averager;
 	/// the face detector, used as part of face averager
@@ -21,7 +24,7 @@ class LiveProcess : public ShutterButton::Callback {
 	std::string capture_filename;
 	/// stores the output paths of each component required to save/load the
 	/// state of `averager`
-	face::OutputPaths save_paths;
+	OutputPaths save_paths;
 	/// stores the last clock time a capture was found
 	std::filesystem::file_time_type last_write_time;
 	/// stores the name of the printer for lp in `print_processed_img`

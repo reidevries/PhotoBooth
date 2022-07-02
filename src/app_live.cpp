@@ -46,9 +46,7 @@ void LiveProcess::capture_and_process()
 			<< " most recent average" << std::endl;
 	}
 
-	if (averager.get_num_faces()%2 == 1) {
-		print_processed_img();
-	}
+	print_processed_img();
 }
 
 void LiveProcess::try_process_new_capture()
@@ -78,9 +76,7 @@ void LiveProcess::try_process_new_capture()
 
 	process_capture_and_save();
 
-	if (averager.get_num_faces()%2 == 1) {
-		print_processed_img();
-	}
+	print_processed_img();
 
 	std::filesystem::remove(capture_filename);
 	last_write_time = new_last_write_time;
@@ -103,11 +99,10 @@ void LiveProcess::process_capture_and_save()
 	std::cout << "saved new avg, generating photo strip" << std::endl;
 
 	auto num_faces = averager.get_num_faces();
-	io.generate_photo_strip(averager.get_avg_img(), num_faces);
-	if (num_faces%2 == 1) {
-		std::cout << "saving combined photo strip" << std::endl;
-		io.save_combined_photo_strip(save_paths.img_proc);
-	}
+	io.generate_2x_photo_strip(averager.get_avg_img());
+	
+	std::cout << "saving photo strip" << std::endl;
+	io.save_combined_photo_strip(save_paths.img_proc);
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

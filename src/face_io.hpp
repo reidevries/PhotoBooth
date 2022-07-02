@@ -14,6 +14,7 @@ class IO
 public:
 	void generate_photo_strip(const cv::Mat& avg_img, const u64 num_faces); 
 	void save_combined_photo_strip(const std::string& filename);
+	void generate_2x_photo_strip(const cv::Mat& avg_img);
 };
 
 }

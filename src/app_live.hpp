@@ -30,6 +30,11 @@ class LiveProcess : public ShutterButton::Callback {
 	/// stores the name of the printer for lp in `print_processed_img`
 	Config config;
 
+	/// the number of averages that have been saved to ext hd so far
+	u64 num_avgs_saved = 0;
+	/// the number of captures by this program since it started
+	u64 num_captures = 0;
+
 protected:
 	void button_pressed() override;
 
@@ -60,6 +65,11 @@ public:
 	 * Process a new capture
 	 */
 	void process_capture_and_save();
+
+	/**
+	 * Save average to external hard drive
+	 */
+	void save_to_exthd();
 
 	/**
 	 * sets `save_paths` using the given folder.

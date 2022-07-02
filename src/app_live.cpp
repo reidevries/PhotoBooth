@@ -103,6 +103,35 @@ void LiveProcess::process_capture_and_save()
 	
 	std::cout << "saving photo strip" << std::endl;
 	io.save_combined_photo_strip(save_paths.img_proc);
+
+	save_to_exthd();
+	
+	++num_captures;
+}
+
+void LiveProcess::save_to_exthd()
+{
+	auto path = std::filesystem::path(config.get_ext_hd_path());
+	if (!std::filesystem::exists(path)) {
+		std::cout << "could not find folder at " << path << std::endl;
+	}
+
+	auto filename = std::stringstream();
+	auto full_path = path;
+	do {
+		filename << std::setfill('0') << std::setw(8) << num_avgs_saved
+			<< ".jpg";
+		full_path = path / filename.str();
+		++num_avgs_saved;
+	} while (std::filesystem::exists(full_path));
+	
+	std::cout << "saving avg number " << num_avgs_saved
+		<< " to " << full_path << std::endl;
+	auto success = cv::imwrite(full_path, averager.get_avg_img()); 
+	if (!success) {
+		std::cout << "error saving average to " << full_path
+			<< " for some unknown reason" << std::endl;
+	}
 }
 
 void LiveProcess::set_save_paths(const std::string &folder)

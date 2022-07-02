@@ -119,6 +119,7 @@ void LiveProcess::save_to_exthd()
 	auto filename = std::stringstream();
 	auto full_path = path;
 	do {
+		filename.str("");
 		filename << std::setfill('0') << std::setw(8) << num_avgs_saved
 			<< ".jpg";
 		full_path = path / filename.str();

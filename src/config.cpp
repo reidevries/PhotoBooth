@@ -2,6 +2,7 @@
 
 void Config::load()
 {
+	std::cout << "loading config" << std::endl;
 	auto file = std::ifstream(config_filename, std::ifstream::in);
 	if (!file) {
 		std::cout << "file not found '" << config_filename
@@ -9,7 +10,7 @@ void Config::load()
 		return;
 	} 
 	std::string line;
-	int line_num;
+	int line_num = 0;
 	while (std::getline(file, line)) {
 		if (static_cast<Entry>(line_num) == Entry::PrinterName) {
 			printer_name = line;

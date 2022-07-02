@@ -14,9 +14,10 @@ class Config
 	{
 		PrinterName = 0,
 		TopText,
-		BottomText
+		BottomText,
+		ExtHdPath
 	};
-	std::string printer_name, top_text, bottom_text;
+	std::string printer_name, top_text, bottom_text, ext_hd_path;
 public:
 	Config() {}
 	Config(const std::string& _config_filename) 
@@ -29,6 +30,7 @@ public:
 	}
 	auto get_top_text() const -> const std::string& { return top_text; }
 	auto get_bottom_text() const -> const std::string& { return bottom_text; }
+	auto get_ext_hd_path() const -> const std::string& { return ext_hd_path; }
 };
 
 #endif //__CONFIG_HPP_

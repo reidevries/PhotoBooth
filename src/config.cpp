@@ -20,6 +20,9 @@ void Config::load()
 		} else if (static_cast<Entry>(line_num) == Entry::BottomText) {
 			bottom_text = line;
 			std::cout << "bottom_text loaded: " << bottom_text << std::endl;
+		} else if (static_cast<Entry>(line_num) == Entry::ExtHdPath) {
+			ext_hd_path = line;
+			std::cout << "ext_hd_path loaded: " << ext_hd_path << std::endl;
 		}
 		line_num++;
 	}

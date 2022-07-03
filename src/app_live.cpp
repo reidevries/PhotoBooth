@@ -44,7 +44,7 @@ LiveProcess::LiveProcess(
 
 void LiveProcess::capture_and_process()
 {
-	auto thread_ptr = led_driver.start_pulse(0.1, 0.1);
+	auto thread_ptr = led_driver.start_pulse(0.05, 0.01);
 
 	system(
 		"gphoto2 --capture-image-and-download \

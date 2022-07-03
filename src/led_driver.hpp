@@ -12,7 +12,7 @@ private:
 	int gpio;
 	
 public:
-	LedDriver(int _gpio);
+	void init(int gpio);
 
 	void countdown(float spacing_s, float pulsewidth_s, int num_pulses);
 };

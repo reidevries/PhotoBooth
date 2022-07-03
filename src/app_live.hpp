@@ -7,6 +7,7 @@
 #include "face_averager.hpp"
 #include "config.hpp"
 #include "shutter_button.hpp"
+#include "led_driver.hpp"
 #include "output_paths.hpp"
 
 namespace app
@@ -37,6 +38,9 @@ class LiveProcess : public ShutterButton::Callback {
 
 	/// whether the system is in the process of capturing
 	bool capturing = false;
+	
+	/// The LED driver
+	LedDriver led_driver;
 
 protected:
 	void button_pressed() override;
@@ -88,6 +92,11 @@ public:
 	 * Prints the processed image saved at `save_paths`
 	 */
 	void print_processed_img();
+	
+	/**
+	 * Initializes the LED driver
+	 */
+	void init_led_driver();
 };
 
 }

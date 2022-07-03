@@ -7,6 +7,7 @@
 #include "app_process.hpp"
 #include "app_live.hpp"
 #include "shutter_button.hpp"
+#include "led_driver.hpp"
 #include "output_paths.hpp"
 
 int main(int argc, char** argv)
@@ -100,6 +101,7 @@ int main(int argc, char** argv)
 			std::cout << "gpio initialized, activating shutter button callback"
 				<< std::endl;
 			auto shutter_button = ShutterButton(21, &app);
+			app.init_led_driver(13);
 			while (true) {
 				//?
 			}

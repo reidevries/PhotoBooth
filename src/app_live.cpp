@@ -169,3 +169,8 @@ void LiveProcess::print_processed_img()
 		return;
 	}
 }
+
+void LiveProcess::init_led_driver(int gpio)
+{
+	led_driver = LedDriver(gpio);
+}

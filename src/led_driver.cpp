@@ -1,8 +1,8 @@
 #include "led_driver.hpp"
 
-LedDriver::LedDriver(int _gpio)
-	: gpio(_gpio)
+void LedDriver::init(int gpio)
 {
+	this->gpio = gpio;
 	gpioSetMode(gpio, PI_OUTPUT);
 }
 

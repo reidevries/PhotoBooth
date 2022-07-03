@@ -37,6 +37,8 @@ LiveProcess::LiveProcess(
 
 void LiveProcess::capture_and_process()
 {
+	auto thread_ptr = led_driver.start_pulse(0.1, 0.1);
+
 	system(
 		"gphoto2 --capture-image-and-download \
 		--force-overwrite --filename capt0000.jpg"
@@ -62,6 +64,7 @@ void LiveProcess::capture_and_process()
 
 	print_processed_img();
 	capturing = false;
+	led_driver.stop_pulse(thread_ptr);
 }
 
 void LiveProcess::try_process_new_capture()

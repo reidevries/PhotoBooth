@@ -10,7 +10,7 @@ public:
 	class Callback
 	{
 	public:
-		virtual void button_pressed() = 0;
+		virtual void button_pressed(uint32_t tick) = 0;
 	};
 
 private:

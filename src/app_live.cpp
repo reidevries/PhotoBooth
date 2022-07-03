@@ -5,14 +5,21 @@
 
 using namespace app;
 
-void LiveProcess::button_pressed()
+void LiveProcess::button_pressed(uint32_t tick)
 {
 	if (!capturing) {
-		capturing = true;
-		std::cout << "shutter button pressed! capturing" << std::endl;
-		led_driver.countdown(2,1,3);
-		capture_and_process();
+		//debounce
+		if (
+			last_tick < 0
+			|| fabsf(static_cast<float>(tick)-static_cast<float>(last_tick))
+		) {
+			capturing = true;
+			std::cout << "shutter button pressed! capturing" << std::endl;
+			led_driver.countdown(1.5,0.5,3);
+			capture_and_process();
+		}
 	}
+	last_tick = tick;
 }
 
 LiveProcess::LiveProcess()

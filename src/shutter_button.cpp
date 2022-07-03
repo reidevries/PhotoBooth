@@ -3,11 +3,9 @@
 void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 {
 	auto self = static_cast<ShutterButton*>(user);
-	if (gpio == self->gpio) {
-		if (level == 1) { // rising edge
-			self->callback->button_pressed();
-			std::cout << "shutter button pressed at tick " << tick << std::endl;
-		}
+	if (gpio == self->gpio && level == 1) {
+		self->callback->button_pressed(tick);
+		std::cout << "shutter button pressed at tick " << tick << std::endl;
 	} else {
 		std::cout << "callback called on wrong gpio number " << gpio
 			<< std::endl;

@@ -41,9 +41,12 @@ class LiveProcess : public ShutterButton::Callback {
 	
 	/// The LED driver
 	LedDriver led_driver;
+	
+	/// for debouncing
+	int last_tick = -1;
 
 protected:
-	void button_pressed() override;
+	void button_pressed(uint32_t tick) override;
 
 public:
 	LiveProcess();

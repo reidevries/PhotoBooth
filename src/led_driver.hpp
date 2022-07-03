@@ -1,5 +1,5 @@
-#ifndef __SHUTTER_BUTTON_HPP_
-#define __SHUTTER_BUTTON_HPP_
+#ifndef __LED_DRIVER_HPP_
+#define __LED_DRIVER_HPP_
 
 #include <pigpio.h>
 #include <iostream>

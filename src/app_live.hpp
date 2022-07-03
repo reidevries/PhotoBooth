@@ -96,7 +96,7 @@ public:
 	/**
 	 * Initializes the LED driver
 	 */
-	void init_led_driver();
+	void init_led_driver(int gpio);
 };
 
 }

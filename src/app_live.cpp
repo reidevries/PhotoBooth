@@ -172,5 +172,5 @@ void LiveProcess::print_processed_img()
 
 void LiveProcess::init_led_driver(int gpio)
 {
-	led_driver = LedDriver(gpio);
+	led_driver.init(gpio);
 }

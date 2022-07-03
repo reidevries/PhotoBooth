@@ -9,14 +9,21 @@ void LiveProcess::button_pressed(uint32_t tick)
 {
 	if (!capturing) {
 		//debounce
+		auto time_since_last_tick
+			= fabsf(static_cast<float>(tick)-static_cast<float>(last_tick));
+		if (last_tick < 0) time_since_last_tick = 0;
 		if (
-			last_tick < 0
-			|| fabsf(static_cast<float>(tick)-static_cast<float>(last_tick))
+			time_since_last_tick < 100000
 		) {
 			capturing = true;
-			std::cout << "shutter button pressed! capturing" << std::endl;
+			std::cout << "shutter button pressed! time elapsed last tick:" 
+				<< time_since_last_tick << std::endl;
 			led_driver.countdown(1.5,0.5,3);
 			capture_and_process();
+		} else {
+			std::cout << "didn't count button press because not enough time "
+				<< "elapsed. last tick was " << last_tick << " and current "
+				<< "tick is " << tick << std::endl;
 		}
 	}
 	last_tick = tick;

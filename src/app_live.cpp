@@ -10,6 +10,7 @@ void LiveProcess::button_pressed()
 	if (!capturing) {
 		capturing = true;
 		std::cout << "shutter button pressed! capturing" << std::endl;
+		led_driver.countdown(2,1,3);
 		capture_and_process();
 	}
 }

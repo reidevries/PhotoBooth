@@ -30,8 +30,8 @@ LiveProcess::LiveProcess(
 void LiveProcess::capture_and_process()
 {
 	system(
-		"gphoto2 --capture-image-and-download"
-		"--force-overwrite --filename capt0000.jpg"
+		"gphoto2 --capture-image-and-download \
+		--force-overwrite --filename capt0000.jpg"
 	);
 
 	config.load();

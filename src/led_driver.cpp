@@ -48,4 +48,5 @@ pthread_t* LedDriver::start_pulse(float spacing_s, float pulsewidth_s)
 void LedDriver::stop_pulse(pthread_t* thread_ptr)
 {
 	gpioStopThread(thread_ptr);
+	gpioWrite(gpio, 0);
 }

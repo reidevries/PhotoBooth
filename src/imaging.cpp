@@ -2,13 +2,23 @@
 
 auto imaging::load_img_and_process(
 	const std::string& filename,
-	const cv::Size& expected_size
+	const cv::Size& expected_size,
+	const int rotation
 ) -> NamedImg
 {
 	const float ASPECT_RATIO = 3.0/3.0;
 	const float MAX_HEIGHT = 500;
 
 	auto img = cv::imread(filename, cv::IMREAD_COLOR);
+
+	// rotate by 90 degrees as many times as specified
+	// rotation=0 doesn't rotate, rotation=1 rotates 90 degrees clockwise, etc
+	if (rotation%4 > 0) {
+		auto amount = cv::ROTATE_90_CLOCKWISE;
+		if (rotation%4 == 2) amount = cv::ROTATE_180;
+		else if (rotation%4 == 3) amount = cv::ROTATE_90_COUNTERCLOCKWISE;
+		cv::rotate(img, img, amount);
+	}
 
 	// crop to 3:4 aspect ratio if possible
 	auto new_height = img.size().width/ASPECT_RATIO;

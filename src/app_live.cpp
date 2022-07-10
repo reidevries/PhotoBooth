@@ -113,7 +113,8 @@ void LiveProcess::process_capture_and_save()
 {
 	auto img = imaging::load_img_and_process(
 		capture_filename,
-		averager.get_avg_img().size()
+		averager.get_avg_img().size(),
+		config.get_rotation()
 	);
 	auto face = face::Face(img, detector);
 

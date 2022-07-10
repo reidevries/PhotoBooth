@@ -18,7 +18,8 @@ namespace imaging
 
 auto load_img_and_process(
 	const std::string& filename,
-	const cv::Size& expected_size
+	const cv::Size& expected_size,
+	const int rotation = 0
 ) -> NamedImg;
 
 auto process_aly_style(

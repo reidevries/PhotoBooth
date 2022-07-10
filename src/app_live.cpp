@@ -13,9 +13,7 @@ void LiveProcess::button_pressed(uint32_t tick)
 			static_cast<float>(tick) - static_cast<float>(last_tick_pressed)
 		);
 		if (last_tick_pressed < 0) time_since_last_tick = 0;
-		if (
-			time_since_last_tick > 100000
-		) {
+		if (time_since_last_tick > 100000) {
 			capturing = true;
 			std::cout << "shutter button pressed! time elapsed last tick: " 
 				<< time_since_last_tick << std::endl;

@@ -4,10 +4,12 @@ void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 {
 	auto self = static_cast<ShutterButton*>(user);
 	if (gpio == self->gpio) {
-		if (level == 1) {
+		// for this button setup it's backwards
+		// press is high to low, release is low to high
+		if (level == 0) {
 			self->callback->button_pressed(tick);
 			std::cout << "shutter button down at tick " << tick << std::endl;
-		} else if (level == 0) {
+		} else if (level == 1) {
 			self->callback->button_released(tick);
 			std::cout << "shutter button up at tick " << tick << std::endl;
 		} else {

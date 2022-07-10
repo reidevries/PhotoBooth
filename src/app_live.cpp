@@ -13,7 +13,7 @@ void LiveProcess::button_pressed(uint32_t tick)
 void LiveProcess::button_released(uint32_t tick)
 {
 	// check if the button has been held down
-	auto time_since_pressed = tick - last_tick_pressed;
+	auto time_since_pressed = tick - static_cast<u32>(last_tick_pressed);
 	if (last_tick_pressed < 0) time_since_pressed = 0;
 
 	// if the held for more than 30 seconds, restart computer
@@ -25,7 +25,7 @@ void LiveProcess::button_released(uint32_t tick)
 				<< std::endl;
 		}
 	} else {
-		auto time_since_released = tick - last_tick_released;
+		auto time_since_released = tick - static_cast<u32>(last_tick_released);
 		if (time_since_released > 30000000) { //30 seconds timer
 			capturing = true;
 			std::cout << "shutter button pressed and released!"

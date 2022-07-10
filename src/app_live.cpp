@@ -7,7 +7,10 @@ using namespace app;
 
 void LiveProcess::button_pressed(uint32_t tick)
 {
-	last_tick_pressed = tick;
+	// debounce
+	if (tick - static_cast<u32>(last_tick_pressed) > 10000) {
+		last_tick_pressed = tick;
+	}
 }
 
 void LiveProcess::button_released(uint32_t tick)
@@ -19,6 +22,7 @@ void LiveProcess::button_released(uint32_t tick)
 	// if the held for more than 30 seconds, restart computer
 	if (time_since_pressed > 30000000) {
 		if (time_since_pressed < 60000000) {
+			std::cout << "button held for 30-60 seconds, rebooting" << std::endl;
 			system("systemctl reboot");
 		} else {
 			std::cout << "possible error, button held for longer than a minute"
@@ -57,7 +61,7 @@ LiveProcess::LiveProcess(
 
 void LiveProcess::capture_and_process()
 {
-	auto thread_ptr = led_driver.start_pulse(0.05, 0.01);
+	auto thread_ptr = led_driver.start_pulse(0.05, 0.002);
 
 	system(
 		"gphoto2 --capture-image-and-download \

@@ -36,9 +36,12 @@ void LiveProcess::button_released(uint32_t tick)
 	);
 	// if the held for more than 30 seconds, restart computer
 	if (time_since_pressed > 30000000) {
-		system(
-			"systemctl reboot"
-		);
+		if (time_since_pressed < 60000000) {
+			system("systemctl reboot");
+		} else {
+			std::cout << "possible error, button held for longer than a minute"
+				<< std::endl;
+		}
 	}
 	last_tick_released = tick;
 }

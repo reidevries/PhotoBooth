@@ -3,10 +3,18 @@
 void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 {
 	auto self = static_cast<ShutterButton*>(user);
-	if (gpio == self->gpio && level == 1) {
-		self->callback->button_pressed(tick);
-		std::cout << "shutter button pressed at tick " << tick << std::endl;
-	} else if (gpio != self->gpio) {
+	if (gpio == self->gpio) {
+		if (level == 1) {
+			self->callback->button_pressed(tick);
+			std::cout << "shutter button down at tick " << tick << std::endl;
+		} else if (level == 0) {
+			self->callback->button_released(tick);
+			std::cout << "shutter button up at tick " << tick << std::endl;
+		} else {
+			std::cout << "watchdog timeout at tick " << tick << "!" 
+				<< std::endl;
+		}
+	} else {
 		std::cout << "callback called on wrong gpio number " << gpio
 			<< std::endl;
 	}

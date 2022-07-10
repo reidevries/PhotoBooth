@@ -9,9 +9,10 @@ void LiveProcess::button_pressed(uint32_t tick)
 {
 	if (!capturing) {
 		//debounce
-		auto time_since_last_tick
-			= fabsf(static_cast<float>(tick)-static_cast<float>(last_tick));
-		if (last_tick < 0) time_since_last_tick = 0;
+		auto time_since_last_tick = fabsf(
+			static_cast<float>(tick) - static_cast<float>(last_tick_pressed)
+		);
+		if (last_tick_pressed < 0) time_since_last_tick = 0;
 		if (
 			time_since_last_tick > 100000
 		) {
@@ -21,12 +22,27 @@ void LiveProcess::button_pressed(uint32_t tick)
 			led_driver.countdown(1.5,0.5,3);
 			capture_and_process();
 		} else {
-			std::cout << "didn't count button press because not enough time "
-				<< "elapsed. last tick was " << last_tick << " and current "
-				<< "tick is " << tick << std::endl;
+			std::cout << "didn't count button press because not enough time"
+				<< " elapsed. last tick was " << last_tick_pressed
+				<< " and current tick is " << tick << std::endl;
 		}
 	}
-	last_tick = tick;
+	last_tick_pressed = tick;
+}
+
+void LiveProcess::button_released(uint32_t tick)
+{
+	// check if the button has been held down
+	auto time_since_pressed = fabsf(
+		static_cast<float>(tick) - static_cast<float>(last_tick_released)
+	);
+	// if the held for more than 30 seconds, restart computer
+	if (time_since_pressed > 30000000) {
+		system(
+			"systemctl reboot"
+		);
+	}
+	last_tick_released = tick;
 }
 
 LiveProcess::LiveProcess()

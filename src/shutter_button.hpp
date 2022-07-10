@@ -11,6 +11,7 @@ public:
 	{
 	public:
 		virtual void button_pressed(uint32_t tick) = 0;
+		virtual void button_released(uint32_t tick) = 0;
 	};
 
 private:

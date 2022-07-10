@@ -1,0 +1,8 @@
+[Unit]
+Description=Automount usb
+
+[Automount]
+Where=/mnt/exthd
+
+[Install]
+WantedBy=multi-user.target

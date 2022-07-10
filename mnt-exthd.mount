@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount sdb1
+
+[Mount]
+What=/dev/disk/by-uuid/UUID_here
+Where=/mnt/exthd
+Type=auto
+Options=defaults
+
+[Install]
+WantedBy=multi-user.target

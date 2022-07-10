@@ -7,7 +7,7 @@ using namespace app;
 
 void LiveProcess::button_pressed(uint32_t tick)
 {
-	// debounce
+	//debounce
 	if (tick - static_cast<u32>(last_tick_pressed) > 10000) {
 		last_tick_pressed = tick;
 	}
@@ -28,7 +28,8 @@ void LiveProcess::button_released(uint32_t tick)
 			std::cout << "possible error, button held for longer than a minute"
 				<< std::endl;
 		}
-	} else {
+	// debounce by making sure the button was held for at least 10ms
+	} else if (time_since_pressed > 10000) {
 		auto time_since_released = tick - static_cast<u32>(last_tick_released);
 		if (time_since_released > 30000000) { //30 seconds timer
 			capturing = true;
@@ -42,8 +43,8 @@ void LiveProcess::button_released(uint32_t tick)
 				<< " elapsed. last tick was " << last_tick_released
 				<< " and current tick is " << tick << std::endl;
 		}
+		last_tick_released = tick;
 	}
-	last_tick_released = tick;
 }
 
 LiveProcess::LiveProcess()

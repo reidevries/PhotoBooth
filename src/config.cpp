@@ -24,6 +24,9 @@ void Config::load()
 		} else if (static_cast<Entry>(line_num) == Entry::ExtHdPath) {
 			ext_hd_path = line;
 			std::cout << "ext_hd_path loaded: " << ext_hd_path << std::endl;
+		} else if (static_cast<Entry>(line_num) == Entry::Rotation) {
+			rotation = std::stoi(line);
+			std::cout << "rotation loaded: " << rotation << std::endl;
 		}
 		line_num++;
 	}

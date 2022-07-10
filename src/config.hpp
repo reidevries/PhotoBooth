@@ -15,9 +15,11 @@ class Config
 		PrinterName = 0,
 		TopText,
 		BottomText,
-		ExtHdPath
+		ExtHdPath,
+		Rotation
 	};
 	std::string printer_name, top_text, bottom_text, ext_hd_path;
+	int rotation; // 0 for unrotated, +1 for each 90 degree clockwise rotation
 public:
 	Config() {}
 	Config(const std::string& _config_filename) 
@@ -31,6 +33,7 @@ public:
 	auto get_top_text() const -> const std::string& { return top_text; }
 	auto get_bottom_text() const -> const std::string& { return bottom_text; }
 	auto get_ext_hd_path() const -> const std::string& { return ext_hd_path; }
+	auto get_rotation() const -> int { return rotation; }
 };
 
 #endif //__CONFIG_HPP_

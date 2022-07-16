@@ -3,6 +3,7 @@
 void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 {
 	auto self = static_cast<ShutterButton*>(user);
+	auto second = static_cast<double>(tick)/1000000.0;
 	if (gpio == self->gpio) {
 		// for this button setup it's backwards
 		// press is high to low, release is low to high
@@ -11,7 +12,7 @@ void ShutterButton::pressed(int gpio, int level, uint32_t tick, void *user)
 		} else if (level == 1) {
 			self->callback->button_released(tick);
 		} else {
-			std::cout << "watchdog timeout at tick " << tick << "!" 
+			std::cout << "watchdog timeout at second " << second << "!!!!!" 
 				<< std::endl;
 		}
 	} else {

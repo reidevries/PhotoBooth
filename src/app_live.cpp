@@ -24,7 +24,7 @@ void LiveProcess::button_released(uint32_t tick)
 			std::cout << "possible error, button held for longer than a minute"
 				<< std::endl;
 		}
-	} else {
+	} else if (time_since_pressed > 1000) { // 1ms timer
 		auto time_since_released = tick - static_cast<u32>(last_tick_released);
 		if (time_since_released > 30000000) { //30 seconds timer
 			capturing = true;
@@ -33,13 +33,17 @@ void LiveProcess::button_released(uint32_t tick)
 				<< last_tick_released-tick << std::endl;
 			led_driver.countdown(1.5,0.5,3);
 			capture_and_process();
+			last_tick_released = tick;
 		} else {
 			std::cout << "didn't count button press because not enough time"
 				<< " elapsed. last tick was " << last_tick_released
 				<< " and current tick is " << tick << std::endl;
 		}
+	} else {
+		std::cout << "button pressed for <1ms, debounced. Last tick was "
+			<< last_tick_released
+			<< " current tick is " << tick << std::endl;
 	}
-	last_tick_released = tick;
 }
 
 LiveProcess::LiveProcess()

@@ -15,7 +15,7 @@ class FaceAverager
 	cv::Mat avg_img;
 	Face avg_face;
 	u64 num_faces = 0;
-	float param = 0.0;
+	float param = 100.0;
 	
 	auto load_num_faces(const std::string& filename) -> u64;
 	void save_num_faces(

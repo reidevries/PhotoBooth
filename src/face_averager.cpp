@@ -50,7 +50,10 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 {
 	auto coef = 1.0;
 	if (num_faces > 0) {
-		coef = fmin((1.0+param)/(num_faces+1+static_cast<int>(param)), 1.0);
+		coef = fmax(
+			fmin((1.0+param)/(num_faces+1+static_cast<int>(param)), 1.0),
+			0.1
+		);
 	} else {
 		// if num_faces == 0 then we need to initialize the averages
 		std::cout << "as 0 faces have been processed,"
@@ -59,12 +62,6 @@ auto FaceAverager::push(const cv::Mat& img, const Face& face) -> cv::Mat
 		avg_face.set_name("avg");
 		avg_img = img;
 		++num_faces;
-		return avg_img;
-	}
-
-	if (std::abs(coef) <= 0.0000000001) {
-		std::cout << "we may not be able to add more faces due to rounding :("
-			<< std::endl;
 		return avg_img;
 	}
 

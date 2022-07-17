@@ -43,9 +43,9 @@ class LiveProcess : public ShutterButton::Callback {
 	LedDriver led_driver;
 	
 	/// for registering how long a button was pressed and for debouncing
-	int last_tick_pressed = -1;
-	int last_tick_released = -1;
-	int last_tick_done_processing = -1;
+	i64 last_tick_pressed = -1;
+	i64 last_tick_released = -1;
+	i64 last_tick_done_processing = -1;
 
 protected:
 	void button_pressed(uint32_t tick) override;

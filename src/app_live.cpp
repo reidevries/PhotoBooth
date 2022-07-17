@@ -7,50 +7,21 @@ using namespace app;
 
 void LiveProcess::button_pressed(uint32_t tick)
 {
-	last_tick_pressed = static_cast<int>(tick);
+	last_tick_pressed = static_cast<i64>(tick);
 }
 
 void LiveProcess::button_released(uint32_t tick)
 {
-	// i can't figure out why it seems to stop working after here so reset computer automatically
-	if (tick > 2147483648) {
-		system("systemctl reboot");
-	}
-	// check if the button has been held down
-	auto time_since_pressed = tick - static_cast<u32>(last_tick_pressed);
-	if (last_tick_pressed < 0) time_since_pressed = 0;
-
-	// if the held for more than 10 seconds, restart computer
-	if (time_since_pressed > 10000000) {
-		if (time_since_pressed < 20000000) {
-			std::cout << "button held for 10-20 seconds, rebooting" << std::endl;
-			system("systemctl reboot");
-		} else {
-			std::cout << "possible error, button held for longer than 20s"
-				<< std::endl;
-		}
-	// debounce by making sure the button was held for at least 1ms
-	} else if (time_since_pressed > 1000) {
-		auto time_since_released = tick - static_cast<u32>(last_tick_released);
-		// wait at least 30s between button press and releases
-		if (time_since_released > 30000000 || last_tick_released < 0) {
-			capturing = true;
-			std::cout << "shutter button pressed and released!"
-				<< " time elapsed since last release: " 
-				<< time_since_released << std::endl;
-			led_driver.countdown(1.5,0.5,3);
-			capture_and_process();
-			last_tick_released = static_cast<int>(tick);
-		} else {
-			std::cout << "didn't count button press because not enough time"
-				<< " elapsed. last tick was " << last_tick_released
-				<< " and current tick is " << tick << std::endl;
-		}
-	} else {
-		std::cout << "button pressed for <1ms, debounced. Last release was "
-			<< last_tick_released
-			<< " current tick is " << tick 
-			<< " time since pressed is " << time_since_pressed << std::endl;
+	auto time_since_released
+		= tick - static_cast<u32>(last_tick_released);
+	if (time_since_released > 30000000) {
+		capturing = true;
+		std::cout << "shutter button pressed and released!"
+			<< " time elapsed since last release: " 
+			<< time_since_released << std::endl;
+		led_driver.countdown(1.5,0.5,3);
+		capture_and_process();
+		last_tick_released = static_cast<i64>(tick);
 	}
 }
 

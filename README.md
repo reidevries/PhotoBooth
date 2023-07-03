@@ -6,7 +6,7 @@ This is the code for an art installation I did for Illuminate Adelaide 2022 in c
 
 Here is a video of the faces evolving over the period the project was installed. There is a change after the first day, this is because I tweaked the software in response to user feedback that the image didn't appear to be changing very much. This makes it more of a moving average than a strict mean of all faces, but carries across the intention of the artwork better.
 
-[Video of the faces evolving over time, they shift gradually in position and expression in front of a grey background.](https://github.com/reidevries/PhotoBooth/assets/25862413/5627669e-339b-469b-b0d8-3750a1c6e4d9)
+[video_fast.webm](https://github.com/reidevries/PhotoBooth/assets/25862413/5627669e-339b-469b-b0d8-3750a1c6e4d9)
 
 ## Build instructions
 You can use Cmake to build this project.
